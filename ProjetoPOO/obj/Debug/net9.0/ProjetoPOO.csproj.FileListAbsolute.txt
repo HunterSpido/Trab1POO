@@ -1,0 +1,14 @@
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ProjetoPOO.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ProjetoPOO.AssemblyInfoInputs.cache
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ProjetoPOO.AssemblyInfo.cs
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ProjetoPOO.csproj.CoreCompileInputs.cache
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\bin\Debug\net9.0\ProjetoPOO.exe
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\bin\Debug\net9.0\ProjetoPOO.deps.json
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\bin\Debug\net9.0\ProjetoPOO.runtimeconfig.json
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\bin\Debug\net9.0\ProjetoPOO.dll
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\bin\Debug\net9.0\ProjetoPOO.pdb
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ProjetoPOO.dll
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\refint\ProjetoPOO.dll
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ProjetoPOO.pdb
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ProjetoPOO.genruntimeconfig.cache
+C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ref\ProjetoPOO.dll
