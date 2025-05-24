@@ -1,14 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using ProjetoPOO.Classes;
 
 namespace ProjetoPOO.Services;
 
 public static class TransportadoraService
 {
-    // Lista estática
-    private static List<Transportadora> ListTransportadora = new List<Transportadora>();
+    private static Transportadora[] vetorTransportadoras = new Transportadora[100];
+    private static int qtdTransportadoras = 0;
 
     public static void MenuTransportadora()
     {
@@ -41,6 +39,12 @@ public static class TransportadoraService
 
     public static void Adicione()
     {
+        if (qtdTransportadoras >= vetorTransportadoras.Length)
+        {
+            Console.WriteLine("Limite de transportadoras atingido.");
+            return;
+        }
+
         Console.Write("Digite o ID da transportadora: ");
         int id = int.Parse(Console.ReadLine()!);
 
@@ -57,7 +61,9 @@ public static class TransportadoraService
             PrecoPorKm = preco
         };
 
-        ListTransportadora.Add(nova);
+        vetorTransportadoras[qtdTransportadoras] = nova;
+        qtdTransportadoras++;
+
         Console.WriteLine("Transportadora adicionada com sucesso!");
     }
 
@@ -66,86 +72,71 @@ public static class TransportadoraService
         Console.Write("Digite o ID da transportadora a alterar: ");
         int id = int.Parse(Console.ReadLine()!);
 
-        Transportadora transportadoraEncontrada = null;
-
-        foreach (Transportadora t in ListTransportadora)
+        for (int i = 0; i < qtdTransportadoras; i++)
         {
-            if (t.IdTransporadora == id)
+            if (vetorTransportadoras[i].IdTransporadora == id)
             {
-                transportadoraEncontrada = t;
-                break;
+                Console.Write("Novo nome: ");
+                vetorTransportadoras[i].Nome = Console.ReadLine()!;
+
+                Console.Write("Novo preço por KM: ");
+                vetorTransportadoras[i].PrecoPorKm = double.Parse(Console.ReadLine()!);
+
+                Console.WriteLine("Transportadora alterada com sucesso!");
+                return;
             }
         }
 
-        if (transportadoraEncontrada != null)
-        {
-            Console.Write("Novo nome: ");
-            transportadoraEncontrada.Nome = Console.ReadLine()!;
-
-            Console.Write("Novo preço por KM: ");
-            transportadoraEncontrada.PrecoPorKm = double.Parse(Console.ReadLine()!);
-
-            Console.WriteLine("Alterado com sucesso!");
-        }
-        else
-        {
-            Console.WriteLine("Transportadora não encontrada.");
-        }
+        Console.WriteLine("Transportadora não encontrada.");
     }
-
 
     public static void Exclusao()
     {
         Console.Write("Digite o ID da transportadora a excluir: ");
         int id = int.Parse(Console.ReadLine()!);
 
-        Transportadora transportadoraEncontrada = null;
-
-        foreach (Transportadora t in ListTransportadora)
+        for (int i = 0; i < qtdTransportadoras; i++)
         {
-            if (t.IdTransporadora == id)
+            if (vetorTransportadoras[i].IdTransporadora == id)
             {
-                transportadoraEncontrada = t;
-                break;
+                // Deslocar os elementos
+                for (int j = i; j < qtdTransportadoras - 1; j++)
+                {
+                    vetorTransportadoras[j] = vetorTransportadoras[j + 1];
+                }
+
+                vetorTransportadoras[qtdTransportadoras - 1] = null!;
+                qtdTransportadoras--;
+
+                Console.WriteLine("Transportadora excluída com sucesso!");
+                return;
             }
         }
 
-        if (transportadoraEncontrada != null)
-        {
-            ListTransportadora.Remove(transportadoraEncontrada);
-            Console.WriteLine("Transportadora excluída com sucesso!");
-        }
-        else
-        {
-            Console.WriteLine("Transportadora não encontrada.");
-        }
+        Console.WriteLine("Transportadora não encontrada.");
     }
 
     public static void Consulta()
     {
-        Console.Write("Digite o ID da tranportadora que deseja consultar: ");
+        Console.Write("Digite o ID da transportadora que deseja consultar: ");
         int id = int.Parse(Console.ReadLine()!);
 
-        Transportadora transportadoraEncontrada = null;
-
-        foreach (Transportadora t in ListTransportadora)
+        for (int i = 0; i < qtdTransportadoras; i++)
         {
-            if (t.IdTransporadora == id)
+            if (vetorTransportadoras[i].IdTransporadora == id)
             {
-                transportadoraEncontrada = t;
-                break;
+                Exibir(vetorTransportadoras[i]);
+                return;
             }
         }
-        if (transportadoraEncontrada != null)
-        {
-            Console.WriteLine("=== Transportadora encontrada ===");
-            Console.WriteLine($"ID: {transportadoraEncontrada.IdTransporadora}");
-            Console.WriteLine($"Nome: {transportadoraEncontrada.Nome}");
-            Console.WriteLine($"Preço por KM: {transportadoraEncontrada.PrecoPorKm}");
-        }
-        else
-        {
-            Console.WriteLine("Transportadora não encontrada.");
-        }
+
+        Console.WriteLine("Transportadora não encontrada.");
+    }
+    private static void Exibir(Transportadora t)
+    {
+        Console.WriteLine("=== Transportadora encontrada ===");
+        Console.WriteLine($"ID: {t.IdTransporadora}");
+        Console.WriteLine($"Nome: {t.Nome}");
+        Console.WriteLine($"Preço por KM: {t.PrecoPorKm}");
     }
 }
