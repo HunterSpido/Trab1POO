@@ -10,8 +10,16 @@ public class Fornecedor
     public string? Telefone{get;set;}    
     public string? Email{get;set;}
 
+    public Fornecedor(string nome, string descricao, string telefone, string email)
+    {
+        this.Nome = nome;
+        this.Descricao = descricao;
+        this.Telefone = telefone;
+        this.Email = email;
+    }
 
-    public void cadastroTransportadora(){
+    public void cadastroTransportadora()
+    {
 
     }
 

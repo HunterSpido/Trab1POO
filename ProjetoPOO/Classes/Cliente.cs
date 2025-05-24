@@ -9,8 +9,16 @@ public class Cliente
     public string? Telefone{get;set;}    
     public string? Email{get;set;}
 
+    public Cliente(string nome, string telefone, string email)
+    {
+        this.Nome = nome;
+        this.Email = email;
+        this.Telefone = telefone;
+    }
 
-    public void fazerPedido(){
+
+    public void fazerPedido()
+    {
 
     }
 

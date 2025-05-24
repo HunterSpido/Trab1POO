@@ -12,3 +12,4 @@ C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\
 C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ProjetoPOO.pdb
 C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ProjetoPOO.genruntimeconfig.cache
 C:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ref\ProjetoPOO.dll
+c:\Users\spido\OneDrive\Documentos\Estudos\Linguagem C#\Trab1POO\ProjetoPOO\obj\Debug\net9.0\ProjetoPOO.sourcelink.json

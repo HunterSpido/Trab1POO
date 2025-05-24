@@ -23,15 +23,25 @@ public class Transportadora
         switch (v)
         {
             case 1:
-                this.Alteracao();
+                Adicione();
                 break;
             case 2:
-            this.
+                Alteracao();
+                break;
+            case 3:
+                Exclusao();
+                break;
+            case 4:
+                Consulta();
+                break;
+            default:
+                System.Console.WriteLine("Digite entre a opção 1-4");
+                break;
         }
            
     }
 
-    public void Alteracao()
+    public void Adicione()
     {
 
     }

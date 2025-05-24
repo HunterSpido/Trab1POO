@@ -9,8 +9,8 @@ public static class AdminMenu
     
     public static void MenuAdmin()
     {
-        int tes=-1;
-        while (tes != 0)
+        int tes=0;
+        while (tes != 4)
         {
             System.Console.WriteLine("Selecione a opcão:");
             System.Console.WriteLine("1- Menu de Fornecedor:");
@@ -33,7 +33,7 @@ public static class AdminMenu
                     Console.WriteLine("tela de transp");
                     break;
                 case 4:
-                    tes = 0;
+                    System.Console.WriteLine("Saindo...");
                     break;
             }
 
