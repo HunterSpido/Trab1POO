@@ -27,6 +27,7 @@ public static class AdminMenu
                 case 1:
                     Console.WriteLine("tela Fornecedor");
                     //chamar a tela de fornecedor
+                    MenuFornecedor.TelaFornecedor();
                     break;
                 case 2:
                     Console.WriteLine("tela de prod");
