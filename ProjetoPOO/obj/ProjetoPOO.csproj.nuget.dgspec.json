@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\spido\\OneDrive\\Documentos\\Estudos\\Linguagem C#\\Trab1POO\\ProjetoPOO\\ProjetoPOO.csproj": {}
+    "C:\\Users\\spido\\OneDrive\\Documentos\\Estudos\\Linguagem C#\\Trab1POO\\ProjetoPOO\\ProjetoPOO.csproj": {}
   },
   "projects": {
-    "c:\\Users\\spido\\OneDrive\\Documentos\\Estudos\\Linguagem C#\\Trab1POO\\ProjetoPOO\\ProjetoPOO.csproj": {
+    "C:\\Users\\spido\\OneDrive\\Documentos\\Estudos\\Linguagem C#\\Trab1POO\\ProjetoPOO\\ProjetoPOO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\spido\\OneDrive\\Documentos\\Estudos\\Linguagem C#\\Trab1POO\\ProjetoPOO\\ProjetoPOO.csproj",
+        "projectUniqueName": "C:\\Users\\spido\\OneDrive\\Documentos\\Estudos\\Linguagem C#\\Trab1POO\\ProjetoPOO\\ProjetoPOO.csproj",
         "projectName": "ProjetoPOO",
-        "projectPath": "c:\\Users\\spido\\OneDrive\\Documentos\\Estudos\\Linguagem C#\\Trab1POO\\ProjetoPOO\\ProjetoPOO.csproj",
+        "projectPath": "C:\\Users\\spido\\OneDrive\\Documentos\\Estudos\\Linguagem C#\\Trab1POO\\ProjetoPOO\\ProjetoPOO.csproj",
         "packagesPath": "C:\\Users\\spido\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\spido\\OneDrive\\Documentos\\Estudos\\Linguagem C#\\Trab1POO\\ProjetoPOO\\obj\\",
+        "outputPath": "C:\\Users\\spido\\OneDrive\\Documentos\\Estudos\\Linguagem C#\\Trab1POO\\ProjetoPOO\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
