@@ -8,11 +8,10 @@ using System.Security.Cryptography.X509Certificates;
 
 public static class AdminMenu
 {
-    
     public static void MenuAdmin()
     {
-        int tes=0;
-        while (tes != 4)
+        int tes = 0;
+        while (tes != 4) // Mantém o loop principal
         {
             System.Console.WriteLine("Selecione a opcão:");
             System.Console.WriteLine("1- Menu de Fornecedor:");
@@ -26,22 +25,24 @@ public static class AdminMenu
             {
                 case 1:
                     Console.WriteLine("tela Fornecedor");
+
                     //chamar a tela de fornecedor
                     MenuFornecedor.TelaFornecedor();
+
                     break;
                 case 2:
                     Console.WriteLine("tela de prod");
                     break;
                 case 3:
-                    Console.WriteLine("Tela de Transportadora");
-                    TransportadoraService.MenuTransportadora();
+                    TransportadoraMenu.MenuTransportadora(); 
                     break;
                 case 4:
                     System.Console.WriteLine("Saindo...");
+                    return; // Sai do MenuAdmin completamente
+                default:
+                    Console.WriteLine("Opção inválida.");
                     break;
             }
-
-
         }
     }
 }

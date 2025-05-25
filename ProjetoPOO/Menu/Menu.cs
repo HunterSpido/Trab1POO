@@ -16,18 +16,18 @@ public static class Menu
             if (opcao == 1)
             {
                 Console.Write("Login: ");
-                string login = Console.ReadLine()!;
+                string nome = Console.ReadLine()!;
                 Console.Write("Senha: ");
                 string senha = Console.ReadLine()!;
 
-                if (login == "admin" && senha == "admin")
+                if (nome == "admin" && senha == "admin")
                 {
                     Console.WriteLine("Bem-vindo admin!");
                     Console.WriteLine(" == MENU DO ADMIN ==");
                     AdminMenu.MenuAdmin();
                     // Chama menu admin
                 }
-                else if (UsuarioService.ValidarLogin(login, senha))
+                else if (ClienteService.ValidarNome(nome, senha))
                 {
                     Console.WriteLine("Login efetuado com sucesso!");
                     UsuarioNormalMenu.MenuUsuario();
@@ -40,7 +40,7 @@ public static class Menu
             }
             else if (opcao == 2)
             {
-                UsuarioService.CadastrarUsuario();
+                ClienteService.CadastrarUsuario();
             }
             else if (opcao == 3)
             {
