@@ -38,10 +38,7 @@ public static class MenuFornecedor
                     break;
 
                 case 5:
-                    // Volta para o meun anterior
-                    break;
-
-
+                    return;
             }
         }
 

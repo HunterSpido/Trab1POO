@@ -24,16 +24,15 @@ public static class AdminMenu
             switch (tes)
             {
                 case 1:
-                    Console.WriteLine("tela Fornecedor");
-
-                    //chamar a tela de fornecedor
+                    Console.WriteLine("MENU FORNECEDOR");
                     MenuFornecedor.TelaFornecedor();
-
                     break;
                 case 2:
-                    Console.WriteLine("tela de prod");
+                    Console.WriteLine("MENU PRODUTO");
+                    ProdutoMenu.MenuProdutos();
                     break;
                 case 3:
+                    Console.WriteLine("MENU TRANSPORTADORA");
                     TransportadoraMenu.MenuTransportadora(); 
                     break;
                 case 4:
