@@ -7,36 +7,7 @@ public static class TransportadoraService
 {
     private static Transportadora[] vetorTransportadoras = new Transportadora[100];
     private static int qtdTransportadoras = 0;
-
-    public static void MenuTransportadora()
-    {
-        Console.WriteLine("Selecione uma opção");
-        Console.WriteLine("1 - Adicione uma transportadora");
-        Console.WriteLine("2 - Altere uma transportadora");
-        Console.WriteLine("3 - Exclua uma transportadora");
-        Console.WriteLine("4 - Consulte uma transportadora");
-
-        int v = int.Parse(Console.ReadLine()!);
-        switch (v)
-        {
-            case 1:
-                Adicione();
-                break;
-            case 2:
-                Alteracao();
-                break;
-            case 3:
-                Exclusao();
-                break;
-            case 4:
-                Consulta();
-                break;
-            default:
-                Console.WriteLine("Digite entre a opção 1-4");
-                break;
-        }
-    }
-
+    private static int Id = 0;
     public static void Adicione()
     {
         if (qtdTransportadoras >= vetorTransportadoras.Length)
@@ -44,11 +15,7 @@ public static class TransportadoraService
             Console.WriteLine("Limite de transportadoras atingido.");
             return;
         }
-
-        Console.Write("Digite o ID da transportadora: ");
-        int id = int.Parse(Console.ReadLine()!);
-
-        Console.Write("Digite o nome da transportadora: ");
+        Console.Write("Digite o nome: ");
         string nome = Console.ReadLine()!;
 
         Console.Write("Digite o preço por KM: ");
@@ -56,13 +23,14 @@ public static class TransportadoraService
 
         var nova = new Transportadora
         {
-            IdTransporadora = id,
+            IdTransporadora = Id,
             Nome = nome,
             PrecoPorKm = preco
         };
 
         vetorTransportadoras[qtdTransportadoras] = nova;
         qtdTransportadoras++;
+        Id++;
 
         Console.WriteLine("Transportadora adicionada com sucesso!");
     }

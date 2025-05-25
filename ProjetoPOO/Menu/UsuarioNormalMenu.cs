@@ -16,26 +16,21 @@ public static class UsuarioNormalMenu
             Console.WriteLine("3 - Consultar Produto");
             Console.WriteLine("4 - Sair");
             Console.Write("Digite a opção: ");
-            
-            if (!int.TryParse(Console.ReadLine(), out opcao))
-            {
-                Console.WriteLine("Opção inválida.");
-                continue;
-            }
 
+            opcao = int.Parse(Console.ReadLine()!);
             switch (opcao)
             {
                 case 1:
-                    //FornecedorService.Consulta();
+                    //FornecedorService.Consulta(); falta fazer o a funcao do fornecedor
                     break;
                 case 2:
                     TransportadoraService.Consulta();
                     break;
                 case 3:
-                    //ProdutoService.Consulta();
+                    //ProdutoService.Consulta(); falta fazer o a funcao do Produto
                     break;
                 case 4:
-                    Console.WriteLine("Saindo...");
+                    Console.WriteLine("Voltar Tela de Login...");
                     break;
                 default:
                     Console.WriteLine("Opção inválida.");
