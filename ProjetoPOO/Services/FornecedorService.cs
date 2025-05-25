@@ -28,7 +28,7 @@ public static class FornecedorService
         string telefone = Console.ReadLine();
         Console.Write("Digite o email: ");
         string email = Console.ReadLine();
-        // Endereco endereco = EnderecoService.PedirEndereco();
+        Endereco endereco = EnderecoService.PedirEndereco();
 
         var fornecedor = new Fornecedor
         {
@@ -37,14 +37,14 @@ public static class FornecedorService
             Descricao = descricao,
             Telefone = telefone,
             Email = email,
-            // Endereco = endereco,
+            Endereco = endereco,
 
         };
 
         vetorFornecedores[qtdFornecedores] = fornecedor;
         qtdFornecedores++;
         idFornecedores++;
-
+        Console.Write("Fornecedor Criado com sucesso!");
     }
 
     public static void Alterar()
@@ -65,7 +65,7 @@ public static class FornecedorService
                 vetorFornecedores[i].Telefone = Console.ReadLine();
                 Console.Write("Digite o novo email: ");
                 vetorFornecedores[i].Email = Console.ReadLine();
-                // vetorFornecedores[i].Endereco = EnderecoService.PedirEndereco();
+                vetorFornecedores[i].Endereco = EnderecoService.PedirEndereco();
 
                 Console.WriteLine("Fornecedora alterada com sucesso!");
                 return;
@@ -129,7 +129,51 @@ public static class FornecedorService
         Console.WriteLine($"Descricao: {f.Descricao}");
         Console.WriteLine($"Telefone: {f.Telefone}");
         Console.WriteLine($"Email: {f.Email}");
-        // Console.WriteLine($"Endereco: {f.Endereco}");
+        Console.WriteLine($"Endereco:");
+        Console.WriteLine($"Estado: {f.Endereco.Estado}");
+        Console.WriteLine($"Cidade: {f.Endereco.Cidade}");
+        Console.WriteLine($"Bairro: {f.Endereco.Bairro}");
+        Console.WriteLine($"Rua: {f.Endereco.Rua}");
+        Console.WriteLine($"Numero: {f.Endereco.Numero}");
+        Console.WriteLine($"CEP: {f.Endereco.Cep}");
     }
+
+    public static void Consultarf()
+    {
+        Console.Write("Digite o id que deseja consultar: ");
+        int id = int.Parse(Console.ReadLine());
+        int i;
+
+        for (i = 0; i < qtdFornecedores; i++)
+        {
+            if (id == vetorFornecedores[i].IdFornecedor)
+            {
+                Exibir(vetorFornecedores[i]);
+                return;
+            }
+        }
+
+        Console.WriteLine("Fornecedor nao encontrado");
+
+    }
+
+    public static int GetQuantidade()
+    {
+        return qtdFornecedores;
+    }
+
+    public static Fornecedor GetFornecedor(int id)
+    {
+        for (int i = 0; i < qtdFornecedores; i++)
+        {
+            if (vetorFornecedores[i] != null && id == vetorFornecedores[i].IdFornecedor)
+            {
+                return vetorFornecedores[i];
+            }
+        }
+        return null;
+    }
+
+    
     
 }
