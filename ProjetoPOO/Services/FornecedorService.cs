@@ -50,7 +50,7 @@ public static class FornecedorService
     public static void Alterar()
     {
         Console.Write("Digite o id que deseja alterar: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine()!);
         int i;
 
         for (i = 0; i < qtdFornecedores; i++)
@@ -77,7 +77,7 @@ public static class FornecedorService
     public static void Excluir()
     {
         Console.Write("Digite o id que deseja Excluir: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine()!);
         int i;
 
         for (i = 0; i < qtdFornecedores; i++)
@@ -137,26 +137,6 @@ public static class FornecedorService
         Console.WriteLine($"Numero: {f.Endereco.Numero}");
         Console.WriteLine($"CEP: {f.Endereco.Cep}");
     }
-
-    public static void Consultarf()
-    {
-        Console.Write("Digite o id que deseja consultar: ");
-        int id = int.Parse(Console.ReadLine());
-        int i;
-
-        for (i = 0; i < qtdFornecedores; i++)
-        {
-            if (id == vetorFornecedores[i].IdFornecedor)
-            {
-                Exibir(vetorFornecedores[i]);
-                return;
-            }
-        }
-
-        Console.WriteLine("Fornecedor nao encontrado");
-
-    }
-
     public static int GetQuantidade()
     {
         return qtdFornecedores;

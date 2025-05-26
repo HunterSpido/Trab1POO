@@ -87,11 +87,12 @@ public static class TransportadoraService
     public static void Consulta()
     {
         Console.Write("Digite o ID da transportadora que deseja consultar: ");
-        int id = int.Parse(Console.ReadLine()!);
+        
+
 
         for (int i = 0; i < qtdTransportadoras; i++)
         {
-            if (vetorTransportadoras[i].IdTransporadora == id)
+            if (vetorTransportadoras[i].IdTransporadora == Id)
             {
                 Exibir(vetorTransportadoras[i]);
                 return;

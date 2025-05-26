@@ -64,23 +64,23 @@ public static class ProdutoService
     public static void Alterar()
     {
         Console.Write("ID do produto a alterar: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine()!);
 
         for (int i = 0; i < qtdProdutos; i++)
         {
             if (vetorProdutos[i].IdProduto == id)
             {
                 Console.Write("Novo nome: ");
-                vetorProdutos[i].Nome = Console.ReadLine();
+                vetorProdutos[i].Nome = Console.ReadLine()!;
 
                 Console.Write("Nova descrição: ");
-                vetorProdutos[i].Descricao = Console.ReadLine();
+                vetorProdutos[i].Descricao = Console.ReadLine()!;
 
                 Console.Write("Novo preço: ");
-                vetorProdutos[i].Preco = double.Parse(Console.ReadLine());
+                vetorProdutos[i].Preco = double.Parse(Console.ReadLine()!);
 
                 Console.Write("Novo estoque: ");
-                vetorProdutos[i].Estoque = int.Parse(Console.ReadLine());
+                vetorProdutos[i].Estoque = int.Parse(Console.ReadLine()!);
 
                 Console.WriteLine("Produto alterado!");
                 return;
@@ -92,7 +92,7 @@ public static class ProdutoService
     public static void Excluir()
     {
         Console.Write("ID do produto a excluir: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine()!);
 
         for (int i = 0; i < qtdProdutos; i++)
         {
@@ -113,7 +113,7 @@ public static class ProdutoService
     public static void Consultar()
     {
         Console.Write("ID do produto: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine()!);
 
         for (int i = 0; i < qtdProdutos; i++)
         {
@@ -137,5 +137,5 @@ public static class ProdutoService
         Console.WriteLine($"Fornecedor: {p.Fornecedor.Nome} (ID: {p.Fornecedor.IdFornecedor})");
     }
 
-    
+
 }

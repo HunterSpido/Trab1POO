@@ -16,7 +16,7 @@ public static class MenuFornecedor
             Console.WriteLine("4 - Consulte um fornecedor");
             Console.WriteLine("5 - Voltar");
 
-            int opcao = int.Parse(Console.ReadLine());
+            int opcao = int.Parse(Console.ReadLine()!);
 
             switch (opcao)
             {
