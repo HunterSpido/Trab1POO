@@ -15,7 +15,7 @@ public class TransportadoraMenu
             Console.WriteLine("2 - Altere uma transportadora");
             Console.WriteLine("3 - Exclua uma transportadora");
             Console.WriteLine("4 - Consulte uma transportadora");
-            Console.WriteLine("5 - Voltar para o menu");
+            Console.WriteLine("5 - Voltar");
 
             int v = int.Parse(Console.ReadLine()!);
             switch (v)
