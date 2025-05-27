@@ -30,7 +30,7 @@ public class TransportadoraMenu
                     TransportadoraService.Exclusao();
                     break;
                 case 4:
-                    TransportadoraService.Consulta();
+                    TransportadoraService.Consultar();
                     break;
                 case 5:
                     return; // Sai do método e volta para o AdminMenu

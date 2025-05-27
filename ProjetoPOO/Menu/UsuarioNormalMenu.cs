@@ -25,7 +25,7 @@ public static class UsuarioNormalMenu
                     
                     break;
                 case 2:
-                    TransportadoraService.Consulta();
+                    TransportadoraService.Consultar();
                     break;
                 case 3:
                     ProdutoService.Consultar();

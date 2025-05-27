@@ -13,15 +13,3 @@ public static class Program
     }
 
 }
-
-/*
-Primeira tela é mostrando login ou cadastro
-    se cadastro{
-        mostrar nome, senha e tipo(admin ou cliente)
-    }
-    se login{
-        Verificar se usuario existe 
-            se existir mostrar telas (admin ou cliente)
-            se nao existir falar que nao sxiste
-    }   
-*/

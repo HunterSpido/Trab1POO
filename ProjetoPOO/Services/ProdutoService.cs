@@ -18,7 +18,7 @@ public static class ProdutoService
         }
 
         Console.Write("Nome do produto: ");
-        string ?nome = Console.ReadLine()!;
+        string? nome = Console.ReadLine()!;
 
         Console.Write("Descrição: ");
         string? descricao = Console.ReadLine()!;
@@ -110,22 +110,6 @@ public static class ProdutoService
         Console.WriteLine("Produto não encontrado.");
     }
 
-    public static void Consultar()
-    {
-        Console.Write("ID do produto: ");
-        int id = int.Parse(Console.ReadLine()!);
-
-        for (int i = 0; i < qtdProdutos; i++)
-        {
-            if (vetorProdutos[i].IdProduto == id)
-            {
-                Exibir(vetorProdutos[i]);
-                return;
-            }
-        }
-        Console.WriteLine("Produto não encontrado.");
-    }
-
     private static void Exibir(Produto p)
     {
         Console.WriteLine("\n=== DADOS DO PRODUTO ===");
@@ -135,6 +119,80 @@ public static class ProdutoService
         Console.WriteLine($"Preço: R${p.Preco:F2}");
         Console.WriteLine($"Estoque: {p.Estoque} unidades");
         Console.WriteLine($"Fornecedor: {p.Fornecedor.Nome} (ID: {p.Fornecedor.IdFornecedor})");
+    }
+    public static void Consultar()
+    {
+        Console.WriteLine("\n--- Tipo de Consulta ---");
+        Console.WriteLine("1 - Por ID");
+        Console.WriteLine("2 - Por Nome (busca parcial)");
+        Console.Write("Opção: ");
+
+        string opcao = Console.ReadLine()!;
+
+        switch (opcao)
+        {
+            case "1":
+                ConsultarId();
+                break;
+            case "2":
+                ConsultarPorNome();
+                break;
+            default:
+                Console.WriteLine("Opção inválida.");
+                break;
+        }
+    }
+
+    public static void ConsultarPorNome()
+    {
+        Console.Write("Digite as letras para buscar (todas presentes): ");
+        string termo = Console.ReadLine()!.ToLower();
+
+        bool encontrou = false;
+
+        for (int i = 0; i < qtdProdutos; i++)
+        {
+            string nomeLower = vetorProdutos[i].Nome.ToLower();
+            bool contemTodasLetras = true;
+
+
+            if (!nomeLower.Contains(termo))
+            {
+                contemTodasLetras = false;
+                break;
+            }
+
+
+            if (contemTodasLetras)
+            {
+                Exibir(vetorProdutos[i]);
+                Console.WriteLine("---------------------");
+                encontrou = true;
+            }
+        }
+
+        if (!encontrou)
+        {
+            Console.WriteLine("Nenhum fornecedor encontrado com todas essas letras.");
+        }
+    }
+    public static void ConsultarId()
+    {
+        Console.Write("Digite o id que deseja consultar: ");
+        int id = int.Parse(Console.ReadLine()!);
+        int i;
+
+        for (i = 0; i < qtdProdutos; i++)
+        {
+            if (id == vetorProdutos[i].IdProduto)
+            {
+                Exibir(vetorProdutos[i]);
+                return;
+            }
+        }
+
+        Console.WriteLine("Fornecedor nao encontrado");
+
     }
 
 

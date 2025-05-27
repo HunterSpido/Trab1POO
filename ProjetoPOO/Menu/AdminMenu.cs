@@ -1,5 +1,4 @@
 namespace ProjetoPOO.Menu;
-
 using ProjetoPOO.Classes;
 using ProjetoPOO.Services;
 using System;

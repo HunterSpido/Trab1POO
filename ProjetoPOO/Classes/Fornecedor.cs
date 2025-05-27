@@ -1,7 +1,7 @@
 namespace ProjetoPOO.Classes;
 
 using System;
-using System.Reflection.Metadata.Ecma335;
+
 
 public class Fornecedor 
 {
@@ -15,10 +15,7 @@ public class Fornecedor
 
 
 
-    public void cadastroTransportadora()
-    {
 
-    }
 
 
 
