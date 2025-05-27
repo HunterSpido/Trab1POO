@@ -1,7 +1,7 @@
 namespace ProjetoPOO.Classes;
 
 using System;
-using System.Reflection.Metadata.Ecma335;
+
 
 public class Fornecedor 
 {
@@ -11,14 +11,11 @@ public class Fornecedor
     public string? Telefone{get;set;}    
     public string? Email{get;set;}
 
-    public Endereco Endereco{ get; set; }
+    public Endereco? Endereco{ get; set; }
 
 
 
-    public void cadastroTransportadora()
-    {
 
-    }
 
 
 

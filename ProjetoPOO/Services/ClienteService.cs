@@ -29,7 +29,14 @@ public static class ClienteService
         Console.Write("Digite o email: ");
         string email = Console.ReadLine()!;
 
-        clientes[totalClientes] = new Cliente { Nome = nome, Senha = senha, Email=email,Telefone=telefone,Endereco=endereco };
+        clientes[totalClientes] = new Cliente
+        {
+            Nome = nome,
+            Senha = senha,
+            Email = email,
+            Telefone = telefone,
+            Endereco = endereco
+        };
         totalClientes++;
 
         Console.WriteLine("Cliente cadastrado com sucesso!");

@@ -84,14 +84,15 @@ public static class TransportadoraService
         Console.WriteLine("Transportadora não encontrada.");
     }
 
-    public static void Consulta()
+    public static void ConsultarId()
     {
         Console.Write("Digite o ID da transportadora que deseja consultar: ");
-        int id = int.Parse(Console.ReadLine()!);
+        int Id = int.Parse(Console.ReadLine()!);
+
 
         for (int i = 0; i < qtdTransportadoras; i++)
         {
-            if (vetorTransportadoras[i].IdTransporadora == id)
+            if (vetorTransportadoras[i].IdTransporadora == Id)
             {
                 Exibir(vetorTransportadoras[i]);
                 return;
@@ -106,5 +107,62 @@ public static class TransportadoraService
         Console.WriteLine($"ID: {t.IdTransporadora}");
         Console.WriteLine($"Nome: {t.Nome}");
         Console.WriteLine($"Preço por KM: {t.PrecoPorKm}");
+    }
+
+    public static void ConsultarPorNome()
+    {
+        Console.Write("Digite as letras para buscar (todas presentes): ");
+        string termo = Console.ReadLine()!.ToLower();
+
+        bool encontrou = false;
+
+        for (int i = 0; i < qtdTransportadoras; i++)
+        {
+            string nomeLower = vetorTransportadoras[i].Nome.ToLower();
+            bool contemTodasLetras = true;
+
+
+            if (!nomeLower.Contains(termo))
+            {
+                contemTodasLetras = false;
+                break;
+            }
+
+
+            if (contemTodasLetras)
+            {
+                Exibir(vetorTransportadoras[i]);
+                Console.WriteLine("---------------------");
+                encontrou = true;
+            }
+        }
+
+        if (!encontrou)
+        {
+            Console.WriteLine("Nenhum fornecedor encontrado com todas essas letras.");
+        }
+    }
+
+    public static void Consultar()
+    {
+        Console.WriteLine("\n--- Tipo de Consulta ---");
+        Console.WriteLine("1 - Por ID");
+        Console.WriteLine("2 - Por Nome (busca parcial)");
+        Console.Write("Opção: ");
+
+        string opcao = Console.ReadLine()!;
+
+        switch (opcao)
+        {
+            case "1":
+                ConsultarId();
+                break;
+            case "2":
+                ConsultarPorNome();
+                break;
+            default:
+                Console.WriteLine("Opção inválida.");
+                break;
+        }
     }
 }

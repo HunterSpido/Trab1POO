@@ -13,10 +13,10 @@ public static class MenuFornecedor
             Console.WriteLine("1 - Adicione um fornecedor");
             Console.WriteLine("2 - Altere um fornecedor");
             Console.WriteLine("3 - Exclua um fornecedor");
-            Console.WriteLine("4 - Consulte um fornecedor");
+            Console.WriteLine("4 - Consultar fornecedor");
             Console.WriteLine("5 - Voltar");
 
-            int opcao = int.Parse(Console.ReadLine());
+            int opcao = int.Parse(Console.ReadLine()!);
 
             switch (opcao)
             {

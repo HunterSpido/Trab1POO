@@ -21,13 +21,13 @@ public static class FornecedorService
         }
 
         Console.Write("Digite o nome: ");
-        string nome = Console.ReadLine();
+        string nome = Console.ReadLine()!;
         Console.Write("Digite a descricao: ");
-        string descricao = Console.ReadLine();
+        string descricao = Console.ReadLine()!;
         Console.Write("Digite o telefone: ");
-        string telefone = Console.ReadLine();
+        string telefone = Console.ReadLine()!;
         Console.Write("Digite o email: ");
-        string email = Console.ReadLine();
+        string email = Console.ReadLine()!;
         Endereco endereco = EnderecoService.PedirEndereco();
 
         var fornecedor = new Fornecedor
@@ -50,7 +50,7 @@ public static class FornecedorService
     public static void Alterar()
     {
         Console.Write("Digite o id que deseja alterar: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine()!);
         int i;
 
         for (i = 0; i < qtdFornecedores; i++)
@@ -77,7 +77,7 @@ public static class FornecedorService
     public static void Excluir()
     {
         Console.Write("Digite o id que deseja Excluir: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine()!);
         int i;
 
         for (i = 0; i < qtdFornecedores; i++)
@@ -102,10 +102,10 @@ public static class FornecedorService
 
     }
 
-    public static void Consultar()
+    public static void ConsultarId()
     {
         Console.Write("Digite o id que deseja consultar: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine()!);
         int i;
 
         for (i = 0; i < qtdFornecedores; i++)
@@ -137,26 +137,6 @@ public static class FornecedorService
         Console.WriteLine($"Numero: {f.Endereco.Numero}");
         Console.WriteLine($"CEP: {f.Endereco.Cep}");
     }
-
-    public static void Consultarf()
-    {
-        Console.Write("Digite o id que deseja consultar: ");
-        int id = int.Parse(Console.ReadLine());
-        int i;
-
-        for (i = 0; i < qtdFornecedores; i++)
-        {
-            if (id == vetorFornecedores[i].IdFornecedor)
-            {
-                Exibir(vetorFornecedores[i]);
-                return;
-            }
-        }
-
-        Console.WriteLine("Fornecedor nao encontrado");
-
-    }
-
     public static int GetQuantidade()
     {
         return qtdFornecedores;
@@ -174,6 +154,62 @@ public static class FornecedorService
         return null;
     }
 
-    
-    
+    public static void Consultar()
+    {
+        Console.WriteLine("\n--- Tipo de Consulta ---");
+        Console.WriteLine("1 - Por ID");
+        Console.WriteLine("2 - Por Nome (busca parcial)");
+        Console.Write("Opção: ");
+
+        string opcao = Console.ReadLine()!;
+
+        switch (opcao)
+        {
+            case "1":
+                ConsultarId();
+                break;
+            case "2":
+                ConsultarPorNome();
+                break;
+            default:
+                Console.WriteLine("Opção inválida.");
+                break;
+        }
+    }
+    public static void ConsultarPorNome()
+    {
+        Console.Write("Digite as letras para buscar (todas presentes): ");
+        string termo = Console.ReadLine()!.ToLower();
+
+        bool encontrou = false;
+
+        for (int i = 0; i < qtdFornecedores; i++)
+        {
+            string nomeLower = vetorFornecedores[i].Nome.ToLower();
+            bool contemTodasLetras = true;
+
+            
+            if (!nomeLower.Contains(termo))
+            {
+                contemTodasLetras = false;
+                break;
+            }
+
+
+            if (contemTodasLetras)
+            {
+                Exibir(vetorFornecedores[i]);
+                Console.WriteLine("---------------------");
+                encontrou = true;
+            }
+        }
+
+        if (!encontrou)
+        {
+            Console.WriteLine("Nenhum fornecedor encontrado com todas essas letras.");
+        }
+    }
+
+
+
 }

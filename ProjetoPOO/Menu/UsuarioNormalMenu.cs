@@ -21,13 +21,14 @@ public static class UsuarioNormalMenu
             switch (opcao)
             {
                 case 1:
-                    //FornecedorService.Consulta(); falta fazer o a funcao do fornecedor
+                    FornecedorService.Consultar();
+                    
                     break;
                 case 2:
-                    TransportadoraService.Consulta();
+                    TransportadoraService.Consultar();
                     break;
                 case 3:
-                    //ProdutoService.Consulta(); falta fazer o a funcao do Produto
+                    ProdutoService.Consultar();
                     break;
                 case 4:
                     Console.WriteLine("Voltar Tela de Login...");
