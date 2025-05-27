@@ -34,6 +34,7 @@ public static class ProdutoService
         for (int i = 0; i < FornecedorService.GetQuantidade(); i++)
         {
             var forn = FornecedorService.GetFornecedor(i);
+            if (forn == null) continue;
             Console.WriteLine($"{forn.IdFornecedor} - {forn.Nome}");
         }
 
