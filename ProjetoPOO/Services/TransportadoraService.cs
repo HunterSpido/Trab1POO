@@ -8,7 +8,7 @@ public static class TransportadoraService
     private static Transportadora[] vetorTransportadoras = new Transportadora[100];
     private static int qtdTransportadoras = 0;
     private static int Id = 0;
-    public static void Adicione()
+    public static void Adicionar()
     {
         if (qtdTransportadoras >= vetorTransportadoras.Length)
         {
@@ -23,7 +23,7 @@ public static class TransportadoraService
 
         var nova = new Transportadora
         {
-            IdTransporadora = Id,
+            IdTransportadora = Id,
             Nome = nome,
             PrecoPorKm = preco
         };
@@ -35,14 +35,14 @@ public static class TransportadoraService
         Console.WriteLine("Transportadora adicionada com sucesso!");
     }
 
-    public static void Alteracao()
+    public static void Alterar()
     {
         Console.Write("Digite o ID da transportadora a alterar: ");
         int id = int.Parse(Console.ReadLine()!);
 
         for (int i = 0; i < qtdTransportadoras; i++)
         {
-            if (vetorTransportadoras[i].IdTransporadora == id)
+            if (vetorTransportadoras[i].IdTransportadora == id)
             {
                 Console.Write("Novo nome: ");
                 vetorTransportadoras[i].Nome = Console.ReadLine()!;
@@ -58,14 +58,14 @@ public static class TransportadoraService
         Console.WriteLine("Transportadora não encontrada.");
     }
 
-    public static void Exclusao()
+    public static void Excluir()
     {
         Console.Write("Digite o ID da transportadora a excluir: ");
         int id = int.Parse(Console.ReadLine()!);
 
         for (int i = 0; i < qtdTransportadoras; i++)
         {
-            if (vetorTransportadoras[i].IdTransporadora == id)
+            if (vetorTransportadoras[i].IdTransportadora == id)
             {
                 // Deslocar os elementos
                 for (int j = i; j < qtdTransportadoras - 1; j++)
@@ -92,7 +92,7 @@ public static class TransportadoraService
 
         for (int i = 0; i < qtdTransportadoras; i++)
         {
-            if (vetorTransportadoras[i].IdTransporadora == Id)
+            if (vetorTransportadoras[i].IdTransportadora == Id)
             {
                 Exibir(vetorTransportadoras[i]);
                 return;
@@ -104,20 +104,24 @@ public static class TransportadoraService
     private static void Exibir(Transportadora t)
     {
         Console.WriteLine("=== Transportadora encontrada ===");
-        Console.WriteLine($"ID: {t.IdTransporadora}");
+        Console.WriteLine($"ID: {t.IdTransportadora}");
         Console.WriteLine($"Nome: {t.Nome}");
         Console.WriteLine($"Preço por KM: {t.PrecoPorKm}");
     }
 
     public static void ConsultarPorNome()
     {
-        Console.Write("Digite as letras para buscar (todas presentes): ");
+        Console.Write("Digite parte do nome para buscar: ");
         string termo = Console.ReadLine()!.ToLower();
 
         bool encontrou = false;
 
         for (int i = 0; i < qtdTransportadoras; i++)
         {
+            if (vetorTransportadoras == null)
+            {
+                continue;
+            }
             string nomeLower = vetorTransportadoras[i].Nome.ToLower();
             bool contemTodasLetras = true;
 
@@ -125,7 +129,7 @@ public static class TransportadoraService
             if (!nomeLower.Contains(termo))
             {
                 contemTodasLetras = false;
-                break;
+                continue;
             }
 
 
@@ -139,7 +143,7 @@ public static class TransportadoraService
 
         if (!encontrou)
         {
-            Console.WriteLine("Nenhum fornecedor encontrado com todas essas letras.");
+            Console.WriteLine($"Nenhuma transportadora encontrado com: {termo}");
         }
     }
 

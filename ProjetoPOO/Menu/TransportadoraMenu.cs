@@ -21,13 +21,13 @@ public class TransportadoraMenu
             switch (v)
             {
                 case 1:
-                    TransportadoraService.Adicione();
+                    TransportadoraService.Adicionar();
                     break;
                 case 2:
-                    TransportadoraService.Alteracao();
+                    TransportadoraService.Alterar();
                     break;
                 case 3:
-                    TransportadoraService.Exclusao();
+                    TransportadoraService.Excluir();
                     break;
                 case 4:
                     TransportadoraService.Consultar();

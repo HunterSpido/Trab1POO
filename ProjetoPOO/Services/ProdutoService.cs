@@ -89,25 +89,31 @@ public static class ProdutoService
         Console.WriteLine("Produto não encontrado.");
     }
 
+
     public static void Excluir()
     {
-        Console.Write("ID do produto a excluir: ");
+        Console.Write("Digite o ID do Produto a excluir: ");
         int id = int.Parse(Console.ReadLine()!);
 
         for (int i = 0; i < qtdProdutos; i++)
         {
             if (vetorProdutos[i].IdProduto == id)
             {
+                // Deslocar os elementos
                 for (int j = i; j < qtdProdutos - 1; j++)
                 {
                     vetorProdutos[j] = vetorProdutos[j + 1];
                 }
+
+                vetorProdutos[qtdProdutos - 1] = null;
                 qtdProdutos--;
-                Console.WriteLine("Produto excluído!");
+
+                Console.WriteLine("Produto excluída com sucesso!");
                 return;
             }
         }
-        Console.WriteLine("Produto não encontrado.");
+
+        Console.WriteLine("Produto não encontrada.");
     }
 
     private static void Exibir(Produto p)
@@ -145,23 +151,27 @@ public static class ProdutoService
 
     public static void ConsultarPorNome()
     {
-        Console.Write("Digite as letras para buscar (todas presentes): ");
+        Console.Write("Digite a parte do nome para buscar: ");
         string termo = Console.ReadLine()!.ToLower();
 
         bool encontrou = false;
 
         for (int i = 0; i < qtdProdutos; i++)
         {
+            // Verifica se o produto na posição i é nulo
+            if (vetorProdutos[i] == null)
+            {
+                continue; // Pula para o próximo produto
+            }
+
             string nomeLower = vetorProdutos[i].Nome.ToLower();
             bool contemTodasLetras = true;
-
 
             if (!nomeLower.Contains(termo))
             {
                 contemTodasLetras = false;
-                break;
+                continue;
             }
-
 
             if (contemTodasLetras)
             {
@@ -173,7 +183,7 @@ public static class ProdutoService
 
         if (!encontrou)
         {
-            Console.WriteLine("Nenhum fornecedor encontrado com todas essas letras.");
+            Console.WriteLine($"Nenhum produto encontrado com: {termo}");
         }
     }
     public static void ConsultarId()
@@ -191,7 +201,7 @@ public static class ProdutoService
             }
         }
 
-        Console.WriteLine("Fornecedor nao encontrado");
+        Console.WriteLine("Produto nao encontrado");
 
     }
 

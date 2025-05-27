@@ -44,7 +44,7 @@ public static class FornecedorService
         vetorFornecedores[qtdFornecedores] = fornecedor;
         qtdFornecedores++;
         idFornecedores++;
-        Console.Write("Fornecedor Criado com sucesso!");
+        Console.WriteLine("Fornecedor Criado com sucesso!");
     }
 
     public static void Alterar()
@@ -74,17 +74,16 @@ public static class FornecedorService
         Console.WriteLine("Fornecedor não encontrado.");
     }
 
+
     public static void Excluir()
     {
-        Console.Write("Digite o id que deseja Excluir: ");
+        Console.Write("Digite o ID do Fornecedor a excluir: ");
         int id = int.Parse(Console.ReadLine()!);
-        int i;
 
-        for (i = 0; i < qtdFornecedores; i++)
+        for (int i = 0; i < qtdFornecedores; i++)
         {
-            if (id == vetorFornecedores[i].IdFornecedor)
+            if (vetorFornecedores[i].IdFornecedor == id)
             {
-
                 // Deslocar os elementos
                 for (int j = i; j < qtdFornecedores - 1; j++)
                 {
@@ -94,14 +93,13 @@ public static class FornecedorService
                 vetorFornecedores[qtdFornecedores - 1] = null!;
                 qtdFornecedores--;
 
-                Console.WriteLine("Forncedor excluido.");
+                Console.WriteLine("Fornecedor excluído com sucesso!");
                 return;
             }
         }
-        Console.WriteLine("Fornecedor não encontrado.");
 
+        Console.WriteLine("Fornecedor não encontrada.");
     }
-
     public static void ConsultarId()
     {
         Console.Write("Digite o id que deseja consultar: ");
@@ -178,21 +176,25 @@ public static class FornecedorService
     }
     public static void ConsultarPorNome()
     {
-        Console.Write("Digite as letras para buscar (todas presentes): ");
+        Console.Write("Digite a parte do nome para buscar: ");
         string termo = Console.ReadLine()!.ToLower();
 
         bool encontrou = false;
 
         for (int i = 0; i < qtdFornecedores; i++)
         {
+            if (vetorFornecedores[i] == null)
+            {
+                continue; // Pula para o próximo produto se for nulo
+            }
             string nomeLower = vetorFornecedores[i].Nome.ToLower();
             bool contemTodasLetras = true;
 
-            
+
             if (!nomeLower.Contains(termo))
             {
                 contemTodasLetras = false;
-                break;
+                continue;
             }
 
 
@@ -206,7 +208,7 @@ public static class FornecedorService
 
         if (!encontrou)
         {
-            Console.WriteLine("Nenhum fornecedor encontrado com todas essas letras.");
+            Console.WriteLine($"Nenhum fornecedor encontrado com: {termo}");
         }
     }
 
