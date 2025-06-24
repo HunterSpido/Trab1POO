@@ -1,10 +1,9 @@
 using ProjetoPOO.Services;
-
 namespace ProjetoPOO.Menu;
 
-public class Menu
+public  class Menu
 {
-    public void TelaLogin()
+    public  void TelaLogin()
     {
         while (true)
         {
@@ -13,6 +12,8 @@ public class Menu
             Console.WriteLine("3 - Sair");
             Console.Write("Escolha: ");
             int opcao = int.Parse(Console.ReadLine()!);
+            ClienteService clienteService = new ClienteService();
+
 
             if (opcao == 1)
             {
@@ -25,30 +26,25 @@ public class Menu
                 {
                     Console.WriteLine("Bem-vindo admin!");
                     Console.WriteLine(" == MENU DO ADMIN ==");
-
-                    AdminMenu adminMenu= new AdminMenu();
+                    AdminMenu adminMenu = new AdminMenu();
                     adminMenu.MenuAdmin();
                     // Chama menu admin
                 }
+
+                else if (clienteService.ValidarNome(nome, senha))
+                {
+                    Console.WriteLine("Login efetuado com sucesso!");
+                    UsuarioNormalMenu usuarioNormalMenu = new UsuarioNormalMenu();
+                    usuarioNormalMenu.MenuUsuario();
+                    // Chama menu usuário normal
+                }
                 else
                 {
-                    ClienteService clienteService = new ClienteService(); 
-                    if (clienteService.ValidarNome(nome, senha))
-                    {
-                        Console.WriteLine("Login efetuado com sucesso!");
-                        UsuarioNormalMenu usuarioNormalMenu = new UsuarioNormalMenu();
-                        usuarioNormalMenu.MenuUsuario();
-                        // Chama menu usuário normal
-                    }
-                    else
-                    {
-                        Console.WriteLine("Login ou senha incorretos.");
-                    }
+                    Console.WriteLine("Login ou senha incorretos.");
                 }
             }
             else if (opcao == 2)
             {
-                ClienteService clienteService = new ClienteService(); 
                 clienteService.CadastrarUsuario();
             }
             else if (opcao == 3)

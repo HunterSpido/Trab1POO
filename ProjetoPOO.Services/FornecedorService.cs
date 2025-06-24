@@ -5,16 +5,20 @@ using ProjetoPOO.Services;
 using System;
 using System.Runtime.CompilerServices;
 
-public class FornecedorService
+public  class FornecedorService
 {
-    private Fornecedor[] vetorFornecedores = new Fornecedor[100];
-    private int qtdFornecedores = 0;
-    EnderecoService enderecoService = new EnderecoService();
-    private int idFornecedores = 0;
-
-    public void Adicionar()
+    EnderecoService enderecoService;
+    public FornecedorService()
     {
+        enderecoService = new EnderecoService();
+    }
+    private  Fornecedor[] vetorFornecedores = new Fornecedor[100];
+    private  int qtdFornecedores = 0;
 
+    private  int idFornecedores = 0;
+
+    public  void Adicionar()
+    {
         if (qtdFornecedores >= vetorFornecedores.Length)
         {
             Console.Write("Limite Atingido");
@@ -48,7 +52,7 @@ public class FornecedorService
         Console.WriteLine("Fornecedor Criado com sucesso!");
     }
 
-    public void Alterar()
+    public  void Alterar()
     {
         Console.Write("Digite o id que deseja alterar: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -66,7 +70,6 @@ public class FornecedorService
                 vetorFornecedores[i].Telefone = Console.ReadLine();
                 Console.Write("Digite o novo email: ");
                 vetorFornecedores[i].Email = Console.ReadLine();
-
                 vetorFornecedores[i].Endereco = enderecoService.PedirEndereco();
 
                 Console.WriteLine("Fornecedora alterada com sucesso!");
@@ -77,7 +80,7 @@ public class FornecedorService
     }
 
 
-    public void Excluir()
+    public  void Excluir()
     {
         Console.Write("Digite o ID do Fornecedor a excluir: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -102,7 +105,7 @@ public class FornecedorService
 
         Console.WriteLine("Fornecedor não encontrada.");
     }
-    public void ConsultarId()
+    public  void ConsultarId()
     {
         Console.Write("Digite o id que deseja consultar: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -121,7 +124,7 @@ public class FornecedorService
 
     }
 
-    private void Exibir(Fornecedor f)
+    private  void Exibir(Fornecedor f)
     {
         Console.WriteLine("=== Fornecedor Encontrado ===");
         Console.WriteLine($"ID: {f.IdFornecedor}");
@@ -137,12 +140,12 @@ public class FornecedorService
         Console.WriteLine($"Numero: {f.Endereco.Numero}");
         Console.WriteLine($"CEP: {f.Endereco.Cep}");
     }
-    public int GetQuantidade()
+    public  int GetQuantidade()
     {
         return qtdFornecedores;
     }
 
-    public Fornecedor GetFornecedor(int id)
+    public  Fornecedor GetFornecedor(int id)
     {
         for (int i = 0; i < qtdFornecedores; i++)
         {
@@ -154,7 +157,7 @@ public class FornecedorService
         return null;
     }
 
-    public void Consultar()
+    public  void Consultar()
     {
         Console.WriteLine("\n--- Tipo de Consulta ---");
         Console.WriteLine("1 - Por ID");
@@ -176,7 +179,7 @@ public class FornecedorService
                 break;
         }
     }
-    public void ConsultarPorNome()
+    public  void ConsultarPorNome()
     {
         Console.Write("Digite a parte do nome para buscar: ");
         string termo = Console.ReadLine()!.ToLower();

@@ -1,58 +1,61 @@
-
+using System;
 using ProjetoPOO.Models;
-using ProjetoPOO.Repository;
+namespace ProjetoPOO.Services;
 
-namespace ProjetoPOO.Services
+public 
+    
+    class ClienteService
 {
-    public class ClienteService
+    EnderecoService enderecoService;
+    public ClienteService()
     {
-        private ClienteRepositoryVetor repo = new ClienteRepositoryVetor();
+        enderecoService = new EnderecoService();
+    }
+    private  Cliente[] clientes = new Cliente[100];
+    private  int totalClientes = 0;
 
-        public void CadastrarUsuario()
+    public  void CadastrarUsuario()
+    {
+        if (totalClientes >= clientes.Length)
         {
-            Console.Write("Digite o nome: ");
-            string nome = Console.ReadLine()!;
-
-            Console.Write("Digite a senha: ");
-            string senha = Console.ReadLine()!;
-
-            EnderecoService enderecoService = new EnderecoService();
-
-            Endereco endereco = enderecoService.PedirEndereco();
-            
-
-            Console.Write("Digite o telefone: ");
-            string telefone = Console.ReadLine()!;
-
-            Console.Write("Digite o email: ");
-            string email = Console.ReadLine()!;
-
-            Cliente novoCliente = new Cliente
-            {
-                Nome = nome,
-                Senha = senha,
-                Email = email,
-                Telefone = telefone,
-                Endereco = endereco
-            };
-
-            bool sucesso = repo.Adicionar(novoCliente);
-
-            if (sucesso)
-                Console.WriteLine("Cliente cadastrado com sucesso!");
-            else
-                Console.WriteLine("Limite de usuários atingido.");
+            Console.WriteLine("Limite de usuários atingido.");
+            return;
         }
 
-        public bool ValidarNome(string nome, string senha)
+        Console.Write("Digite o nome: ");
+        string nome = Console.ReadLine()!;
+
+        Console.Write("Digite a senha: ");
+        string senha = Console.ReadLine()!;
+
+        Endereco endereco=enderecoService.PedirEndereco();
+
+        Console.Write("Digite o telefone: ");
+        string telefone = Console.ReadLine()!;
+
+        Console.Write("Digite o email: ");
+        string email = Console.ReadLine()!;
+
+        clientes[totalClientes] = new Cliente
         {
-            var cliente = repo.ConsultarPorNomeESenha(nome, senha);
-            return cliente != null;
-        }
-        public bool FazerLogin(string nome, string senha)
+            Nome = nome,
+            Senha = senha,
+            Email = email,
+            Telefone = telefone,
+            Endereco = endereco
+        };
+        totalClientes++;
+
+        Console.WriteLine("Cliente cadastrado com sucesso!");
+    }
+
+    public  bool ValidarNome(string nome, string senha)
+    {
+        for (int i = 0; i < totalClientes; i++)
         {
-            return repo.ValidarLogin(nome, senha);
+            if (clientes[i].Nome == nome && clientes[i].Senha == senha)
+                return true;
         }
-        
+        return false;
     }
 }

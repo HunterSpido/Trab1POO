@@ -3,15 +3,19 @@ using ProjetoPOO.Models;
 using ProjetoPOO.Menu;
 namespace ProjetoPOO.Services;
 
-public class ProdutoService
+public  class ProdutoService
 {
+    FornecedorService fornecedorService;
+    public ProdutoService()
+    {
+        fornecedorService = new FornecedorService();
+    }
     private  Produto[] vetorProdutos = new Produto[100];
     private  int qtdProdutos = 0;
-    private int idProduto = 0;
+    private  int idProduto = 0;
 
-    public void Adicionar()
+    public  void Adicionar()
     {
-        FornecedorService fornecedorService = new FornecedorService();
         if (qtdProdutos >= vetorProdutos.Length)
         {
             Console.WriteLine("Limite de produtos atingido!");
@@ -63,7 +67,7 @@ public class ProdutoService
         Console.WriteLine("Produto cadastrado com sucesso!");
     }
 
-    public void Alterar()
+    public  void Alterar()
     {
         Console.Write("ID do produto a alterar: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -92,7 +96,7 @@ public class ProdutoService
     }
 
 
-    public void Excluir()
+    public  void Excluir()
     {
         Console.Write("Digite o ID do Produto a excluir: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -118,7 +122,7 @@ public class ProdutoService
         Console.WriteLine("Produto não encontrada.");
     }
 
-    private static void Exibir(Produto p)
+    private  void Exibir(Produto p)
     {
         Console.WriteLine("\n=== DADOS DO PRODUTO ===");
         Console.WriteLine($"ID: {p.IdProduto}");
@@ -128,7 +132,7 @@ public class ProdutoService
         Console.WriteLine($"Estoque: {p.Estoque} unidades");
         Console.WriteLine($"Fornecedor: {p.Fornecedor.Nome} (ID: {p.Fornecedor.IdFornecedor})");
     }
-    public void Consultar()
+    public  void Consultar()
     {
         Console.WriteLine("\n--- Tipo de Consulta ---");
         Console.WriteLine("1 - Por ID");
@@ -151,7 +155,7 @@ public class ProdutoService
         }
     }
 
-    public void ConsultarPorNome()
+    public  void ConsultarPorNome()
     {
         Console.Write("Digite a parte do nome para buscar: ");
         string termo = Console.ReadLine()!.ToLower();
@@ -188,7 +192,7 @@ public class ProdutoService
             Console.WriteLine($"Nenhum produto encontrado com: {termo}");
         }
     }
-    public void ConsultarId()
+    public  void ConsultarId()
     {
         Console.Write("Digite o id que deseja consultar: ");
         int id = int.Parse(Console.ReadLine()!);

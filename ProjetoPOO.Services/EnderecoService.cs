@@ -5,7 +5,7 @@ namespace ProjetoPOO.Services;
 
 public class EnderecoService
 {
-    public Endereco PedirEndereco()
+    public  Endereco PedirEndereco()
     {
         Endereco endereco = new Endereco();
         Console.WriteLine("Informe seu Endereço:");

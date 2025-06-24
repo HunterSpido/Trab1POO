@@ -24,7 +24,6 @@ public class AdminMenu
             {
                 case 1:
                     Console.WriteLine("MENU FORNECEDOR");
-                    
                     MenuFornecedor menuFornecedor = new MenuFornecedor();
                     menuFornecedor.TelaFornecedor();
                     break;

@@ -10,8 +10,10 @@ namespace ProjetoPOO.Repository
     {
         public void Adicionar(T obj);
         public void Remover(T obj);
-        public IList<T> Listar();
+        public List<T> Listar();
         public void Alterar(T obj);
+        public void Salvar();
+        public void Carregar();
 
     }
 }

@@ -2,9 +2,9 @@ namespace ProjetoPOO.Menu;
 using ProjetoPOO.Services;
 using System;
 
-public class MenuFornecedor
+public  class MenuFornecedor
 {
-    public void TelaFornecedor()
+    public  void TelaFornecedor()
     {
         while (true)
         {
@@ -16,6 +16,7 @@ public class MenuFornecedor
             Console.WriteLine("4 - Consultar fornecedor");
             Console.WriteLine("5 - Voltar");
             FornecedorService fornecedorService = new FornecedorService();
+
             int opcao = int.Parse(Console.ReadLine()!);
 
             switch (opcao)

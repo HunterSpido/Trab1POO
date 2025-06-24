@@ -4,7 +4,7 @@ namespace ProjetoPOO.Menu;
 
 public class ProdutoMenu
 {
-    public void MenuProdutos()
+    public  void MenuProdutos()
     {
         while (true)
         {
@@ -16,6 +16,7 @@ public class ProdutoMenu
             Console.WriteLine("5- Voltar");
             int v = int.Parse(Console.ReadLine()!);
             ProdutoService produtoService = new ProdutoService();
+
             switch (v)
             {
                 case 1:

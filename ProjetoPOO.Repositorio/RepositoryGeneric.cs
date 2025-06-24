@@ -63,7 +63,20 @@ namespace ProjetoPOO.Repository
             return lista.Where(x => x.Nome != null && x.Nome.Contains(nome)).ToList();
         }
 
+        public void Salvar()
+        {
+            throw new NotImplementedException();
+        }
 
+        public void Carregar()
+        {
+            throw new NotImplementedException();
+        }
+
+        List<T> IRepository<T>.Listar()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     

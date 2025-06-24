@@ -3,9 +3,18 @@ using ProjetoPOO.Services;
 
 namespace ProjetoPOO.Menu;
 
-public class UsuarioNormalMenu
+public  class UsuarioNormalMenu
 {
-    public void MenuUsuario()
+    FornecedorService fornecedorService;
+    TransportadoraService transportadoraService;
+    ProdutoService produtoService;
+    public UsuarioNormalMenu()
+    {
+        fornecedorService = new FornecedorService();
+        transportadoraService=new TransportadoraService();
+        produtoService=new ProdutoService();
+    }
+    public  void MenuUsuario()
     {
         int opcao;
         do
@@ -16,10 +25,6 @@ public class UsuarioNormalMenu
             Console.WriteLine("3 - Consultar Produto");
             Console.WriteLine("4 - Sair");
             Console.Write("Digite a opção: ");
-            FornecedorService fornecedorService = new FornecedorService();
-            TransportadoraService transportadoraService = new TransportadoraService();
-            ProdutoService produtoService = new ProdutoService();
-
 
             opcao = int.Parse(Console.ReadLine()!);
             switch (opcao)
