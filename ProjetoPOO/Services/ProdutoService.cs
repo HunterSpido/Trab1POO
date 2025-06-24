@@ -3,13 +3,18 @@ using ProjetoPOO.Classes;
 using ProjetoPOO.Menu;
 namespace ProjetoPOO.Services;
 
-public static class ProdutoService
+public  class ProdutoService
 {
-    private static Produto[] vetorProdutos = new Produto[100];
-    private static int qtdProdutos = 0;
-    private static int idProduto = 0;
+    FornecedorService fornecedorService;
+    public ProdutoService()
+    {
+        fornecedorService = new FornecedorService();
+    }
+    private  Produto[] vetorProdutos = new Produto[100];
+    private  int qtdProdutos = 0;
+    private  int idProduto = 0;
 
-    public static void Adicionar()
+    public  void Adicionar()
     {
         if (qtdProdutos >= vetorProdutos.Length)
         {
@@ -31,16 +36,16 @@ public static class ProdutoService
 
         // Listar fornecedores disponíveis
         Console.WriteLine("\nFornecedores disponíveis:");
-        for (int i = 0; i < FornecedorService.GetQuantidade(); i++)
+        for (int i = 0; i < fornecedorService.GetQuantidade(); i++)
         {
-            var forn = FornecedorService.GetFornecedor(i);
+            var forn = fornecedorService.GetFornecedor(i);
             if (forn == null) continue;
             Console.WriteLine($"{forn.IdFornecedor} - {forn.Nome}");
         }
 
         Console.Write("ID do Fornecedor: ");
         int idFornecedor = int.Parse(Console.ReadLine()!);
-        Fornecedor fornecedor = FornecedorService.GetFornecedor(idFornecedor);
+        Fornecedor fornecedor = fornecedorService.GetFornecedor(idFornecedor);
 
         if (fornecedor == null)
         {
@@ -62,7 +67,7 @@ public static class ProdutoService
         Console.WriteLine("Produto cadastrado com sucesso!");
     }
 
-    public static void Alterar()
+    public  void Alterar()
     {
         Console.Write("ID do produto a alterar: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -91,7 +96,7 @@ public static class ProdutoService
     }
 
 
-    public static void Excluir()
+    public  void Excluir()
     {
         Console.Write("Digite o ID do Produto a excluir: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -117,7 +122,7 @@ public static class ProdutoService
         Console.WriteLine("Produto não encontrada.");
     }
 
-    private static void Exibir(Produto p)
+    private  void Exibir(Produto p)
     {
         Console.WriteLine("\n=== DADOS DO PRODUTO ===");
         Console.WriteLine($"ID: {p.IdProduto}");
@@ -127,7 +132,7 @@ public static class ProdutoService
         Console.WriteLine($"Estoque: {p.Estoque} unidades");
         Console.WriteLine($"Fornecedor: {p.Fornecedor.Nome} (ID: {p.Fornecedor.IdFornecedor})");
     }
-    public static void Consultar()
+    public  void Consultar()
     {
         Console.WriteLine("\n--- Tipo de Consulta ---");
         Console.WriteLine("1 - Por ID");
@@ -150,7 +155,7 @@ public static class ProdutoService
         }
     }
 
-    public static void ConsultarPorNome()
+    public  void ConsultarPorNome()
     {
         Console.Write("Digite a parte do nome para buscar: ");
         string termo = Console.ReadLine()!.ToLower();
@@ -187,7 +192,7 @@ public static class ProdutoService
             Console.WriteLine($"Nenhum produto encontrado com: {termo}");
         }
     }
-    public static void ConsultarId()
+    public  void ConsultarId()
     {
         Console.Write("Digite o id que deseja consultar: ");
         int id = int.Parse(Console.ReadLine()!);

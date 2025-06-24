@@ -2,9 +2,9 @@ namespace ProjetoPOO.Menu;
 using ProjetoPOO.Services;
 using System;
 
-public static class MenuFornecedor
+public  class MenuFornecedor
 {
-    public static void TelaFornecedor()
+    public  void TelaFornecedor()
     {
         while (true)
         {
@@ -15,6 +15,7 @@ public static class MenuFornecedor
             Console.WriteLine("3 - Exclua um fornecedor");
             Console.WriteLine("4 - Consultar fornecedor");
             Console.WriteLine("5 - Voltar");
+            FornecedorService fornecedorService = new FornecedorService();
 
             int opcao = int.Parse(Console.ReadLine()!);
 
@@ -22,19 +23,19 @@ public static class MenuFornecedor
             {
 
                 case 1:
-                    FornecedorService.Adicionar();
+                    fornecedorService.Adicionar();
                     break;
 
                 case 2:
-                    FornecedorService.Alterar();
+                    fornecedorService.Alterar();
                     break;
 
                 case 3:
-                    FornecedorService.Excluir();
+                    fornecedorService.Excluir();
                     break;
 
                 case 4:
-                    FornecedorService.Consultar();
+                    fornecedorService.Consultar();
                     break;
 
                 case 5:

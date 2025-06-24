@@ -9,7 +9,8 @@ public static class Program
     public static void Main(string[] args)
     {
         System.Console.WriteLine("Bem vindo!");
-        ProjetoPOO.Menu.Menu.TelaLogin();   
+        Menu menu = new Menu();
+        menu.TelaLogin();   
     }
 
 }

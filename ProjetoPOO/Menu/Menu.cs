@@ -1,9 +1,9 @@
 using ProjetoPOO.Services;
 namespace ProjetoPOO.Menu;
 
-public static class Menu
+public  class Menu
 {
-    public static void TelaLogin()
+    public  void TelaLogin()
     {
         while (true)
         {
@@ -12,6 +12,8 @@ public static class Menu
             Console.WriteLine("3 - Sair");
             Console.Write("Escolha: ");
             int opcao = int.Parse(Console.ReadLine()!);
+            ClienteService clienteService = new ClienteService();
+
 
             if (opcao == 1)
             {
@@ -24,13 +26,16 @@ public static class Menu
                 {
                     Console.WriteLine("Bem-vindo admin!");
                     Console.WriteLine(" == MENU DO ADMIN ==");
-                    AdminMenu.MenuAdmin();
+                    AdminMenu adminMenu = new AdminMenu();
+                    adminMenu.MenuAdmin();
                     // Chama menu admin
                 }
-                else if (ClienteService.ValidarNome(nome, senha))
+
+                else if (clienteService.ValidarNome(nome, senha))
                 {
                     Console.WriteLine("Login efetuado com sucesso!");
-                    UsuarioNormalMenu.MenuUsuario();
+                    UsuarioNormalMenu usuarioNormalMenu = new UsuarioNormalMenu();
+                    usuarioNormalMenu.MenuUsuario();
                     // Chama menu usuário normal
                 }
                 else
@@ -40,7 +45,7 @@ public static class Menu
             }
             else if (opcao == 2)
             {
-                ClienteService.CadastrarUsuario();
+                clienteService.CadastrarUsuario();
             }
             else if (opcao == 3)
             {

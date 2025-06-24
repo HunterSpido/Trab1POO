@@ -7,4 +7,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ProjetoPOO.Menu\ProjetoPOO.Menu.csproj" />
+    <ProjectReference Include="..\ProjetoPOO.Models\ProjetoPOO.Models.csproj" />
+    <ProjectReference Include="..\ProjetoPOO.Repositorio\ProjetoPOO.Repository.csproj" />
+    <ProjectReference Include="..\ProjetoPOO.Services\ProjetoPOO.Services.csproj" />
+  </ItemGroup>
+
 </Project>

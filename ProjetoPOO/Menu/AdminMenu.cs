@@ -5,9 +5,9 @@ using System;
 using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 
-public static class AdminMenu
+public class AdminMenu
 {
-    public static void MenuAdmin()
+    public void MenuAdmin()
     {
         int tes = 0;
         while (tes != 4) // Mantém o loop principal
@@ -24,15 +24,18 @@ public static class AdminMenu
             {
                 case 1:
                     Console.WriteLine("MENU FORNECEDOR");
-                    MenuFornecedor.TelaFornecedor();
+                    MenuFornecedor menuFornecedor = new MenuFornecedor();
+                    menuFornecedor.TelaFornecedor();
                     break;
                 case 2:
                     Console.WriteLine("MENU PRODUTO");
-                    ProdutoMenu.MenuProdutos();
+                    ProdutoMenu produtoMenu = new ProdutoMenu();
+                    produtoMenu.MenuProdutos();
                     break;
                 case 3:
                     Console.WriteLine("MENU TRANSPORTADORA");
-                    TransportadoraMenu.MenuTransportadora(); 
+                    TransportadoraMenu transportadoraMenu = new TransportadoraMenu();
+                    transportadoraMenu.MenuTransportadora(); 
                     break;
                 case 4:
                     System.Console.WriteLine("Saindo...");

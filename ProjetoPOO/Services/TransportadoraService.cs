@@ -3,12 +3,12 @@ using ProjetoPOO.Classes;
 
 namespace ProjetoPOO.Services;
 
-public static class TransportadoraService
+public  class TransportadoraService
 {
-    private static Transportadora[] vetorTransportadoras = new Transportadora[100];
-    private static int qtdTransportadoras = 0;
-    private static int Id = 0;
-    public static void Adicionar()
+    private  Transportadora[] vetorTransportadoras = new Transportadora[100];
+    private  int qtdTransportadoras = 0;
+    private  int Id = 0;
+    public  void Adicionar()
     {
         if (qtdTransportadoras >= vetorTransportadoras.Length)
         {
@@ -35,7 +35,7 @@ public static class TransportadoraService
         Console.WriteLine("Transportadora adicionada com sucesso!");
     }
 
-    public static void Alterar()
+    public  void Alterar()
     {
         Console.Write("Digite o ID da transportadora a alterar: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -58,7 +58,7 @@ public static class TransportadoraService
         Console.WriteLine("Transportadora não encontrada.");
     }
 
-    public static void Excluir()
+    public  void Excluir()
     {
         Console.Write("Digite o ID da transportadora a excluir: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -84,7 +84,7 @@ public static class TransportadoraService
         Console.WriteLine("Transportadora não encontrada.");
     }
 
-    public static void ConsultarId()
+    public  void ConsultarId()
     {
         Console.Write("Digite o ID da transportadora que deseja consultar: ");
         int Id = int.Parse(Console.ReadLine()!);
@@ -101,7 +101,7 @@ public static class TransportadoraService
 
         Console.WriteLine("Transportadora não encontrada.");
     }
-    private static void Exibir(Transportadora t)
+    private  void Exibir(Transportadora t)
     {
         Console.WriteLine("=== Transportadora encontrada ===");
         Console.WriteLine($"ID: {t.IdTransportadora}");
@@ -109,7 +109,7 @@ public static class TransportadoraService
         Console.WriteLine($"Preço por KM: {t.PrecoPorKm}");
     }
 
-    public static void ConsultarPorNome()
+    public  void ConsultarPorNome()
     {
         Console.Write("Digite parte do nome para buscar: ");
         string termo = Console.ReadLine()!.ToLower();
@@ -147,7 +147,7 @@ public static class TransportadoraService
         }
     }
 
-    public static void Consultar()
+    public  void Consultar()
     {
         Console.WriteLine("\n--- Tipo de Consulta ---");
         Console.WriteLine("1 - Por ID");

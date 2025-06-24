@@ -2,12 +2,19 @@ using System;
 using ProjetoPOO.Classes;
 namespace ProjetoPOO.Services;
 
-public static class ClienteService
+public 
+    
+    class ClienteService
 {
-    private static Cliente[] clientes = new Cliente[100];
-    private static int totalClientes = 0;
+    EnderecoService enderecoService;
+    public ClienteService()
+    {
+        enderecoService = new EnderecoService();
+    }
+    private  Cliente[] clientes = new Cliente[100];
+    private  int totalClientes = 0;
 
-    public static void CadastrarUsuario()
+    public  void CadastrarUsuario()
     {
         if (totalClientes >= clientes.Length)
         {
@@ -21,7 +28,7 @@ public static class ClienteService
         Console.Write("Digite a senha: ");
         string senha = Console.ReadLine()!;
 
-        Endereco endereco=EnderecoService.PedirEndereco();
+        Endereco endereco=enderecoService.PedirEndereco();
 
         Console.Write("Digite o telefone: ");
         string telefone = Console.ReadLine()!;
@@ -42,7 +49,7 @@ public static class ClienteService
         Console.WriteLine("Cliente cadastrado com sucesso!");
     }
 
-    public static bool ValidarNome(string nome, string senha)
+    public  bool ValidarNome(string nome, string senha)
     {
         for (int i = 0; i < totalClientes; i++)
         {

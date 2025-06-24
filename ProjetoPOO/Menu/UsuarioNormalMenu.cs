@@ -3,9 +3,18 @@ using ProjetoPOO.Services;
 
 namespace ProjetoPOO.Menu;
 
-public static class UsuarioNormalMenu
+public  class UsuarioNormalMenu
 {
-    public static void MenuUsuario()
+    FornecedorService fornecedorService;
+    TransportadoraService transportadoraService;
+    ProdutoService produtoService;
+    public UsuarioNormalMenu()
+    {
+        fornecedorService = new FornecedorService();
+        transportadoraService=new TransportadoraService();
+        produtoService=new ProdutoService();
+    }
+    public  void MenuUsuario()
     {
         int opcao;
         do
@@ -21,14 +30,14 @@ public static class UsuarioNormalMenu
             switch (opcao)
             {
                 case 1:
-                    FornecedorService.Consultar();
+                    fornecedorService.Consultar();
                     
                     break;
                 case 2:
-                    TransportadoraService.Consultar();
+                    transportadoraService.Consultar();
                     break;
                 case 3:
-                    ProdutoService.Consultar();
+                    produtoService.Consultar();
                     break;
                 case 4:
                     Console.WriteLine("Voltar Tela de Login...");

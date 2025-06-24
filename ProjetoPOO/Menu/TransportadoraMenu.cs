@@ -6,7 +6,7 @@ namespace ProjetoPOO.Menu;
 
 public class TransportadoraMenu
 {
-    public static void MenuTransportadora()
+    public void MenuTransportadora()
     {
         while (true) 
         {
@@ -16,21 +16,22 @@ public class TransportadoraMenu
             Console.WriteLine("3 - Exclua uma transportadora");
             Console.WriteLine("4 - Consulte uma transportadora");
             Console.WriteLine("5 - Voltar");
+            TransportadoraService transportadoraService= new TransportadoraService();
 
             int v = int.Parse(Console.ReadLine()!);
             switch (v)
             {
                 case 1:
-                    TransportadoraService.Adicionar();
+                    transportadoraService.Adicionar();
                     break;
                 case 2:
-                    TransportadoraService.Alterar();
+                    transportadoraService.Alterar();
                     break;
                 case 3:
-                    TransportadoraService.Excluir();
+                    transportadoraService.Excluir();
                     break;
                 case 4:
-                    TransportadoraService.Consultar();
+                    transportadoraService.Consultar();
                     break;
                 case 5:
                     return; // Sai do método e volta para o AdminMenu
