@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjetoPOO.Models;
 
-namespace ProjetoPOO.Repository
+namespace ProjetoPOO.Repository.Interfaces
 {
-    public class FornecedorRepository:RepositoryGeneric<Fornecedor>
+    internal interface IRepositoryProduto
     {
-
     }
 }

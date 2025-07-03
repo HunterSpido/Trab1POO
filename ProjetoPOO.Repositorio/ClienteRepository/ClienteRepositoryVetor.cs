@@ -1,6 +1,6 @@
 ﻿using ProjetoPOO.Models;
 
-namespace ProjetoPOO.Repository
+namespace ProjetoPOO.Repository.ClienteRepository
 {
     public class ClienteRepositoryVetor
     {

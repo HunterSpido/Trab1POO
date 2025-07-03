@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using ProjetoPOO.Models;
+using ProjetoPOO.Repository.Interfaces;
 
-namespace ProjetoPOO.Repository
+namespace ProjetoPOO.Repository.FornecedorRepository
 {
     public class FornecedorRepositoryList : IRepository<Fornecedor>
     {
@@ -40,7 +41,7 @@ namespace ProjetoPOO.Repository
             fornecedores.RemoveAll(f => f.IdFornecedor == obj.IdFornecedor);
         }
 
-        public IList<Fornecedor> Listar()
+        public List<Fornecedor> Listar()
         {
             return fornecedores;
         }

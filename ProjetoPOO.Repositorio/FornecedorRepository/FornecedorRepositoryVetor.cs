@@ -2,8 +2,9 @@
 using System.Text.Json;
 using ProjetoPOO.Models;
 using System.Collections.Generic;
+using ProjetoPOO.Repository.Interfaces;
 
-namespace ProjetoPOO.Repository
+namespace ProjetoPOO.Repository.FornecedorRepository
 {
     public class FornecedorRepositoryVetor : IRepository<Fornecedor>
     {
@@ -57,7 +58,7 @@ namespace ProjetoPOO.Repository
             throw new KeyNotFoundException("Fornecedor não encontrado para remoção.");
         }
 
-        public IList<Fornecedor> Listar()
+        public List<Fornecedor> Listar()
         {
             var lista = new List<Fornecedor>();
             for (int i = 0; i < qtdFornecedores; i++)

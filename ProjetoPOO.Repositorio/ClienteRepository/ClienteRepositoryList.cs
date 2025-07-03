@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProjetoPOO.Models;
+using ProjetoPOO.Repository.Interfaces;
 
-namespace ProjetoPOO.Repository
+namespace ProjetoPOO.Repository.ClienteRepository
 {
     public class ClienteRepositoryList : IRepository<Cliente>
     {
@@ -22,9 +23,9 @@ namespace ProjetoPOO.Repository
 
         public void Carregar()
         {
-            if (System.IO.File.Exists("clientes.json"))
+            if (File.Exists("clientes.json"))
             {
-                var json = System.IO.File.ReadAllText("clientes.json");
+                var json = File.ReadAllText("clientes.json");
                 var lista = System.Text.Json.JsonSerializer.Deserialize<List<Cliente>>(json);
                 if (lista != null)
                     clientes = lista;
@@ -46,13 +47,10 @@ namespace ProjetoPOO.Repository
         public void Salvar()
         {
             var json = System.Text.Json.JsonSerializer.Serialize(clientes, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            System.IO.File.WriteAllText("clientes.json", json);
+            File.WriteAllText("clientes.json", json);
         }
 
-        IList<Cliente> IRepository<Cliente>.Listar()
-        {
-            return Listar();
-        }
+       
     }
 
 
