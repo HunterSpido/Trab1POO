@@ -1,215 +1,247 @@
-using System;
-using ProjetoPOO.Models;
-using ProjetoPOO.Menu;
-namespace ProjetoPOO.Services;
+//using System;
+//using ProjetoPOO.Models;
+//using ProjetoPOO.Repository.Interfaces;
+//using System.Collections.Generic;
 
-public  class ProdutoService
-{
-    FornecedorService fornecedorService;
-    public ProdutoService()
-    {
-        fornecedorService = new FornecedorService();
-    }
-    private  Produto[] vetorProdutos = new Produto[100];
-    private  int qtdProdutos = 0;
-    private  int idProduto = 0;
+//namespace ProjetoPOO.Services
+//{
+//    public class ProdutoService
+//    {
+//        private readonly FornecedorService fornecedorService;
+//        private Produto[] vetorProdutos = new Produto[100];
+//        private int qtdProdutos = 0;
+//        private int idProduto = 0;
 
-    public  void Adicionar()
-    {
-        if (qtdProdutos >= vetorProdutos.Length)
-        {
-            Console.WriteLine("Limite de produtos atingido!");
-            return;
-        }
+//        // Recebe o repositório de fornecedores para passar para o FornecedorService
+//        public ProdutoService(IRepository<Fornecedor> repositorioFornecedor)
+//        {
+//            fornecedorService = new FornecedorService(repositorioFornecedor);
+//        }
 
-        Console.Write("Nome do produto: ");
-        string? nome = Console.ReadLine()!;
+//        public void Adicionar()
+//        {
+//            if (qtdProdutos >= vetorProdutos.Length)
+//            {
+//                Console.WriteLine("Limite de produtos atingido!");
+//                return;
+//            }
 
-        Console.Write("Descrição: ");
-        string? descricao = Console.ReadLine()!;
+//            Console.Write("Nome do produto: ");
+//            string nome = Console.ReadLine() ?? "";
 
-        Console.Write("Preço: ");
-        double preco = double.Parse(Console.ReadLine()!);
+//            Console.Write("Descrição: ");
+//            string descricao = Console.ReadLine() ?? "";
 
-        Console.Write("Quantidade em estoque: ");
-        int estoque = int.Parse(Console.ReadLine()!);
+//            Console.Write("Preço: ");
+//            string precoStr = Console.ReadLine() ?? "";
+//            if (!double.TryParse(precoStr, out double preco))
+//            {
+//                Console.WriteLine("Preço inválido.");
+//                return;
+//            }
 
-        // Listar fornecedores disponíveis
-        Console.WriteLine("\nFornecedores disponíveis:");
-        for (int i = 0; i < fornecedorService.GetQuantidade(); i++)
-        {
-            var forn = fornecedorService.GetFornecedor(i);
-            if (forn == null) continue;
-            Console.WriteLine($"{forn.IdFornecedor} - {forn.Nome}");
-        }
+//            Console.Write("Quantidade em estoque: ");
+//            string estoqueStr = Console.ReadLine() ?? "";
+//            if (!int.TryParse(estoqueStr, out int estoque))
+//            {
+//                Console.WriteLine("Quantidade inválida.");
+//                return;
+//            }
 
-        Console.Write("ID do Fornecedor: ");
-        int idFornecedor = int.Parse(Console.ReadLine()!);
-        Fornecedor fornecedor = fornecedorService.GetFornecedor(idFornecedor);
+//            var fornecedores = fornecedorService.ListarFornecedores();
+//            if (fornecedores.Count == 0)
+//            {
+//                Console.WriteLine("Nenhum fornecedor cadastrado.");
+//                return;
+//            }
 
-        if (fornecedor == null)
-        {
-            Console.WriteLine("Fornecedor não encontrado!");
-            return;
-        }
+//            Console.WriteLine("\nFornecedores disponíveis:");
+//            foreach (var forn in fornecedores)
+//            {
+//                Console.WriteLine($"{forn.IdFornecedor} - {forn.Nome}");
+//            }
 
-        var produto = new Produto
-        {
-            IdProduto = idProduto++,
-            Nome = nome,
-            Descricao = descricao,
-            Preco = preco,
-            Estoque = estoque,
-            Fornecedor = fornecedor
-        };
+//            Console.Write("ID do Fornecedor: ");
+//            string idFornStr = Console.ReadLine() ?? "";
+//            if (!int.TryParse(idFornStr, out int idFornecedor))
+//            {
+//                Console.WriteLine("ID inválido.");
+//                return;
+//            }
 
-        vetorProdutos[qtdProdutos++] = produto;
-        Console.WriteLine("Produto cadastrado com sucesso!");
-    }
+//            var fornecedor = fornecedorService.ConsultarPorId(idFornecedor);
+//            if (fornecedor == null)
+//            {
+//                Console.WriteLine("Fornecedor não encontrado!");
+//                return;
+//            }
 
-    public  void Alterar()
-    {
-        Console.Write("ID do produto a alterar: ");
-        int id = int.Parse(Console.ReadLine()!);
+//            var produto = new Produto
+//            {
+//                IdProduto = idProduto++,
+//                Nome = nome,
+//                Descricao = descricao,
+//                Preco = preco,
+//                Estoque = estoque,
+//                Fornecedor = fornecedor
+//            };
 
-        for (int i = 0; i < qtdProdutos; i++)
-        {
-            if (vetorProdutos[i].IdProduto == id)
-            {
-                Console.Write("Novo nome: ");
-                vetorProdutos[i].Nome = Console.ReadLine()!;
+//            vetorProdutos[qtdProdutos++] = produto;
+//            Console.WriteLine("Produto cadastrado com sucesso!");
+//        }
 
-                Console.Write("Nova descrição: ");
-                vetorProdutos[i].Descricao = Console.ReadLine()!;
+//        public void Alterar()
+//        {
+//            Console.Write("ID do produto a alterar: ");
+//            string idStr = Console.ReadLine() ?? "";
+//            if (!int.TryParse(idStr, out int id))
+//            {
+//                Console.WriteLine("ID inválido.");
+//                return;
+//            }
 
-                Console.Write("Novo preço: ");
-                vetorProdutos[i].Preco = double.Parse(Console.ReadLine()!);
+//            for (int i = 0; i < qtdProdutos; i++)
+//            {
+//                if (vetorProdutos[i].IdProduto == id)
+//                {
+//                    Console.Write("Novo nome: ");
+//                    vetorProdutos[i].Nome = Console.ReadLine() ?? "";
 
-                Console.Write("Novo estoque: ");
-                vetorProdutos[i].Estoque = int.Parse(Console.ReadLine()!);
+//                    Console.Write("Nova descrição: ");
+//                    vetorProdutos[i].Descricao = Console.ReadLine() ?? "";
 
-                Console.WriteLine("Produto alterado!");
-                return;
-            }
-        }
-        Console.WriteLine("Produto não encontrado.");
-    }
+//                    Console.Write("Novo preço: ");
+//                    string novoPrecoStr = Console.ReadLine() ?? "";
+//                    vetorProdutos[i].Preco = double.TryParse(novoPrecoStr, out double novoPreco) ? novoPreco : vetorProdutos[i].Preco;
 
+//                    Console.Write("Novo estoque: ");
+//                    string novoEstoqueStr = Console.ReadLine() ?? "";
+//                    vetorProdutos[i].Estoque = int.TryParse(novoEstoqueStr, out int novoEstoque) ? novoEstoque : vetorProdutos[i].Estoque;
 
-    public  void Excluir()
-    {
-        Console.Write("Digite o ID do Produto a excluir: ");
-        int id = int.Parse(Console.ReadLine()!);
+//                    Console.WriteLine("Produto alterado!");
+//                    return;
+//                }
+//            }
+//            Console.WriteLine("Produto não encontrado.");
+//        }
 
-        for (int i = 0; i < qtdProdutos; i++)
-        {
-            if (vetorProdutos[i].IdProduto == id)
-            {
-                // Deslocar os elementos
-                for (int j = i; j < qtdProdutos - 1; j++)
-                {
-                    vetorProdutos[j] = vetorProdutos[j + 1];
-                }
+//        public void Excluir()
+//        {
+//            Console.Write("Digite o ID do Produto a excluir: ");
+//            string idStr = Console.ReadLine() ?? "";
+//            if (!int.TryParse(idStr, out int id))
+//            {
+//                Console.WriteLine("ID inválido.");
+//                return;
+//            }
 
-                vetorProdutos[qtdProdutos - 1] = null;
-                qtdProdutos--;
+//            for (int i = 0; i < qtdProdutos; i++)
+//            {
+//                if (vetorProdutos[i].IdProduto == id)
+//                {
+//                    for (int j = i; j < qtdProdutos - 1; j++)
+//                    {
+//                        vetorProdutos[j] = vetorProdutos[j + 1];
+//                    }
 
-                Console.WriteLine("Produto excluída com sucesso!");
-                return;
-            }
-        }
+//                    vetorProdutos[qtdProdutos - 1] = null!;
+//                    qtdProdutos--;
 
-        Console.WriteLine("Produto não encontrada.");
-    }
+//                    Console.WriteLine("Produto excluído com sucesso!");
+//                    return;
+//                }
+//            }
 
-    private  void Exibir(Produto p)
-    {
-        Console.WriteLine("\n=== DADOS DO PRODUTO ===");
-        Console.WriteLine($"ID: {p.IdProduto}");
-        Console.WriteLine($"Nome: {p.Nome}");
-        Console.WriteLine($"Descrição: {p.Descricao}");
-        Console.WriteLine($"Preço: R${p.Preco:F2}");
-        Console.WriteLine($"Estoque: {p.Estoque} unidades");
-        Console.WriteLine($"Fornecedor: {p.Fornecedor.Nome} (ID: {p.Fornecedor.IdFornecedor})");
-    }
-    public  void Consultar()
-    {
-        Console.WriteLine("\n--- Tipo de Consulta ---");
-        Console.WriteLine("1 - Por ID");
-        Console.WriteLine("2 - Por Nome (busca parcial)");
-        Console.Write("Opção: ");
+//            Console.WriteLine("Produto não encontrado.");
+//        }
 
-        string opcao = Console.ReadLine()!;
+//        private void Exibir(Produto p)
+//        {
+//            Console.WriteLine("\n=== DADOS DO PRODUTO ===");
+//            Console.WriteLine($"ID: {p.IdProduto}");
+//            Console.WriteLine($"Nome: {p.Nome}");
+//            Console.WriteLine($"Descrição: {p.Descricao}");
+//            Console.WriteLine($"Preço: R${p.Preco:F2}");
+//            Console.WriteLine($"Estoque: {p.Estoque} unidades");
+//            Console.WriteLine($"Fornecedor: {p.Fornecedor.Nome} (ID: {p.Fornecedor.IdFornecedor})");
+//        }
 
-        switch (opcao)
-        {
-            case "1":
-                ConsultarId();
-                break;
-            case "2":
-                ConsultarPorNome();
-                break;
-            default:
-                Console.WriteLine("Opção inválida.");
-                break;
-        }
-    }
+//        public void Consultar()
+//        {
+//            Console.WriteLine("\n--- Tipo de Consulta ---");
+//            Console.WriteLine("1 - Por ID");
+//            Console.WriteLine("2 - Por Nome (busca parcial)");
+//            Console.Write("Opção: ");
 
-    public  void ConsultarPorNome()
-    {
-        Console.Write("Digite a parte do nome para buscar: ");
-        string termo = Console.ReadLine()!.ToLower();
+//            string opcao = Console.ReadLine() ?? "";
 
-        bool encontrou = false;
+//            switch (opcao)
+//            {
+//                case "1":
+//                    ConsultarId();
+//                    break;
+//                case "2":
+//                    ConsultarPorNome();
+//                    break;
+//                default:
+//                    Console.WriteLine("Opção inválida.");
+//                    break;
+//            }
+//        }
 
-        for (int i = 0; i < qtdProdutos; i++)
-        {
-            // Verifica se o produto na posição i é nulo
-            if (vetorProdutos[i] == null)
-            {
-                continue; // Pula para o próximo produto
-            }
+//        public void ConsultarPorNome()
+//        {
+//            Console.Write("Digite a parte do nome para buscar: ");
+//            string termo = Console.ReadLine()!.ToLower();
 
-            string nomeLower = vetorProdutos[i].Nome.ToLower();
-            bool contemTodasLetras = true;
+//            bool encontrou = false;
 
-            if (!nomeLower.Contains(termo))
-            {
-                contemTodasLetras = false;
-                continue;
-            }
+//            for (int i = 0; i < qtdProdutos; i++)
+//            {
+//                if (vetorProdutos[i] == null) continue;
 
-            if (contemTodasLetras)
-            {
-                Exibir(vetorProdutos[i]);
-                Console.WriteLine("---------------------");
-                encontrou = true;
-            }
-        }
+//                string nomeLower = vetorProdutos[i].Nome.ToLower();
 
-        if (!encontrou)
-        {
-            Console.WriteLine($"Nenhum produto encontrado com: {termo}");
-        }
-    }
-    public  void ConsultarId()
-    {
-        Console.Write("Digite o id que deseja consultar: ");
-        int id = int.Parse(Console.ReadLine()!);
-        int i;
+//                if (nomeLower.Contains(termo))
+//                {
+//                    Exibir(vetorProdutos[i]);
+//                    Console.WriteLine("---------------------");
+//                    encontrou = true;
+//                }
+//            }
 
-        for (i = 0; i < qtdProdutos; i++)
-        {
-            if (id == vetorProdutos[i].IdProduto)
-            {
-                Exibir(vetorProdutos[i]);
-                return;
-            }
-        }
+//            if (!encontrou)
+//            {
+//                Console.WriteLine($"Nenhum produto encontrado com: {termo}");
+//            }
+//        }
 
-        Console.WriteLine("Produto nao encontrado");
+//        public Fornecedor ConsultarPorId(int id)
+//        {
+//            // Implementar o método conforme o seu FornecedorService
+//            return fornecedorService.ConsultarPorId(id);
+//        }
 
-    }
+//        public void ConsultarId()
+//        {
+//            Console.Write("Digite o id que deseja consultar: ");
+//            string idStr = Console.ReadLine() ?? "";
+//            if (!int.TryParse(idStr, out int id))
+//            {
+//                Console.WriteLine("ID inválido.");
+//                return;
+//            }
 
+//            for (int i = 0; i < qtdProdutos; i++)
+//            {
+//                if (vetorProdutos[i].IdProduto == id)
+//                {
+//                    Exibir(vetorProdutos[i]);
+//                    return;
+//                }
+//            }
 
-}
+//            Console.WriteLine("Produto não encontrado");
+//        }
+//    }
+//}

@@ -8,12 +8,12 @@ namespace ProjetoPOO.Repository.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        public void Adicionar(T obj);
-        public void Remover(T obj);
-        public List<T> Listar();
-        public void Alterar(T obj);
-        public void Salvar();
-        public void Carregar();
+         bool Adicionar(T obj);
+         bool Remover(T obj);
+         List<T> Listar();
+         bool Alterar(T obj);
+         void Salvar();
+         void Carregar();
 
     }
 }

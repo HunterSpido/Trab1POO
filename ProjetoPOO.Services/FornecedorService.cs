@@ -1,222 +1,230 @@
-namespace ProjetoPOO.Menu;
-
 using ProjetoPOO.Models;
-using ProjetoPOO.Services;
+using ProjetoPOO.Repository.Interfaces;
 using System;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
-public  class FornecedorService
+namespace ProjetoPOO.Services
 {
-    EnderecoService enderecoService;
-    public FornecedorService()
+    public class FornecedorService
     {
-        enderecoService = new EnderecoService();
-    }
-    private  Fornecedor[] vetorFornecedores = new Fornecedor[100];
-    private  int qtdFornecedores = 0;
+        private readonly IRepository<Fornecedor> _repositorio;
+        private readonly EnderecoService _enderecoService;
 
-    private  int idFornecedores = 0;
-
-    public  void Adicionar()
-    {
-        if (qtdFornecedores >= vetorFornecedores.Length)
+        public FornecedorService(IRepository<Fornecedor> repositorio)
         {
-            Console.Write("Limite Atingido");
-            return;
-        }
+            _repositorio = repositorio ?? throw new ArgumentNullException(nameof(repositorio));
+            _enderecoService = new EnderecoService();
 
-        Console.Write("Digite o nome: ");
-        string nome = Console.ReadLine()!;
-        Console.Write("Digite a descricao: ");
-        string descricao = Console.ReadLine()!;
-        Console.Write("Digite o telefone: ");
-        string telefone = Console.ReadLine()!;
-        Console.Write("Digite o email: ");
-        string email = Console.ReadLine()!;
-        Endereco endereco = enderecoService.PedirEndereco();
-
-        var fornecedor = new Fornecedor
-        {
-            IdFornecedor = idFornecedores,
-            Nome = nome,
-            Descricao = descricao,
-            Telefone = telefone,
-            Email = email,
-            Endereco = endereco,
-
-        };
-
-        vetorFornecedores[qtdFornecedores] = fornecedor;
-        qtdFornecedores++;
-        idFornecedores++;
-        Console.WriteLine("Fornecedor Criado com sucesso!");
-    }
-
-    public  void Alterar()
-    {
-        Console.Write("Digite o id que deseja alterar: ");
-        int id = int.Parse(Console.ReadLine()!);
-        int i;
-
-        for (i = 0; i < qtdFornecedores; i++)
-        {
-            if (id == vetorFornecedores[i].IdFornecedor)
+            try
             {
-                Console.Write("Digite o novo nome: ");
-                vetorFornecedores[i].Nome = Console.ReadLine();
-                Console.Write("Digite a nova descricao: ");
-                vetorFornecedores[i].Descricao = Console.ReadLine();
-                Console.Write("Digite o novo telefone: ");
-                vetorFornecedores[i].Telefone = Console.ReadLine();
-                Console.Write("Digite o novo email: ");
-                vetorFornecedores[i].Email = Console.ReadLine();
-                vetorFornecedores[i].Endereco = enderecoService.PedirEndereco();
-
-                Console.WriteLine("Fornecedora alterada com sucesso!");
-                return;
+                _repositorio.Carregar();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao carregar fornecedores: {ex.Message}");
             }
         }
-        Console.WriteLine("Fornecedor não encontrado.");
-    }
 
-
-    public  void Excluir()
-    {
-        Console.Write("Digite o ID do Fornecedor a excluir: ");
-        int id = int.Parse(Console.ReadLine()!);
-
-        for (int i = 0; i < qtdFornecedores; i++)
+        public void Adicionar()
         {
-            if (vetorFornecedores[i].IdFornecedor == id)
+            try
             {
-                // Deslocar os elementos
-                for (int j = i; j < qtdFornecedores - 1; j++)
+                Console.Write("Digite o nome: ");
+                string nome = Console.ReadLine() ?? "";
+                Console.Write("Digite a descrição: ");
+                string descricao = Console.ReadLine() ?? "";
+                Console.Write("Digite o telefone: ");
+                string telefone = Console.ReadLine() ?? "";
+                Console.Write("Digite o email: ");
+                string email = Console.ReadLine() ?? "";
+                var endereco = _enderecoService.PedirEndereco();
+
+                var fornecedor = new Fornecedor
                 {
-                    vetorFornecedores[j] = vetorFornecedores[j + 1];
+                    Nome = nome,
+                    Descricao = descricao,
+                    Telefone = telefone,
+                    Email = email,
+                    Endereco = endereco,
+                };
+
+                if (_repositorio.Adicionar(fornecedor))
+                {
+                    _repositorio.Salvar();
+                    Console.WriteLine("Fornecedor adicionado com sucesso!");
+                }
+                else
+                {
+                    Console.WriteLine("Erro ao adicionar fornecedor.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro no cadastro: {ex.Message}");
+            }
+        }
+
+        public void Alterar()
+        {
+            try
+            {
+                Console.Write("Digite o ID do fornecedor a alterar: ");
+                if (!int.TryParse(Console.ReadLine(), out int id))
+                {
+                    Console.WriteLine("ID inválido.");
+                    return;
                 }
 
-                vetorFornecedores[qtdFornecedores - 1] = null!;
-                qtdFornecedores--;
+                var fornecedor = _repositorio.Listar().Find(f => f.IdFornecedor == id);
+                if (fornecedor == null)
+                {
+                    Console.WriteLine("Fornecedor não encontrado.");
+                    return;
+                }
 
-                Console.WriteLine("Fornecedor excluído com sucesso!");
+                Console.Write("Digite o novo nome (ou ENTER para manter): ");
+                string nome = Console.ReadLine() ?? "";
+                if (!string.IsNullOrWhiteSpace(nome)) fornecedor.Nome = nome;
+
+                Console.Write("Digite a nova descrição (ou ENTER para manter): ");
+                string descricao = Console.ReadLine() ?? "";
+                if (!string.IsNullOrWhiteSpace(descricao)) fornecedor.Descricao = descricao;
+
+                Console.Write("Digite o novo telefone (ou ENTER para manter): ");
+                string telefone = Console.ReadLine() ?? "";
+                if (!string.IsNullOrWhiteSpace(telefone)) fornecedor.Telefone = telefone;
+
+                Console.Write("Digite o novo email (ou ENTER para manter): ");
+                string email = Console.ReadLine() ?? "";
+                if (!string.IsNullOrWhiteSpace(email)) fornecedor.Email = email;
+
+                Console.WriteLine("Informe o novo endereço:");
+                fornecedor.Endereco = _enderecoService.PedirEndereco();
+
+                if (_repositorio.Alterar(fornecedor))
+                {
+                    _repositorio.Salvar();
+                    Console.WriteLine("Fornecedor alterado com sucesso!");
+                }
+                else
+                {
+                    Console.WriteLine("Erro ao alterar fornecedor.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro na alteração: {ex.Message}");
+            }
+        }
+
+        public void Excluir()
+        {
+            try
+            {
+                Console.Write("Digite o ID do fornecedor a excluir: ");
+                if (!int.TryParse(Console.ReadLine(), out int id))
+                {
+                    Console.WriteLine("ID inválido.");
+                    return;
+                }
+
+                var fornecedor = _repositorio.Listar().Find(f => f.IdFornecedor == id);
+                if (fornecedor == null)
+                {
+                    Console.WriteLine("Fornecedor não encontrado.");
+                    return;
+                }
+
+                if (_repositorio.Remover(fornecedor))
+                {
+                    _repositorio.Salvar();
+                    Console.WriteLine("Fornecedor excluído com sucesso!");
+                }
+                else
+                {
+                    Console.WriteLine("Erro ao excluir fornecedor.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro na exclusão: {ex.Message}");
+            }
+        }
+
+        public void Consultar()
+        {
+            Console.WriteLine("Consulta por:");
+            Console.WriteLine("1 - ID");
+            Console.WriteLine("2 - Nome (parcial)");
+            Console.Write("Escolha: ");
+            string opcao = Console.ReadLine() ?? "";
+
+            switch (opcao)
+            {
+                case "1": ConsultarPorId(); break;
+                case "2": ConsultarPorNome(); break;
+                default: Console.WriteLine("Opção inválida."); break;
+            }
+        }
+
+        public void ConsultarPorId()
+        {
+            Console.Write("Digite o ID do fornecedor: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("ID inválido.");
                 return;
             }
+
+            var fornecedor = _repositorio.Listar().Find(f => f.IdFornecedor == id);
+            if (fornecedor != null)
+                Exibir(fornecedor);
+            else
+                Console.WriteLine("Fornecedor não encontrado.");
         }
 
-        Console.WriteLine("Fornecedor não encontrada.");
-    }
-    public  void ConsultarId()
-    {
-        Console.Write("Digite o id que deseja consultar: ");
-        int id = int.Parse(Console.ReadLine()!);
-        int i;
-
-        for (i = 0; i < qtdFornecedores; i++)
+        public void ConsultarPorNome()
         {
-            if (id == vetorFornecedores[i].IdFornecedor)
+            Console.Write("Digite parte do nome para busca: ");
+            string termo = (Console.ReadLine() ?? "").ToLower();
+
+            var resultados = _repositorio.Listar()
+                .FindAll(f => f.Nome.ToLower().Contains(termo));
+
+            if (resultados.Count == 0)
             {
-                Exibir(vetorFornecedores[i]);
+                Console.WriteLine("Nenhum fornecedor encontrado.");
                 return;
             }
-        }
 
-        Console.WriteLine("Fornecedor nao encontrado");
-
-    }
-
-    private  void Exibir(Fornecedor f)
-    {
-        Console.WriteLine("=== Fornecedor Encontrado ===");
-        Console.WriteLine($"ID: {f.IdFornecedor}");
-        Console.WriteLine($"Nome: {f.Nome}");
-        Console.WriteLine($"Descricao: {f.Descricao}");
-        Console.WriteLine($"Telefone: {f.Telefone}");
-        Console.WriteLine($"Email: {f.Email}");
-        Console.WriteLine($"Endereco:");
-        Console.WriteLine($"Estado: {f.Endereco.Estado}");
-        Console.WriteLine($"Cidade: {f.Endereco.Cidade}");
-        Console.WriteLine($"Bairro: {f.Endereco.Bairro}");
-        Console.WriteLine($"Rua: {f.Endereco.Rua}");
-        Console.WriteLine($"Numero: {f.Endereco.Numero}");
-        Console.WriteLine($"CEP: {f.Endereco.Cep}");
-    }
-    public  int GetQuantidade()
-    {
-        return qtdFornecedores;
-    }
-
-    public  Fornecedor GetFornecedor(int id)
-    {
-        for (int i = 0; i < qtdFornecedores; i++)
-        {
-            if (vetorFornecedores[i] != null && id == vetorFornecedores[i].IdFornecedor)
+            foreach (var f in resultados)
             {
-                return vetorFornecedores[i];
-            }
-        }
-        return null;
-    }
-
-    public  void Consultar()
-    {
-        Console.WriteLine("\n--- Tipo de Consulta ---");
-        Console.WriteLine("1 - Por ID");
-        Console.WriteLine("2 - Por Nome (busca parcial)");
-        Console.Write("Opção: ");
-
-        string opcao = Console.ReadLine()!;
-
-        switch (opcao)
-        {
-            case "1":
-                ConsultarId();
-                break;
-            case "2":
-                ConsultarPorNome();
-                break;
-            default:
-                Console.WriteLine("Opção inválida.");
-                break;
-        }
-    }
-    public  void ConsultarPorNome()
-    {
-        Console.Write("Digite a parte do nome para buscar: ");
-        string termo = Console.ReadLine()!.ToLower();
-
-        bool encontrou = false;
-
-        for (int i = 0; i < qtdFornecedores; i++)
-        {
-            if (vetorFornecedores[i] == null)
-            {
-                continue; // Pula para o próximo produto se for nulo
-            }
-            string nomeLower = vetorFornecedores[i].Nome.ToLower();
-            bool contemTodasLetras = true;
-
-
-            if (!nomeLower.Contains(termo))
-            {
-                contemTodasLetras = false;
-                continue;
-            }
-
-
-            if (contemTodasLetras)
-            {
-                Exibir(vetorFornecedores[i]);
-                Console.WriteLine("---------------------");
-                encontrou = true;
+                Exibir(f);
+                Console.WriteLine("----------------------------");
             }
         }
 
-        if (!encontrou)
+        private void Exibir(Fornecedor f)
         {
-            Console.WriteLine($"Nenhum fornecedor encontrado com: {termo}");
+            Console.WriteLine($"ID: {f.IdFornecedor}");
+            Console.WriteLine($"Nome: {f.Nome}");
+            Console.WriteLine($"Descrição: {f.Descricao}");
+            Console.WriteLine($"Telefone: {f.Telefone}");
+            Console.WriteLine($"Email: {f.Email}");
+            Console.WriteLine("Endereço:");
+            Console.WriteLine($"  Estado: {f.Endereco.Estado}");
+            Console.WriteLine($"  Cidade: {f.Endereco.Cidade}");
+            Console.WriteLine($"  Bairro: {f.Endereco.Bairro}");
+            Console.WriteLine($"  Rua: {f.Endereco.Rua}");
+            Console.WriteLine($"  Número: {f.Endereco.Numero}");
+            Console.WriteLine($"  CEP: {f.Endereco.Cep}");
         }
+        public List<Fornecedor> GetLista()
+        {
+            return _repositorio.Listar();
+        }
+        // Se você quiser acessar de fora, ex:
+        public Fornecedor? GetFornecedor(int id) => _repositorio.Listar().Find(f => f.IdFornecedor == id);
+        public int GetQuantidade() => _repositorio.Listar().Count;
     }
-
-
-
 }

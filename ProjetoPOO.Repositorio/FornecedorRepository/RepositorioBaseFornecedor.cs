@@ -1,39 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjetoPOO.Models;
+﻿using ProjetoPOO.Models;
 using ProjetoPOO.Repository.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace ProjetoPOO.Repository.FornecedorRepository
 {
     public class RepositorioBaseFornecedor
     {
-        private IRepositoryFornecedor repositorioFornecedor;
-        public RepositorioBaseFornecedor(IRepositoryFornecedor repositoryFornecedor)
+        private readonly IRepository<Fornecedor> _repositorioFornecedor;
+
+        public RepositorioBaseFornecedor(IRepository<Fornecedor> repositorioFornecedor)
         {
-            repositorioFornecedor= repositoryFornecedor;
+            _repositorioFornecedor = repositorioFornecedor ?? throw new ArgumentNullException(nameof(repositorioFornecedor));
         }
-        public void adicionarFornecedor(Fornecedor fornecedor)
+
+        public bool AdicionarFornecedor(Fornecedor fornecedor)
         {
-            repositorioFornecedor.Adicionar(fornecedor);
+            try
+            {
+                _repositorioFornecedor.Adicionar(fornecedor);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
-        public void removerFornecedor(Fornecedor fornecedor)
+
+        public bool RemoverFornecedor(Fornecedor fornecedor)
         {
-            repositorioFornecedor.Remover(fornecedor);
+            try
+            {
+                _repositorioFornecedor.Remover(fornecedor);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
-        public void listarFornecedores()
+
+        public bool AlterarFornecedor(Fornecedor fornecedor)
         {
-            repositorioFornecedor.Listar();
+            try
+            {
+                _repositorioFornecedor.Alterar(fornecedor);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
-        public void salvarFornecedores()
+
+        public List<Fornecedor> ListarFornecedores()
         {
-            repositorioFornecedor.Salvar();
+            return _repositorioFornecedor.Listar();
         }
-        public void carregarFornecedores()
+
+        public void SalvarFornecedores()
         {
-            repositorioFornecedor.Carregar();
+            _repositorioFornecedor.Salvar();
+        }
+
+        public void CarregarFornecedores()
+        {
+            _repositorioFornecedor.Carregar();
         }
     }
 }

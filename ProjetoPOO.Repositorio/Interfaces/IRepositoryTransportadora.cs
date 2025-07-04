@@ -7,7 +7,7 @@ using ProjetoPOO.Models;
 
 namespace ProjetoPOO.Repository.Interfaces
 {
-    public interface IRepositoryTransportadora:IRepository<Fornecedor>
+    public interface IRepositoryTransportadora:IRepository<Transportadora>
     {
     }
 }

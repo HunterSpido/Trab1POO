@@ -1,58 +1,76 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Text.Json;
 using ProjetoPOO.Models;
 using ProjetoPOO.Repository.Interfaces;
 
 namespace ProjetoPOO.Repository.ClienteRepository
 {
-    public class ClienteRepositoryList : IRepository<Cliente>
+    public class ClienteRepositoryList : IRepositoryClientes
     {
-        private List<Cliente> clientes=new List<Cliente>();
-        public void Adicionar(Cliente obj)
+        private readonly List<Cliente> clientes = new();
+
+        public bool Adicionar(Cliente cliente)
         {
-            clientes.Add(obj);
+            clientes.Add(cliente);
+            return true;
         }
 
-        public void Alterar(Cliente obj)
+        public bool ValidarLogin(string nome, string senha)
         {
-            throw new NotImplementedException();
+            return clientes.Exists(c => c.Nome == nome && c.Senha == senha);
         }
 
-        public void Carregar()
+        public Cliente ConsultarPorNomeESenha(string nome, string senha)
         {
-            if (File.Exists("clientes.json"))
-            {
-                var json = File.ReadAllText("clientes.json");
-                var lista = System.Text.Json.JsonSerializer.Deserialize<List<Cliente>>(json);
-                if (lista != null)
-                    clientes = lista;
-            }
+            return clientes.Find(c => c.Nome == nome && c.Senha == senha);
         }
 
         public List<Cliente> Listar()
         {
-            return clientes;
+            return new List<Cliente>(clientes);
         }
 
-
-
-        public void Remover(Cliente obj)
+        public void Carregar()
         {
-            clientes.Remove(obj);
+            if (File.Exists("clientes_lista.json"))
+            {
+                var json = File.ReadAllText("clientes_lista.json");
+                var lista = JsonSerializer.Deserialize<List<Cliente>>(json);
+                if (lista != null)
+                {
+                    clientes.Clear();
+                    clientes.AddRange(lista);
+                }
+            }
+        }
+
+        public void AlterarCliente(Cliente cliente)
+        {
+            var idx = clientes.FindIndex(c => c.IdCliente == cliente.IdCliente);
+            if (idx >= 0)
+                clientes[idx] = cliente;
+        }
+
+        public void Remover(Cliente cliente)
+        {
+            clientes.RemoveAll(c => c.IdCliente == cliente.IdCliente);
         }
 
         public void Salvar()
         {
-            var json = System.Text.Json.JsonSerializer.Serialize(clientes, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText("clientes.json", json);
+            var json = JsonSerializer.Serialize(clientes, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText("clientes_lista.json", json);
         }
 
-       
+        public void ListarPedidos()
+        {
+            foreach (var cliente in clientes)
+            {
+                Console.WriteLine($"Cliente: {cliente.Nome} - Id: {cliente.IdCliente}");
+                // Implemente a exibição dos pedidos do cliente se houver
+            }
+        }
     }
-
-
-
 }

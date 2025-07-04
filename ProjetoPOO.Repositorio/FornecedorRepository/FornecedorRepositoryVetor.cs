@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text.Json;
 using ProjetoPOO.Models;
 using System.Collections.Generic;
@@ -19,30 +20,31 @@ namespace ProjetoPOO.Repository.FornecedorRepository
             idFornecedores = 0;
         }
 
-        public void Adicionar(Fornecedor obj)
+        public bool Adicionar(Fornecedor obj)
         {
             if (qtdFornecedores >= fornecedores.Length)
-                throw new InvalidOperationException("Limite de fornecedores atingido.");
+                return false; // Limite atingido
 
             obj.IdFornecedor = idFornecedores++;
             fornecedores[qtdFornecedores] = obj;
             qtdFornecedores++;
+            return true;
         }
 
-        public void Alterar(Fornecedor obj)
+        public bool Alterar(Fornecedor obj)
         {
             for (int i = 0; i < qtdFornecedores; i++)
             {
                 if (fornecedores[i].IdFornecedor == obj.IdFornecedor)
                 {
                     fornecedores[i] = obj;
-                    return;
+                    return true;
                 }
             }
-            throw new KeyNotFoundException("Fornecedor não encontrado para alteração.");
+            return false; // Não encontrado
         }
 
-        public void Remover(Fornecedor obj)
+        public bool Remover(Fornecedor obj)
         {
             for (int i = 0; i < qtdFornecedores; i++)
             {
@@ -50,12 +52,13 @@ namespace ProjetoPOO.Repository.FornecedorRepository
                 {
                     for (int j = i; j < qtdFornecedores - 1; j++)
                         fornecedores[j] = fornecedores[j + 1];
+
                     fornecedores[qtdFornecedores - 1] = null!;
                     qtdFornecedores--;
-                    return;
+                    return true;
                 }
             }
-            throw new KeyNotFoundException("Fornecedor não encontrado para remoção.");
+            return false; // Não encontrado
         }
 
         public List<Fornecedor> Listar()
@@ -71,10 +74,6 @@ namespace ProjetoPOO.Repository.FornecedorRepository
             var lista = Listar();
             var json = JsonSerializer.Serialize(lista, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText("fornecedores_vetor.json", json);
-        }
-        public int GetQuantidade()
-        {
-            return qtdFornecedores;
         }
 
         public void Carregar()

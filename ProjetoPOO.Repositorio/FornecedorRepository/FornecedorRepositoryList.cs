@@ -17,28 +17,30 @@ namespace ProjetoPOO.Repository.FornecedorRepository
             fornecedores = new();
         }
 
-        public void Adicionar(Fornecedor obj)
+        public bool Adicionar(Fornecedor obj)
         {
             obj.IdFornecedor = idFornecedores++;
             fornecedores.Add(obj);
+            return true;
         }
 
-        public void Alterar(Fornecedor obj)
+        public bool Alterar(Fornecedor obj)
         {
             for (int i = 0; i < fornecedores.Count; i++)
             {
                 if (fornecedores[i].IdFornecedor == obj.IdFornecedor)
                 {
                     fornecedores[i] = obj;
-                    return;
+                    return true;
                 }
             }
-            throw new KeyNotFoundException("Fornecedor não encontrado para alteração.");
+            return false; // Não encontrou para alterar
         }
 
-        public void Remover(Fornecedor obj)
+        public bool Remover(Fornecedor obj)
         {
-            fornecedores.RemoveAll(f => f.IdFornecedor == obj.IdFornecedor);
+            int removedCount = fornecedores.RemoveAll(f => f.IdFornecedor == obj.IdFornecedor);
+            return removedCount > 0;
         }
 
         public List<Fornecedor> Listar()

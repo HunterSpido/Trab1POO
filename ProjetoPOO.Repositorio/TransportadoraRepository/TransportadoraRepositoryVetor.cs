@@ -1,43 +1,107 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Text.Json;
 using ProjetoPOO.Models;
 using ProjetoPOO.Repository.Interfaces;
 
 namespace ProjetoPOO.Repository.TransportadoraRepository
 {
-    internal class TransportadoraRepositoryVetor : IRepositoryTransportadora
+    public class TransportadoraRepositoryVetor : IRepositoryTransportadora
     {
-        public void Adicionar(Fornecedor obj)
+        private Transportadora[] transportadoras = new Transportadora[100];
+        private int totalTransportadoras = 0;
+        private int idTransportadoras = 0; // Para auto incrementar o ID
+
+        public bool Adicionar(Transportadora transportadora)
         {
-            throw new NotImplementedException();
+            if (totalTransportadoras >= transportadoras.Length)
+                return false; // Limite atingido
+
+            transportadora.IdTransportadora = idTransportadoras++; // Atribui ID único
+            transportadoras[totalTransportadoras++] = transportadora;
+            return true;
         }
 
-        public void Alterar(Fornecedor obj)
+        public bool Alterar(Transportadora transportadora)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < totalTransportadoras; i++)
+            {
+                if (transportadoras[i].IdTransportadora == transportadora.IdTransportadora)
+                {
+                    transportadoras[i] = transportadora;
+                    return true;
+                }
+            }
+            return false; // Não encontrado
         }
 
-        public void Carregar()
+        public bool Remover(Transportadora transportadora)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < totalTransportadoras; i++)
+            {
+                if (transportadoras[i].IdTransportadora == transportadora.IdTransportadora)
+                {
+                    for (int j = i; j < totalTransportadoras - 1; j++)
+                        transportadoras[j] = transportadoras[j + 1];
+                    transportadoras[--totalTransportadoras] = null!;
+                    return true;
+                }
+            }
+            return false; // Não encontrado
         }
 
-        public List<Fornecedor> Listar()
+        public List<Transportadora> Listar()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Remover(Fornecedor obj)
-        {
-            throw new NotImplementedException();
+            var lista = new List<Transportadora>();
+            for (int i = 0; i < totalTransportadoras; i++)
+                lista.Add(transportadoras[i]);
+            return lista;
         }
 
         public void Salvar()
         {
-            throw new NotImplementedException();
+            var lista = Listar();
+            var json = JsonSerializer.Serialize(lista, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText("transportadoras_vetor.json", json);
+        }
+
+        public void Carregar()
+        {
+            if (File.Exists("transportadoras_vetor.json"))
+            {
+                var json = File.ReadAllText("transportadoras_vetor.json");
+                var lista = JsonSerializer.Deserialize<List<Transportadora>>(json);
+                if (lista != null)
+                {
+                    totalTransportadoras = Math.Min(lista.Count, transportadoras.Length);
+                    for (int i = 0; i < totalTransportadoras; i++)
+                        transportadoras[i] = lista[i];
+                    idTransportadoras = totalTransportadoras > 0
+                        ? transportadoras[totalTransportadoras - 1].IdTransportadora + 1
+                        : 0;
+                }
+            }
+        }
+
+        public Transportadora? ConsultarPorId(int id)
+        {
+            for (int i = 0; i < totalTransportadoras; i++)
+                if (transportadoras[i].IdTransportadora == id)
+                    return transportadoras[i];
+            return null;
+        }
+
+        public List<Transportadora> ConsultarPorNome(string nome)
+        {
+            var lista = new List<Transportadora>();
+            for (int i = 0; i < totalTransportadoras; i++)
+            {
+                if (!string.IsNullOrEmpty(transportadoras[i].Nome) &&
+                    transportadoras[i].Nome.ToLower().Contains(nome.ToLower()))
+                    lista.Add(transportadoras[i]);
+            }
+            return lista;
         }
     }
 }
