@@ -1,0 +1,307 @@
+[
+  {
+    "Id": 0,
+    "Cliente": {
+      "Id": 2,
+      "Nome": "bbb",
+      "Senha": "bbb",
+      "Telefone": "bbb",
+      "Email": "bbb",
+      "Endereco": {
+        "Rua": "bbb",
+        "Numero": "bbb",
+        "Complemento": "bb",
+        "Bairro": "bbb",
+        "Cep": "bbb",
+        "Cidade": "bbb",
+        "Estado": "bbb"
+      },
+      "Pedidos": []
+    },
+    "Data": "2025-07-05T05:33:39.4289534-03:00",
+    "Itens": [
+      {
+        "Produto": {
+          "Id": 0,
+          "Nome": "grg",
+          "Descricao": "rgrgrg",
+          "Preco": 54,
+          "Estoque": 65,
+          "Fornecedor": {
+            "IdFornecedor": 0,
+            "Nome": "aa",
+            "Descricao": "a",
+            "Telefone": null,
+            "Email": null,
+            "Id": 0,
+            "Endereco": {
+              "Rua": "a",
+              "Numero": "a",
+              "Complemento": "a",
+              "Bairro": "a",
+              "Cep": "a",
+              "Cidade": "a",
+              "Estado": "a"
+            }
+          }
+        },
+        "Quantidade": 4,
+        "PrecoUnitario": 54,
+        "PrecoTotal": 216
+      }
+    ],
+    "ValorFrete": 0,
+    "ValorTotal": 216,
+    "Status": "Novo",
+    "DataEnvio": null,
+    "DataCancelamento": null,
+    "Transportadora": null
+  },
+  {
+    "Id": 1,
+    "Cliente": {
+      "Id": 1,
+      "Nome": "a",
+      "Senha": "a",
+      "Telefone": "a",
+      "Email": "a",
+      "Endereco": {
+        "Rua": "a",
+        "Numero": "a",
+        "Complemento": "a",
+        "Bairro": "a",
+        "Cep": "a",
+        "Cidade": "a",
+        "Estado": "a"
+      },
+      "Pedidos": []
+    },
+    "Data": "2025-07-05T13:10:22.0015373-03:00",
+    "Itens": [
+      {
+        "Produto": {
+          "Id": 0,
+          "Nome": "grg",
+          "Descricao": "rgrgrg",
+          "Preco": 54,
+          "Estoque": 65,
+          "Fornecedor": {
+            "IdFornecedor": 0,
+            "Nome": "aa",
+            "Descricao": "a",
+            "Telefone": null,
+            "Email": null,
+            "Id": 0,
+            "Endereco": {
+              "Rua": "a",
+              "Numero": "a",
+              "Complemento": "a",
+              "Bairro": "a",
+              "Cep": "a",
+              "Cidade": "a",
+              "Estado": "a"
+            }
+          }
+        },
+        "Quantidade": 9,
+        "PrecoUnitario": 54,
+        "PrecoTotal": 486
+      }
+    ],
+    "ValorFrete": 0,
+    "ValorTotal": 486,
+    "Status": "Novo",
+    "DataEnvio": null,
+    "DataCancelamento": null,
+    "Transportadora": null
+  },
+  {
+    "Id": 2,
+    "Cliente": {
+      "Id": 1,
+      "Nome": "a",
+      "Senha": "a",
+      "Telefone": "a",
+      "Email": "a",
+      "Endereco": {
+        "Rua": "a",
+        "Numero": "a",
+        "Complemento": "a",
+        "Bairro": "a",
+        "Cep": "a",
+        "Cidade": "a",
+        "Estado": "a"
+      },
+      "Pedidos": []
+    },
+    "Data": "2025-07-05T13:32:32.0587253-03:00",
+    "Itens": [
+      {
+        "Produto": {
+          "Id": 0,
+          "Nome": "grg",
+          "Descricao": "rgrgrg",
+          "Preco": 54,
+          "Estoque": 60,
+          "Fornecedor": {
+            "IdFornecedor": 0,
+            "Nome": "aa",
+            "Descricao": "a",
+            "Telefone": null,
+            "Email": null,
+            "Id": 0,
+            "Endereco": {
+              "Rua": "a",
+              "Numero": "a",
+              "Complemento": "a",
+              "Bairro": "a",
+              "Cep": "a",
+              "Cidade": "a",
+              "Estado": "a"
+            }
+          }
+        },
+        "Quantidade": 5,
+        "PrecoUnitario": 54,
+        "PrecoTotal": 270
+      }
+    ],
+    "ValorFrete": 0,
+    "ValorTotal": 270,
+    "Status": "Novo",
+    "DataEnvio": null,
+    "DataCancelamento": null,
+    "Transportadora": {
+      "IdTransportadora": 0,
+      "Nome": "best",
+      "PrecoPorKm": 10,
+      "ValorFrete": 0
+    }
+  },
+  {
+    "Id": 3,
+    "Cliente": {
+      "Id": 1,
+      "Nome": "a",
+      "Senha": "a",
+      "Telefone": "a",
+      "Email": "a",
+      "Endereco": {
+        "Rua": "a",
+        "Numero": "a",
+        "Complemento": "a",
+        "Bairro": "a",
+        "Cep": "a",
+        "Cidade": "a",
+        "Estado": "a"
+      },
+      "Pedidos": []
+    },
+    "Data": "2025-07-05T13:46:05.9793652-03:00",
+    "Itens": [
+      {
+        "Produto": {
+          "Id": 0,
+          "Nome": "grg",
+          "Descricao": "rgrgrg",
+          "Preco": 54,
+          "Estoque": 50,
+          "Fornecedor": {
+            "IdFornecedor": 0,
+            "Nome": "aa",
+            "Descricao": "a",
+            "Telefone": null,
+            "Email": null,
+            "Id": 0,
+            "Endereco": {
+              "Rua": "a",
+              "Numero": "a",
+              "Complemento": "a",
+              "Bairro": "a",
+              "Cep": "a",
+              "Cidade": "a",
+              "Estado": "a"
+            }
+          }
+        },
+        "Quantidade": 10,
+        "PrecoUnitario": 54,
+        "PrecoTotal": 540
+      }
+    ],
+    "ValorFrete": 500,
+    "ValorTotal": 1040,
+    "Status": "Novo",
+    "DataEnvio": null,
+    "DataCancelamento": null,
+    "Transportadora": {
+      "IdTransportadora": 0,
+      "Nome": "best",
+      "PrecoPorKm": 10,
+      "ValorFrete": 0
+    }
+  },
+  {
+    "Id": 4,
+    "Cliente": {
+      "Id": 1,
+      "Nome": "a",
+      "Senha": "a",
+      "Telefone": "a",
+      "Email": "a",
+      "Endereco": {
+        "Rua": "a",
+        "Numero": "a",
+        "Complemento": "a",
+        "Bairro": "a",
+        "Cep": "a",
+        "Cidade": "a",
+        "Estado": "a"
+      },
+      "Pedidos": []
+    },
+    "Data": "2025-07-05T13:48:40.2760178-03:00",
+    "Itens": [
+      {
+        "Produto": {
+          "Id": 1,
+          "Nome": "teste",
+          "Descricao": "teste",
+          "Preco": 57,
+          "Estoque": 0,
+          "Fornecedor": {
+            "IdFornecedor": 0,
+            "Nome": "aa",
+            "Descricao": "a",
+            "Telefone": null,
+            "Email": null,
+            "Id": 0,
+            "Endereco": {
+              "Rua": "a",
+              "Numero": "a",
+              "Complemento": "a",
+              "Bairro": "a",
+              "Cep": "a",
+              "Cidade": "a",
+              "Estado": "a"
+            }
+          }
+        },
+        "Quantidade": 4,
+        "PrecoUnitario": 57,
+        "PrecoTotal": 228
+      }
+    ],
+    "ValorFrete": 230,
+    "ValorTotal": 458,
+    "Status": "Novo",
+    "DataEnvio": null,
+    "DataCancelamento": null,
+    "Transportadora": {
+      "IdTransportadora": 0,
+      "Nome": "best",
+      "PrecoPorKm": 10,
+      "ValorFrete": 0
+    }
+  }
+]

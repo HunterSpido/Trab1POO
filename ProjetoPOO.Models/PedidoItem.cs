@@ -4,7 +4,8 @@ namespace ProjetoPOO.Models;
 
 public class PedidoItem
 {
-    public int Quantidade{get;set;}
-    public double PrecoTotal{get;set;}
-
+    public Produto Produto { get; set; } = null!;
+    public int Quantidade { get; set; }
+    public decimal PrecoUnitario { get; set; } // Armazena o valor na data da compra
+    public decimal PrecoTotal => PrecoUnitario * Quantidade;
 }

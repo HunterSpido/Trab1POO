@@ -4,17 +4,17 @@ using ProjetoPOO.Repository.Interfaces;
 
 namespace ProjetoPOO.Services;
 
-public  class TransportadoraService
+public class TransportadoraService
 {
     private readonly IRepositoryTransportadora _repo;
-    
-    public TransportadoraService(IRepositoryTransportadora repo)
-        {
-            _repo = repo;
 
-            // Carrega do arquivo ao iniciar
-            _repo.Carregar();
-        }
+    public TransportadoraService(IRepositoryTransportadora repo)
+    {
+        _repo = repo;
+
+        // Carrega do arquivo ao iniciar
+        _repo.Carregar();
+    }
     public void Adicionar()
     {
         Console.Write("Digite o nome: ");
@@ -45,7 +45,7 @@ public  class TransportadoraService
         }
     }
 
-    public  void Alterar()
+    public void Alterar()
     {
         Console.Write("Digite o ID da transportadora a alterar: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -79,7 +79,7 @@ public  class TransportadoraService
         }
     }
 
-    public  void Excluir()
+    public void Excluir()
     {
         Console.Write("Digite o ID da transportadora a excluir: ");
         int id = int.Parse(Console.ReadLine()!);
@@ -170,6 +170,11 @@ public  class TransportadoraService
         Console.WriteLine($"ID: {t.IdTransportadora}");
         Console.WriteLine($"Nome: {t.Nome}");
         Console.WriteLine($"Preço por KM: {t.PrecoPorKm}");
+    }
+    
+    public List<Transportadora> GetTodos()
+    {
+        return _repo.Listar();
     }
 
 }
