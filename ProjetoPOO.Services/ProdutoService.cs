@@ -191,5 +191,18 @@ namespace ProjetoPOO.Services
             else
                 Console.WriteLine("Falha ao remover produto.");
         }
+
+        public Produto? ObterPorId(int id)
+        {
+            return _repo.Listar().Find(x => x.Id == id);
+        }
+
+        public bool Atualizar(Produto produto)
+        {
+            return _repo.Alterar(produto);
+        }
+
     }
+    
+    
 }

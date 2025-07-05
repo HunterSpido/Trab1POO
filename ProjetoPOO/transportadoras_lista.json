@@ -1,0 +1,14 @@
+[
+  {
+    "IdTransportadora": 0,
+    "Nome": "best",
+    "PrecoPorKm": 10,
+    "ValorFrete": 0
+  },
+  {
+    "IdTransportadora": 1,
+    "Nome": "test",
+    "PrecoPorKm": 30,
+    "ValorFrete": 0
+  }
+]

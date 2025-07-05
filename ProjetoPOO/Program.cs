@@ -5,7 +5,8 @@ using ProjetoPOO.Services;
 using ProjetoPOO.Menu;
 using ProjetoPOO.Repository.FornecedorRepository;
 using ProjetoPOO.Repository.TransportadoraRepository;
-using ProjetoPOO.Repository.ProdutoRepository;  // onde seu Menu está
+using ProjetoPOO.Repository.ProdutoRepository;
+using ProjetoPOO.Repository.PedidoRepository;  // onde seu Menu está
 
 namespace ProjetoPOO
 {
@@ -19,6 +20,7 @@ namespace ProjetoPOO
             IRepositoryFornecedor fornerrepo;
             IRepositoryTransportadora transportadora;
             IRepositoryProduto produto;
+            IRepositoryPedido pedido;
 
 
             if (escolha == "V")
@@ -27,6 +29,7 @@ namespace ProjetoPOO
                 fornerrepo = new FornecedorRepositoryVetor();
                 transportadora = new TransportadoraRepositoryVetor();
                 produto = new ProdutoRepositoryVetor();
+                pedido = new PedidoRepositoryVetor();
             }
             else
             {
@@ -34,6 +37,7 @@ namespace ProjetoPOO
                 fornerrepo = new FornecedorRepositoryList();
                 transportadora = new TransportadoraRepositoryList();
                 produto = new ProdutoRepositoryList();
+                pedido = new PedidoRepositoryList();
             }
 
             var enderecoService = new EnderecoService();
@@ -41,9 +45,10 @@ namespace ProjetoPOO
             var fornecedoreService = new FornecedorService(fornerrepo, enderecoService);
             var transportadoraService = new TransportadoraService(transportadora);
             var produtoService = new ProdutoService(produto, fornerrepo);
+            var PedidoService = new PedidoService(pedido);
 
             // Agora o compilador sabe que Menu é a classe em UI.Menus
-            var menu = new MenuPrincipal(clienteService, fornecedoreService, transportadoraService, produtoService);
+            var menu = new MenuPrincipal(clienteService, fornecedoreService, transportadoraService, produtoService, PedidoService);
             menu.TelaLogin();
         }
     }

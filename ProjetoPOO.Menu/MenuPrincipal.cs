@@ -11,13 +11,15 @@ namespace ProjetoPOO.Menu // ou o namespace que você definiu
 
         private readonly TransportadoraService _transportadoraService;
         private readonly ProdutoService _produtoService;
+        private readonly PedidoService _pedidoService;
 
-        public MenuPrincipal(ClienteService clienteService, FornecedorService fornecedorService, TransportadoraService transportadoraService, ProdutoService produtoService)
+        public MenuPrincipal(ClienteService clienteService, FornecedorService fornecedorService, TransportadoraService transportadoraService, ProdutoService produtoService, PedidoService pedidoService)
         {
             _clienteService = clienteService ?? throw new ArgumentNullException(nameof(clienteService));
             _fornecedorService = fornecedorService ?? throw new ArgumentNullException(nameof(fornecedorService));
             _transportadoraService = transportadoraService ?? throw new ArgumentNullException(nameof(transportadoraService));
             _produtoService = produtoService ?? throw new ArgumentNullException(nameof(produtoService));
+            _pedidoService = pedidoService ?? throw new ArgumentNullException(nameof(pedidoService));
 
         }
 
@@ -64,7 +66,7 @@ namespace ProjetoPOO.Menu // ou o namespace que você definiu
             if (nome == "admin" && senha == "admin")
             {
                 Console.WriteLine("Bem-vindo, admin!");
-                new AdminMenu(_fornecedorService,_transportadoraService,_produtoService).MenuAdmin();
+                new AdminMenu(_fornecedorService,_transportadoraService,_produtoService, _pedidoService).MenuAdmin();
                 return;
             }
 
@@ -72,7 +74,7 @@ namespace ProjetoPOO.Menu // ou o namespace que você definiu
             {
                 Console.WriteLine("Login efetuado com sucesso!");
                 var cliente = _clienteService.ObterCliente(nome, senha)!;
-                new UsuarioNormalMenu(cliente, _fornecedorService, _transportadoraService,_produtoService).MenuUsuario(); 
+                new UsuarioNormalMenu(cliente, _fornecedorService, _transportadoraService,_produtoService, _pedidoService).MenuUsuario(); 
             }
             else
             {

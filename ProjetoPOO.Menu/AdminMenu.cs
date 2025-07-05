@@ -12,11 +12,14 @@ public class AdminMenu
 
     private readonly ProdutoService _produtoService;
 
-    public AdminMenu(FornecedorService fornecedorService, TransportadoraService transportadoraService, ProdutoService produtoService)
+    private readonly PedidoService _pedidoService;
+
+    public AdminMenu(FornecedorService fornecedorService, TransportadoraService transportadoraService, ProdutoService produtoService, PedidoService pedidoService)
     {
         _fornecedorService = fornecedorService ?? throw new ArgumentNullException(nameof(fornecedorService));
         _transportadoraService = transportadoraService ?? throw new ArgumentNullException(nameof(transportadoraService));
         _produtoService = produtoService ?? throw new ArgumentNullException(nameof(produtoService));
+        _pedidoService = pedidoService ?? throw new ArgumentNullException(nameof(pedidoService));
 
     }
 
