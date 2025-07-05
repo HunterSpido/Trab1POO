@@ -1,99 +1,127 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using ProjetoPOO.Models;
 using ProjetoPOO.Repository.Interfaces;
 
 namespace ProjetoPOO.Repository.ClienteRepository
 {
-    public class ClienteRepositoryVetor : IRepositoryClientes
+    public class ClienteRepositoryVetor : IClienteRepository
     {
-        private Cliente[] clientes = new Cliente[100];
-        private int totalClientes = 0;
+        private Cliente[] _clientes = new Cliente[100];
+        private int _count = 0;
+        private const string FileName = "clientes_vetor.json";
+
+        public ClienteRepositoryVetor() => Carregar();
+
+        public void Carregar()
+        {
+            if (!File.Exists(FileName)) return;
+            var json = File.ReadAllText(FileName);
+            var lista = JsonSerializer.Deserialize<List<Cliente>>(json);
+            if (lista == null) return;
+
+            _count = Math.Min(lista.Count, _clientes.Length);
+            for (int i = 0; i < _count; i++)
+                _clientes[i] = lista[i];
+        }
+
+        public void Salvar()
+        {
+            var lista = new List<Cliente>();
+            for (int i = 0; i < _count; i++)
+                lista.Add(_clientes[i]);
+
+            var json = JsonSerializer.Serialize(lista, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(FileName, json);
+        }
 
         public bool Adicionar(Cliente cliente)
         {
-            if (totalClientes >= clientes.Length)
-                return false;
-            clientes[totalClientes++] = cliente;
+            if (cliente == null || _count >= _clientes.Length) return false;
+            cliente.Id = _clientes
+                .Take(_count)
+                .Select(c => c.Id)
+                .DefaultIfEmpty(0)
+                .Max() + 1;
+            _clientes[_count++] = cliente;
+            Salvar();
             return true;
         }
 
-        public bool ValidarLogin(string nome, string senha)
+        public bool Alterar(Cliente cliente)
         {
-            for (int i = 0; i < totalClientes; i++)
-                if (clientes[i].Nome == nome && clientes[i].Senha == senha)
+            if (cliente == null) return false;
+            for (int i = 0; i < _count; i++)
+            {
+                if (_clientes[i].Id == cliente.Id)
+                {
+                    _clientes[i] = cliente;
+                    Salvar();
                     return true;
+                }
+            }
             return false;
         }
 
-        public Cliente ConsultarPorNomeESenha(string nome, string senha)
+        public bool Remover(Cliente cliente)
         {
-            for (int i = 0; i < totalClientes; i++)
-                if (clientes[i].Nome == nome && clientes[i].Senha == senha)
-                    return clientes[i];
-            return null;
+            if (cliente == null) return false;
+            for (int i = 0; i < _count; i++)
+            {
+                if (_clientes[i].Id == cliente.Id)
+                {
+                    // desloca todos à esquerda
+                    for (int j = i; j < _count - 1; j++)
+                        _clientes[j] = _clientes[j + 1];
+                    _clientes[--_count] = null!;
+                    Salvar();
+                    return true;
+                }
+            }
+            return false;
         }
 
         public List<Cliente> Listar()
         {
             var lista = new List<Cliente>();
-            for (int i = 0; i < totalClientes; i++)
-                lista.Add(clientes[i]);
+            for (int i = 0; i < _count; i++)
+                lista.Add(_clientes[i]);
             return lista;
         }
 
-        public void Carregar()
+        public Cliente? ObterPorId(int id)
         {
-            if (File.Exists("clientes_vetor.json"))
-            {
-                var json = File.ReadAllText("clientes_vetor.json");
-                var lista = JsonSerializer.Deserialize<List<Cliente>>(json);
-                if (lista != null)
-                {
-                    totalClientes = Math.Min(lista.Count, clientes.Length);
-                    for (int i = 0; i < totalClientes; i++)
-                        clientes[i] = lista[i];
-                }
-            }
+            for (int i = 0; i < _count; i++)
+                if (_clientes[i].Id == id)
+                    return _clientes[i];
+            return null;
         }
 
-        public void AlterarCliente(Cliente cliente)
+        public bool ValidarLogin(string nome, string senha)
         {
-            for (int i = 0; i < totalClientes; i++)
-                if (clientes[i].IdCliente == cliente.IdCliente)
-                    clientes[i] = cliente;
+            return ObterPorNomeESenha(nome, senha) != null;
         }
 
-        public void Remover(Cliente cliente)
+        public Cliente? ObterPorNomeESenha(string nome, string senha)
         {
-            for (int i = 0; i < totalClientes; i++)
-            {
-                if (clientes[i].IdCliente == cliente.IdCliente)
-                {
-                    for (int j = i; j < totalClientes - 1; j++)
-                        clientes[j] = clientes[j + 1];
-                    clientes[--totalClientes] = null!;
-                    break;
-                }
-            }
+            for (int i = 0; i < _count; i++)
+                if (_clientes[i].Nome.Equals(nome, StringComparison.OrdinalIgnoreCase)
+                    && _clientes[i].Senha == senha)
+                    return _clientes[i];
+            return null;
         }
 
-        public void Salvar()
+        public List<Cliente> ObterPorNome(string termo)
         {
-            var lista = Listar();
-            var json = JsonSerializer.Serialize(lista, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText("clientes_vetor.json", json);
-        }
-
-        public void ListarPedidos()
-        {
-            for (int i = 0; i < totalClientes; i++)
-            {
-                Console.WriteLine($"Cliente: {clientes[i].Nome} - Id: {clientes[i].IdCliente}");
-                // Implemente a exibição dos pedidos do cliente se houver
-            }
+            termo = termo?.ToLower() ?? "";
+            var resultados = new List<Cliente>();
+            for (int i = 0; i < _count; i++)
+                if (_clientes[i].Nome?.ToLower().Contains(termo) == true)
+                    resultados.Add(_clientes[i]);
+            return resultados;
         }
     }
 }

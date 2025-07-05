@@ -1,162 +1,166 @@
 using System;
+using System.Collections.Generic;
 using ProjetoPOO.Models;
-using ProjetoPOO.Repository.ClienteRepository;
 using ProjetoPOO.Repository.Interfaces;
 
 namespace ProjetoPOO.Services
 {
     public class ClienteService
     {
+        private readonly IClienteRepository _repo;
         private readonly EnderecoService _enderecoService;
-        private readonly RepositorioBaseCliente _repositorioCliente;
 
-        public ClienteService(IRepositoryClientes repositoryClientes, EnderecoService enderecoService)
+        public ClienteService(IClienteRepository repo, EnderecoService enderecoService)
         {
+            _repo = repo ?? throw new ArgumentNullException(nameof(repo));
             _enderecoService = enderecoService ?? throw new ArgumentNullException(nameof(enderecoService));
-            _repositorioCliente = new RepositorioBaseCliente(repositoryClientes ?? throw new ArgumentNullException(nameof(repositoryClientes)));
 
-            // Tenta carregar os dados existentes ao iniciar o serviço
-            try
-            {
-                _repositorioCliente.Carregar();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao carregar os dados: {ex.Message}");
-            }
+            // Carrega dados ao iniciar
+            _repo.Carregar();
         }
 
-        public void CadastrarUsuario()
+        public void Cadastrar()
         {
-            try
+            Console.WriteLine("=== Cadastro de Cliente ===");
+            Console.Write("Nome: ");
+            var nome = Console.ReadLine()?.Trim() ?? "";
+            if (nome == "")
             {
-                Console.Write("Digite o nome: ");
-                string? nome = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(nome))
-                {
-                    Console.WriteLine("Nome inválido.");
-                    return;
-                }
-
-                Console.Write("Digite a senha: ");
-                string? senha = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(senha))
-                {
-                    Console.WriteLine("Senha inválida.");
-                    return;
-                }
-
-                Endereco endereco = _enderecoService.PedirEndereco();
-
-                Console.Write("Digite o telefone: ");
-                string telefone = Console.ReadLine() ?? "";
-
-                Console.Write("Digite o email: ");
-                string email = Console.ReadLine() ?? "";
-
-                // Verifica se o cliente já existe
-                if (_repositorioCliente.ConsultarPorNomeESenha(nome, senha) != null)
-                {
-                    Console.WriteLine("Erro: Cliente já cadastrado!");
-                    return;
-                }
-
-                var novoCliente = new Cliente
-                {
-                    Nome = nome,
-                    Senha = senha,
-                    Email = email,
-                    Telefone = telefone,
-                    Endereco = endereco
-                };
-
-                if (_repositorioCliente.AdicionarCliente(novoCliente))
-                {
-                    try
-                    {
-                        _repositorioCliente.Salvar();
-                        Console.WriteLine("Cliente cadastrado com sucesso!");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Erro ao salvar os dados do cliente: {ex.Message}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Erro ao cadastrar cliente!");
-                }
+                Console.WriteLine("Nome inválido.");
+                return;
             }
-            catch (Exception ex)
+
+            Console.Write("Senha: ");
+            var senha = Console.ReadLine()?.Trim() ?? "";
+            if (senha == "")
             {
-                Console.WriteLine($"Erro no cadastro: {ex.Message}");
+                Console.WriteLine("Senha inválida.");
+                return;
             }
+
+            // Evita duplicado
+            if (_repo.ObterPorNomeESenha(nome, senha) != null)
+            {
+                Console.WriteLine("Já existe um cliente com esse nome/senha.");
+                return;
+            }
+
+            Console.Write("Email: ");
+            var email = Console.ReadLine()?.Trim() ?? "";
+
+            Console.Write("Telefone: ");
+            var telefone = Console.ReadLine()?.Trim() ?? "";
+
+            // Pede endereço
+            var endereco = _enderecoService.PedirEndereco();
+
+            var cliente = new Cliente
+            {
+                Nome = nome,
+                Senha = senha,
+                Email = email,
+                Telefone = telefone,
+                Endereco = endereco
+            };
+
+            if (_repo.Adicionar(cliente))
+                Console.WriteLine("Cliente cadastrado com sucesso!");
+            else
+                Console.WriteLine("Falha ao cadastrar cliente.");
         }
 
-        public bool ValidarLogin(string nome, string senha)
+        public Cliente? ValidarLogin(string nome, string senha)
         {
             if (string.IsNullOrWhiteSpace(nome) || string.IsNullOrWhiteSpace(senha))
-            {
-                return false;
-            }
-
-            try
-            {
-                return _repositorioCliente.ValidarLogin(nome, senha);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro na validação do login: {ex.Message}");
-                return false;
-            }
+                return null;
+            return _repo.ObterPorNomeESenha(nome, senha);
         }
 
+        public void ListarTodos()
+        {
+            Console.WriteLine("=== Lista de Clientes ===");
+            var todos = _repo.Listar();
+            if (todos.Count == 0)
+            {
+                Console.WriteLine("Nenhum cliente cadastrado.");
+                return;
+            }
+            foreach (var c in todos)
+                Console.WriteLine($"ID {c.Id}: {c.Nome} — {c.Email} / {c.Telefone}");
+        } 
+
+        public void Atualizar()
+        {
+            Console.Write("ID do cliente a alterar: ");
+            if (!int.TryParse(Console.ReadLine(), out var id))
+            {
+                Console.WriteLine("ID inválido.");
+                return;
+            }
+
+            var c = _repo.ObterPorId(id);
+            if (c == null)
+            {
+                Console.WriteLine("Cliente não encontrado.");
+                return;
+            }
+
+            Console.Write($"Novo nome ({c.Nome}): ");
+            var nome = Console.ReadLine()?.Trim();
+            if (!string.IsNullOrWhiteSpace(nome))
+                c.Nome = nome;
+
+            Console.Write($"Nova senha (****): ");
+            var senha = Console.ReadLine()?.Trim();
+            if (!string.IsNullOrWhiteSpace(senha))
+                c.Senha = senha;
+
+            Console.Write($"Novo email ({c.Email}): ");
+            var email = Console.ReadLine()?.Trim();
+            if (!string.IsNullOrWhiteSpace(email))
+                c.Email = email;
+
+            Console.Write($"Novo telefone ({c.Telefone}): ");
+            var tel = Console.ReadLine()?.Trim();
+            if (!string.IsNullOrWhiteSpace(tel))
+                c.Telefone = tel;
+
+            Console.WriteLine("Atualizar endereço:");
+            c.Endereco = _enderecoService.PedirEndereco();
+
+            if (_repo.Alterar(c))
+                Console.WriteLine("Cliente atualizado!");
+            else
+                Console.WriteLine("Falha ao atualizar cliente.");
+        }
+        public bool EhLoginValido(string nome, string senha)
+        {
+            return _repo.ValidarLogin(nome, senha);
+        }
         public Cliente? ObterCliente(string nome, string senha)
         {
-            try
-            {
-                return _repositorioCliente.ConsultarPorNomeESenha(nome, senha);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao obter cliente: {ex.Message}");
-                return null;
-            }
+            return _repo.ObterPorNomeESenha(nome, senha);
         }
-
-        public void ListarTodosClientes()
+        public void Remover()
         {
-            try
+            Console.Write("ID do cliente a remover: ");
+            if (!int.TryParse(Console.ReadLine(), out var id))
             {
-                var clientes = _repositorioCliente.Listar();
-                if (clientes == null || clientes.Count == 0)
-                {
-                    Console.WriteLine("Nenhum cliente cadastrado.");
-                    return;
-                }
+                Console.WriteLine("ID inválido.");
+                return;
+            }
 
-                Console.WriteLine("\nLista de Clientes Cadastrados:");
-                foreach (var cliente in clientes)
-                {
-                    Console.WriteLine($"- Nome: {cliente.Nome}, Email: {cliente.Email}, Telefone: {cliente.Telefone}");
-                }
-            }
-            catch (Exception ex)
+            var c = _repo.ObterPorId(id);
+            if (c == null)
             {
-                Console.WriteLine($"Erro ao listar clientes: {ex.Message}");
+                Console.WriteLine("Cliente não encontrado.");
+                return;
             }
-        }
 
-        public void ListarPedidosClientes()
-        {
-            try
-            {
-                _repositorioCliente.ListarPedidos();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao listar pedidos dos clientes: {ex.Message}");
-            }
+            if (_repo.Remover(c))
+                Console.WriteLine("Cliente removido.");
+            else
+                Console.WriteLine("Falha ao remover cliente.");
         }
     }
 }

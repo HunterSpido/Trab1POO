@@ -1,76 +1,90 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using ProjetoPOO.Models;
 using ProjetoPOO.Repository.Interfaces;
 
 namespace ProjetoPOO.Repository.ClienteRepository
 {
-    public class ClienteRepositoryList : IRepositoryClientes
+    public class ClienteRepositoryList : IClienteRepository
     {
-        private readonly List<Cliente> clientes = new();
+        private List<Cliente> _clientes = new List<Cliente>();
+        private const string FileName = "clientes_lista.json";
 
-        public bool Adicionar(Cliente cliente)
-        {
-            clientes.Add(cliente);
-            return true;
-        }
-
-        public bool ValidarLogin(string nome, string senha)
-        {
-            return clientes.Exists(c => c.Nome == nome && c.Senha == senha);
-        }
-
-        public Cliente ConsultarPorNomeESenha(string nome, string senha)
-        {
-            return clientes.Find(c => c.Nome == nome && c.Senha == senha);
-        }
-
-        public List<Cliente> Listar()
-        {
-            return new List<Cliente>(clientes);
-        }
+        public ClienteRepositoryList() => Carregar();
 
         public void Carregar()
         {
-            if (File.Exists("clientes_lista.json"))
-            {
-                var json = File.ReadAllText("clientes_lista.json");
-                var lista = JsonSerializer.Deserialize<List<Cliente>>(json);
-                if (lista != null)
-                {
-                    clientes.Clear();
-                    clientes.AddRange(lista);
-                }
-            }
-        }
-
-        public void AlterarCliente(Cliente cliente)
-        {
-            var idx = clientes.FindIndex(c => c.IdCliente == cliente.IdCliente);
-            if (idx >= 0)
-                clientes[idx] = cliente;
-        }
-
-        public void Remover(Cliente cliente)
-        {
-            clientes.RemoveAll(c => c.IdCliente == cliente.IdCliente);
+            if (!File.Exists(FileName)) return;
+            var json = File.ReadAllText(FileName);
+            var lista = JsonSerializer.Deserialize<List<Cliente>>(json);
+            if (lista != null) _clientes = lista;
         }
 
         public void Salvar()
         {
-            var json = JsonSerializer.Serialize(clientes, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText("clientes_lista.json", json);
+            var json = JsonSerializer.Serialize(_clientes, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(FileName, json);
         }
 
-        public void ListarPedidos()
+        public bool Adicionar(Cliente cliente)
         {
-            foreach (var cliente in clientes)
-            {
-                Console.WriteLine($"Cliente: {cliente.Nome} - Id: {cliente.IdCliente}");
-                // Implemente a exibição dos pedidos do cliente se houver
-            }
+            if (cliente == null) return false;
+            cliente.Id = _clientes.Select(c => c.Id).DefaultIfEmpty(0).Max() + 1;
+            _clientes.Add(cliente);
+            Salvar();
+            return true;
+        }
+
+        public bool Alterar(Cliente cliente)
+        {
+            if (cliente == null) return false;
+            int idx = _clientes.FindIndex(c => c.Id == cliente.Id);
+            if (idx < 0) return false;
+            _clientes[idx] = cliente;
+            Salvar();
+            return true;
+        }
+
+        public bool Remover(Cliente cliente)
+        {
+            if (cliente == null) return false;
+            bool removed = _clientes.RemoveAll(c => c.Id == cliente.Id) > 0;
+            if (removed) Salvar();
+            return removed;
+        }
+
+        public List<Cliente> Listar()
+        {
+            return new List<Cliente>(_clientes);
+        }
+
+        public Cliente? ObterPorId(int id)
+        {
+            return _clientes.FirstOrDefault(c => c.Id == id);
+        }
+
+        public bool ValidarLogin(string nome, string senha)
+        {
+            return ObterPorNomeESenha(nome, senha) != null;
+        }
+
+        public Cliente? ObterPorNomeESenha(string nome, string senha)
+        {
+            return _clientes
+                .FirstOrDefault(c =>
+                    c.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase)
+                    && c.Senha == senha);
+        }
+
+        public List<Cliente> ObterPorNome(string termo)
+        {
+            termo = termo?.ToLower() ?? "";
+            return _clientes
+                .Where(c => c.Nome?.ToLower().Contains(termo) == true)
+                .ToList();
         }
     }
 }

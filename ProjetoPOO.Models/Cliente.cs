@@ -1,24 +1,13 @@
-namespace ProjetoPOO.Models;
+using ProjetoPOO.Models;
 
-using System;
-
-
-public class Cliente:IIdentificavel
+public class Cliente : IIdentificavel
 {
-    public string? Nome{get;set;}
-    public int IdCliente { get;set;} 
-    public string Senha{ get; set; }
-    public string? Telefone { get; set; }    
-    public string? Email{get;set;}
-    public Endereco Endereco{ get; set; }
-
-    public int Id =>IdCliente ;
-
-    public void fazerPedido()
-    {
-
-    }
-
-    
-
+    public int Id { get; set; }
+    public string? Nome { get; set; }
+    public string Senha { get; set; } = string.Empty;
+    public string? Telefone { get; set; }
+    public string? Email { get; set; }
+    public Endereco Endereco { get; set; } = new Endereco();
+    public List<Pedido> Pedidos { get; set; } = new();
+    // …
 }
