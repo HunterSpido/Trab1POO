@@ -16,5 +16,7 @@ namespace ProjetoPOO.Repository.Interfaces
         void Salvar();
         void Carregar();
 
+        Fornecedor? ObterPorId(int id);
+
     }
 }
