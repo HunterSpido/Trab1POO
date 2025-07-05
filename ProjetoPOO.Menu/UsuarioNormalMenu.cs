@@ -181,9 +181,25 @@ public class UsuarioNormalMenu
     {
         Console.WriteLine($"\nPedido Nº {pedido.Id} | Data: {pedido.Data:dd/MM/yyyy HH:mm}");
         foreach (var item in pedido.Itens)
-            Console.WriteLine($"Produto: {item.Produto.Nome} | Qtd: {item.Quantidade} | Unit: {item.PrecoUnitario:C} | Total: {item.PrecoTotal:C}");
+        {
+            var produto = _produtoService.ObterPorId(item.ProdutoId);
+            if (produto != null)
+            {
+                Console.WriteLine($"Produto: {produto.Nome} | Qtd: {item.Quantidade} | Unit: {item.PrecoUnitario:C} | Total: {item.PrecoTotal:C}");
+                Console.WriteLine($"Descrição: {produto.Descricao}");
+            }
+            else
+            {
+                Console.WriteLine($"Produto removido ou não encontrado (ID: {item.ProdutoId})");
+            }
+        }
         Console.WriteLine($"Frete: {pedido.ValorFrete:C}");
         Console.WriteLine($"Total do pedido: {pedido.ValorTotal:C}");
+
+        if (pedido.Status == "Enviado" && pedido.DataEnvio != null)
+            Console.WriteLine($"Data de envio: {pedido.DataEnvio:dd/MM/yyyy}");
+        if (pedido.Status == "Cancelado" && pedido.DataCancelamento != null)
+            Console.WriteLine($"Data de cancelamento: {pedido.DataCancelamento:dd/MM/yyyy}");
     }
     public void MenuUsuario()
     {

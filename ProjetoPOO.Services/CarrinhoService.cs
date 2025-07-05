@@ -12,13 +12,14 @@ namespace ProjetoPOO.Services
 
         public void AdicionarProduto(Produto produto, int quantidade)
         {
-            var existente = _itens.FirstOrDefault(x => x.Produto == produto);
+            var existente = _itens.FirstOrDefault(x => x.ProdutoId == produto.Id);
             if (existente != null)
                 existente.Quantidade += quantidade;
             else
                 _itens.Add(new PedidoItem
                 {
-                    Produto = produto,
+                    ProdutoId = produto.Id,
+                    Produto = produto,              // só para exibição na sessão, não serializa!
                     Quantidade = quantidade,
                     PrecoUnitario = (decimal)produto.Preco
                 });

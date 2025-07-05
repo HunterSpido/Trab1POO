@@ -4,8 +4,12 @@ namespace ProjetoPOO.Models;
 
 public class PedidoItem
 {
-    public Produto Produto { get; set; } = null!;
+   public int ProdutoId { get; set; }
     public int Quantidade { get; set; }
-    public decimal PrecoUnitario { get; set; } // Armazena o valor na data da compra
+    public decimal PrecoUnitario { get; set; }
     public decimal PrecoTotal => PrecoUnitario * Quantidade;
+
+    // Não serializar este campo!
+    [System.Text.Json.Serialization.JsonIgnore]
+    public Produto? Produto { get; set; }
 }

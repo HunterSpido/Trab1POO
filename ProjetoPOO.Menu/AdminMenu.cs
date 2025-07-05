@@ -26,13 +26,14 @@ public class AdminMenu
     public void MenuAdmin()
     {
         int tes = 0;
-        while (tes != 4) // Mantém o loop principal
+        while (tes != 5) // Mantém o loop principal
         {
             System.Console.WriteLine("Selecione a opcão:");
             System.Console.WriteLine("1- Menu de Fornecedor:");
             System.Console.WriteLine("2- Menu de Produtos:");
             System.Console.WriteLine("3- Menu de Transportadora:");
-            System.Console.WriteLine("4- Sair");
+            System.Console.WriteLine("4- Menu de Pedidos:");
+            System.Console.WriteLine("5- Sair");
 
             tes = int.Parse(Console.ReadLine()!);
 
@@ -54,6 +55,11 @@ public class AdminMenu
                     transportadoraMenu.MenuTransportadora();
                     break;
                 case 4:
+                    Console.WriteLine("MENU Pedidos");
+                    MenuPedidos pedidoMenu = new MenuPedidos(_pedidoService, _produtoService);
+                    pedidoMenu.MenuPedidosAdm();
+                    break;
+                case 5:
                     System.Console.WriteLine("Saindo...");
                     return; // Sai do MenuAdmin completamente
                 default:
