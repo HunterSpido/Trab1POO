@@ -10,10 +10,13 @@ public class AdminMenu
     private readonly FornecedorService _fornecedorService;
     private readonly TransportadoraService _transportadoraService;
 
-    public AdminMenu(FornecedorService fornecedorService, TransportadoraService transportadoraService)
+    private readonly ProdutoService _produtoService;
+
+    public AdminMenu(FornecedorService fornecedorService, TransportadoraService transportadoraService, ProdutoService produtoService)
     {
         _fornecedorService = fornecedorService ?? throw new ArgumentNullException(nameof(fornecedorService));
         _transportadoraService = transportadoraService ?? throw new ArgumentNullException(nameof(transportadoraService));
+        _produtoService = produtoService ?? throw new ArgumentNullException(nameof(produtoService));
 
     }
 
@@ -39,7 +42,7 @@ public class AdminMenu
                     break;
                 case 2:
                     Console.WriteLine("MENU PRODUTO");
-                    ProdutoMenu produtoMenu = new ProdutoMenu();
+                    ProdutoMenu produtoMenu = new ProdutoMenu(_produtoService);
                     produtoMenu.MenuProdutos();
                     break;
                 case 3:

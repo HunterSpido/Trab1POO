@@ -10,12 +10,14 @@ namespace ProjetoPOO.Menu // ou o namespace que você definiu
         private readonly FornecedorService _fornecedorService;
 
         private readonly TransportadoraService _transportadoraService;
+        private readonly ProdutoService _produtoService;
 
-        public MenuPrincipal(ClienteService clienteService, FornecedorService fornecedorService, TransportadoraService transportadoraService)
+        public MenuPrincipal(ClienteService clienteService, FornecedorService fornecedorService, TransportadoraService transportadoraService, ProdutoService produtoService)
         {
             _clienteService = clienteService ?? throw new ArgumentNullException(nameof(clienteService));
             _fornecedorService = fornecedorService ?? throw new ArgumentNullException(nameof(fornecedorService));
             _transportadoraService = transportadoraService ?? throw new ArgumentNullException(nameof(transportadoraService));
+            _produtoService = produtoService ?? throw new ArgumentNullException(nameof(produtoService));
 
         }
 
@@ -62,7 +64,7 @@ namespace ProjetoPOO.Menu // ou o namespace que você definiu
             if (nome == "admin" && senha == "admin")
             {
                 Console.WriteLine("Bem-vindo, admin!");
-                new AdminMenu(_fornecedorService,_transportadoraService).MenuAdmin();
+                new AdminMenu(_fornecedorService,_transportadoraService,_produtoService).MenuAdmin();
                 return;
             }
 

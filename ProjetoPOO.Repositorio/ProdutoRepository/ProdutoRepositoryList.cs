@@ -36,7 +36,7 @@ namespace ProjetoPOO.Repository.ProdutoRepository
         public bool Adicionar(Produto obj)
         {
             if (obj == null) return false;
-            obj.Id = _produtos.Select(p => p.Id).DefaultIfEmpty(0).Max() + 1;
+            obj.Id = _produtos.Count == 0 ? 0 : _produtos.Max(p => p.Id) + 1;
             _produtos.Add(obj);
             Salvar();
             return true;

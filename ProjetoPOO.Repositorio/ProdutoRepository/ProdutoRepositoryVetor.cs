@@ -46,7 +46,7 @@ namespace ProjetoPOO.Repository.ProdutoRepository
             obj.Id = _produtos
                 .Take(_count)
                 .Select(p => p.Id)
-                .DefaultIfEmpty(0)
+                .DefaultIfEmpty(-1)
                 .Max() + 1;
             _produtos[_count++] = obj;
             Salvar();

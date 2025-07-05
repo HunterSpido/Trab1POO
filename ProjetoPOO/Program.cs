@@ -4,7 +4,8 @@ using ProjetoPOO.Repository.Interfaces;
 using ProjetoPOO.Services;
 using ProjetoPOO.Menu;
 using ProjetoPOO.Repository.FornecedorRepository;
-using ProjetoPOO.Repository.TransportadoraRepository;  // onde seu Menu está
+using ProjetoPOO.Repository.TransportadoraRepository;
+using ProjetoPOO.Repository.ProdutoRepository;  // onde seu Menu está
 
 namespace ProjetoPOO
 {
@@ -17,6 +18,7 @@ namespace ProjetoPOO
             IClienteRepository clierepo;
             IRepositoryFornecedor fornerrepo;
             IRepositoryTransportadora transportadora;
+            IRepositoryProduto produto;
 
 
             if (escolha == "V")
@@ -24,21 +26,24 @@ namespace ProjetoPOO
                 clierepo = new ClienteRepositoryVetor();
                 fornerrepo = new FornecedorRepositoryVetor();
                 transportadora = new TransportadoraRepositoryVetor();
+                produto = new ProdutoRepositoryVetor();
             }
             else
             {
                 clierepo = new ClienteRepositoryList();
                 fornerrepo = new FornecedorRepositoryList();
                 transportadora = new TransportadoraRepositoryList();
+                produto = new ProdutoRepositoryList();
             }
 
             var enderecoService = new EnderecoService();
             var clienteService = new ClienteService(clierepo, enderecoService);
             var fornecedoreService = new FornecedorService(fornerrepo, enderecoService);
             var transportadoraService = new TransportadoraService(transportadora);
+            var produtoService = new ProdutoService(produto, fornerrepo);
 
             // Agora o compilador sabe que Menu é a classe em UI.Menus
-            var menu = new MenuPrincipal(clienteService, fornecedoreService, transportadoraService);
+            var menu = new MenuPrincipal(clienteService, fornecedoreService, transportadoraService, produtoService);
             menu.TelaLogin();
         }
     }

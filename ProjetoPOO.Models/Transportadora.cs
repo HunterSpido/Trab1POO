@@ -9,6 +9,6 @@ public class Transportadora:IIdentificavel
     public string? Nome { get; set; }
     public double PrecoPorKm { get; set; }
 
-    public int Id => IdTransportadora;
+    int IIdentificavel.Id { get => IdTransportadora; set => throw new NotImplementedException(); }
 }
  
