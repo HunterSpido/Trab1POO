@@ -7,7 +7,14 @@ using ProjetoPOO.Models;
 
 namespace ProjetoPOO.Repository.Interfaces
 {
-    public interface IRepositoryFornecedor:IRepository<Fornecedor>
+    public interface IRepositoryFornecedor
     {
+        bool Adicionar(Fornecedor obj);
+        bool Remover(Fornecedor obj);
+        List<Fornecedor> Listar();
+        bool Alterar(Fornecedor obj);
+        void Salvar();
+        void Carregar();
+
     }
 }

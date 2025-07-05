@@ -4,7 +4,15 @@ using System;
 
 public  class MenuFornecedor
 {
-    public  void TelaFornecedor()
+    private readonly FornecedorService _fornecedorService;
+
+    public MenuFornecedor(FornecedorService fornecedorService)
+    {
+        _fornecedorService = fornecedorService ?? throw new ArgumentNullException(nameof(fornecedorService));
+
+    }
+    // adiciona construct e 
+    public void TelaFornecedor()
     {
         while (true)
         {
@@ -23,19 +31,21 @@ public  class MenuFornecedor
             {
 
                 case 1:
-                    //fornecedorService.Adicionar();
+                    Console.WriteLine("escolheu 1");
+                    _fornecedorService.Cadastrar();
                     break;
 
                 case 2:
-                    //fornecedorService.Alterar();
+                    Console.WriteLine("escolheu 1");
+                    _fornecedorService.Alterar();
                     break;
 
                 case 3:
-                    //fornecedorService.Excluir();
+                    _fornecedorService.Excluir();
                     break;
 
                 case 4:
-                    //fornecedorService.Consultar();
+                    _fornecedorService.Consultar();
                     break;
 
                 case 5:

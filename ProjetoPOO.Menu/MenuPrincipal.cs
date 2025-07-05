@@ -7,10 +7,13 @@ namespace ProjetoPOO.Menu // ou o namespace que você definiu
     public class MenuPrincipal
     {
         private readonly ClienteService _clienteService;
+        private readonly FornecedorService _fornecedorService;
 
-        public MenuPrincipal(ClienteService clienteService)
+        public MenuPrincipal(ClienteService clienteService, FornecedorService fornecedorService)
         {
             _clienteService = clienteService ?? throw new ArgumentNullException(nameof(clienteService));
+            _fornecedorService = fornecedorService ?? throw new ArgumentNullException(nameof(fornecedorService));
+
         }
 
         public void TelaLogin()
@@ -56,7 +59,7 @@ namespace ProjetoPOO.Menu // ou o namespace que você definiu
             if (nome == "admin" && senha == "admin")
             {
                 Console.WriteLine("Bem-vindo, admin!");
-                new AdminMenu().MenuAdmin();
+                new AdminMenu(_fornecedorService).MenuAdmin();
                 return;
             }
 
@@ -64,7 +67,7 @@ namespace ProjetoPOO.Menu // ou o namespace que você definiu
             {
                 Console.WriteLine("Login efetuado com sucesso!");
                 var cliente = _clienteService.ObterCliente(nome, senha)!;
-                //new UsuarioNormalMenu(cliente).MenuUsuario(); ;;;
+                //new UsuarioNormalMenu(cliente, _fornecedorService).MenuUsuario(); ;;;
             }
             else
             {

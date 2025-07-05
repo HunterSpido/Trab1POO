@@ -7,7 +7,7 @@ using ProjetoPOO.Repository.Interfaces;
 
 namespace ProjetoPOO.Repository.FornecedorRepository
 {
-    public class FornecedorRepositoryVetor : IRepository<Fornecedor>
+    public class FornecedorRepositoryVetor : IRepositoryFornecedor
     {
         private Fornecedor[] fornecedores;
         private int qtdFornecedores;

@@ -7,7 +7,7 @@ using ProjetoPOO.Repository.Interfaces;
 
 namespace ProjetoPOO.Repository.FornecedorRepository
 {
-    public class FornecedorRepositoryList : IRepository<Fornecedor>
+    public class FornecedorRepositoryList : IRepositoryFornecedor
     {
         private readonly List<Fornecedor> fornecedores;
         private int idFornecedores = 0;

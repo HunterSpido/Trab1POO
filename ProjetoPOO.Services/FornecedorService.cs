@@ -7,11 +7,11 @@ namespace ProjetoPOO.Services
 {
     public class FornecedorService
     {
-        private readonly IRepository<Fornecedor> _repo;
+        private readonly IRepositoryFornecedor _repo;
         private readonly EnderecoService _enderecoService;
 
         // Injeção de dependências via construtor
-        public FornecedorService(IRepository<Fornecedor> repositorio, EnderecoService enderecoService)
+        public FornecedorService(IRepositoryFornecedor repositorio, EnderecoService enderecoService)
         {
             _repo = repositorio;
             _enderecoService = enderecoService;
@@ -94,40 +94,46 @@ namespace ProjetoPOO.Services
             alvo.Endereco = _enderecoService.PedirEndereco();
 
             // Chama repositório e salva
-            //bool ok = _repo.Atualizar(alvo);
-            //if (ok)
-            //{
-            //    _repo.Salvar();
-            //    Console.WriteLine("Fornecedor alterado com sucesso!");
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Falha ao alterar fornecedor.");
-            //}
+            bool ok = _repo.Alterar(alvo);
+            if (ok)
+            {
+               _repo.Salvar();
+               Console.WriteLine("Fornecedor alterado com sucesso!");
+            }
+            else
+            {
+               Console.WriteLine("Falha ao alterar fornecedor.");
+            }
         }
 
         // 3) EXCLUIR
         public void Excluir()
         {
-            //Console.WriteLine("=== Exclusão de Fornecedor ===");
-            //Console.Write("ID do fornecedor: ");
-            //if (!int.TryParse(Console.ReadLine(), out int id))
-            //{
-            //    Console.WriteLine("ID inválido.");
-            //    return;
-            //}
+            Console.WriteLine("=== Exclusão de Fornecedor ===");
+            Console.Write("ID do fornecedor: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("ID inválido.");
+                return;
+            }
 
-            // Remove pelo ID
-        //    bool ok = _repo.Remover(id);
-        //    if (ok)
-        //    {
-        //        _repo.Salvar();
-        //        Console.WriteLine("Fornecedor excluído.");
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Falha ao excluir (ID não encontrado).");
-        //    }
+            var f = _repo.Listar().FirstOrDefault(f => f.IdFornecedor == id);
+            if (f == null)
+            {
+                Console.WriteLine("Fornecedor não encontrado.");
+                return;
+            }
+
+            bool ok = _repo.Remover(f);
+            if (ok)
+            {
+                _repo.Salvar();
+                Console.WriteLine("Fornecedor excluído com sucesso!");
+            }
+            else
+            {
+                Console.WriteLine("Falha ao excluir fornecedor.");
+            }
         }
 
         // 4) CONSULTAR (menu interno)
@@ -153,15 +159,11 @@ namespace ProjetoPOO.Services
                 return;
             }
 
-            //Fornecedor? f = _repo.ConsultarPorId(id);
-            //if (f == null)
-            //{
-            //    Console.WriteLine("Não encontrado.");
-            //}
-            //else
-            //{
-            //    Exibir(f);
-            //}
+            var f = _repo.Listar().FirstOrDefault(f => f.IdFornecedor == id);
+            if (f == null)
+                Console.WriteLine("Não encontrado.");
+            else
+                Exibir(f);
         }
 
         private void ConsultarPorNome()

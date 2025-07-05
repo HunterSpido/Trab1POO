@@ -2,7 +2,8 @@
 using ProjetoPOO.Repository.ClienteRepository;
 using ProjetoPOO.Repository.Interfaces;
 using ProjetoPOO.Services;
-using ProjetoPOO.Menu;  // onde seu Menu está
+using ProjetoPOO.Menu;
+using ProjetoPOO.Repository.FornecedorRepository;  // onde seu Menu está
 
 namespace ProjetoPOO
 {
@@ -12,16 +13,27 @@ namespace ProjetoPOO
         {
             Console.Write("Usar Vetor (V) ou Lista (L)? ");
             var escolha = (Console.ReadLine() ?? "").Trim().ToUpper();
+            IClienteRepository clierepo;
+            IRepositoryFornecedor fornerrepo;
 
-            IClienteRepository repo = escolha == "V"
-                ? new ClienteRepositoryVetor()
-                : new ClienteRepositoryList();
+
+            if (escolha == "V")
+            {
+                clierepo = new ClienteRepositoryVetor();
+                fornerrepo = new FornecedorRepositoryVetor();
+            }
+            else
+            {
+                clierepo = new ClienteRepositoryList();
+                fornerrepo = new FornecedorRepositoryList();
+            }
 
             var enderecoService = new EnderecoService();
-            var clienteService = new ClienteService(repo, enderecoService);
+            var clienteService = new ClienteService(clierepo, enderecoService);
+            var fornecedoreService = new FornecedorService(fornerrepo, enderecoService);
 
             // Agora o compilador sabe que Menu é a classe em UI.Menus
-            var menu = new MenuPrincipal(clienteService);
+            var menu = new MenuPrincipal(clienteService, fornecedoreService);
             menu.TelaLogin();
         }
     }
