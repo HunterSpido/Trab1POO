@@ -10,9 +10,12 @@ namespace ProjetoPOO.Repository.TransportadoraRepository
     public class TransportadoraRepositoryList : IRepositoryTransportadora
     {
         private readonly List<Transportadora> transportadoras = new();
+        private int proximoId = 0; // <-- CONTADOR DE ID
 
         public bool Adicionar(Transportadora transportadora)
         {
+            // Atribui ID único ao adicionar
+            transportadora.IdTransportadora = proximoId++;
             transportadoras.Add(transportadora);
             return true;
         }
@@ -55,6 +58,12 @@ namespace ProjetoPOO.Repository.TransportadoraRepository
                 {
                     transportadoras.Clear();
                     transportadoras.AddRange(lista);
+
+                    // Atualiza o contador de IDs para evitar duplicidade!
+                    if (transportadoras.Count > 0)
+                        proximoId = transportadoras[transportadoras.Count - 1].IdTransportadora + 1;
+                    else
+                        proximoId = 0;
                 }
             }
         }

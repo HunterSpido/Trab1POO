@@ -1,38 +1,48 @@
 using System;
 using ProjetoPOO.Models;
+using ProjetoPOO.Repository.Interfaces;
 
 namespace ProjetoPOO.Services;
 
 public  class TransportadoraService
 {
-    private  Transportadora[] vetorTransportadoras = new Transportadora[100];
-    private  int qtdTransportadoras = 0;
-    private  int Id = 0;
-    public  void Adicionar()
-    {
-        if (qtdTransportadoras >= vetorTransportadoras.Length)
+    private readonly IRepositoryTransportadora _repo;
+    
+    public TransportadoraService(IRepositoryTransportadora repo)
         {
-            Console.WriteLine("Limite de transportadoras atingido.");
-            return;
+            _repo = repo;
+
+            // Carrega do arquivo ao iniciar
+            _repo.Carregar();
         }
+    public void Adicionar()
+    {
         Console.Write("Digite o nome: ");
         string nome = Console.ReadLine()!;
 
         Console.Write("Digite o preço por KM: ");
         double preco = double.Parse(Console.ReadLine()!);
 
+        // Se quiser, pode pedir endereço também
+        // Endereco end = _enderecoService.PedirEndereco();
+
         var nova = new Transportadora
         {
-            IdTransportadora = Id,
             Nome = nome,
             PrecoPorKm = preco
+            // Endereco = end
         };
 
-        vetorTransportadoras[qtdTransportadoras] = nova;
-        qtdTransportadoras++;
-        Id++;
-
-        Console.WriteLine("Transportadora adicionada com sucesso!");
+        bool ok = _repo.Adicionar(nova);
+        if (ok)
+        {
+            _repo.Salvar();
+            Console.WriteLine("Transportadora adicionada com sucesso!");
+        }
+        else
+        {
+            Console.WriteLine("Falha ao adicionar transportadora.");
+        }
     }
 
     public  void Alterar()
@@ -40,22 +50,33 @@ public  class TransportadoraService
         Console.Write("Digite o ID da transportadora a alterar: ");
         int id = int.Parse(Console.ReadLine()!);
 
-        for (int i = 0; i < qtdTransportadoras; i++)
+        var t = _repo.Listar().FirstOrDefault(t => t.IdTransportadora == id);
+        if (t == null)
         {
-            if (vetorTransportadoras[i].IdTransportadora == id)
-            {
-                Console.Write("Novo nome: ");
-                vetorTransportadoras[i].Nome = Console.ReadLine()!;
-
-                Console.Write("Novo preço por KM: ");
-                vetorTransportadoras[i].PrecoPorKm = double.Parse(Console.ReadLine()!);
-
-                Console.WriteLine("Transportadora alterada com sucesso!");
-                return;
-            }
+            Console.WriteLine("Transportadora não encontrada.");
+            return;
         }
 
-        Console.WriteLine("Transportadora não encontrada.");
+        Console.Write($"Novo nome ({t.Nome}): ");
+        string nome = Console.ReadLine()!;
+        if (!string.IsNullOrWhiteSpace(nome))
+            t.Nome = nome;
+
+        Console.Write($"Novo preço por KM ({t.PrecoPorKm}): ");
+        string precoStr = Console.ReadLine()!;
+        if (double.TryParse(precoStr, out double preco))
+            t.PrecoPorKm = preco;
+
+        bool ok = _repo.Alterar(t);
+        if (ok)
+        {
+            _repo.Salvar();
+            Console.WriteLine("Transportadora alterada com sucesso!");
+        }
+        else
+        {
+            Console.WriteLine("Falha ao alterar transportadora.");
+        }
     }
 
     public  void Excluir()
@@ -63,79 +84,52 @@ public  class TransportadoraService
         Console.Write("Digite o ID da transportadora a excluir: ");
         int id = int.Parse(Console.ReadLine()!);
 
-        for (int i = 0; i < qtdTransportadoras; i++)
+        var t = _repo.Listar().FirstOrDefault(t => t.IdTransportadora == id);
+        if (t == null)
         {
-            if (vetorTransportadoras[i].IdTransportadora == id)
-            {
-                // Deslocar os elementos
-                for (int j = i; j < qtdTransportadoras - 1; j++)
-                {
-                    vetorTransportadoras[j] = vetorTransportadoras[j + 1];
-                }
-
-                vetorTransportadoras[qtdTransportadoras - 1] = null!;
-                qtdTransportadoras--;
-
-                Console.WriteLine("Transportadora excluída com sucesso!");
-                return;
-            }
+            Console.WriteLine("Transportadora não encontrada.");
+            return;
         }
 
-        Console.WriteLine("Transportadora não encontrada.");
+        bool ok = _repo.Remover(t);
+        if (ok)
+        {
+            _repo.Salvar();
+            Console.WriteLine("Transportadora excluída com sucesso!");
+        }
+        else
+        {
+            Console.WriteLine("Falha ao excluir transportadora.");
+        }
     }
 
-    public  void ConsultarId()
+    public void ConsultarId()
     {
         Console.Write("Digite o ID da transportadora que deseja consultar: ");
-        int Id = int.Parse(Console.ReadLine()!);
+        int id = int.Parse(Console.ReadLine()!);
 
-
-        for (int i = 0; i < qtdTransportadoras; i++)
+        var t = _repo.Listar().FirstOrDefault(t => t.IdTransportadora == id);
+        if (t == null)
         {
-            if (vetorTransportadoras[i].IdTransportadora == Id)
-            {
-                Exibir(vetorTransportadoras[i]);
-                return;
-            }
+            Console.WriteLine("Transportadora não encontrada.");
+            return;
         }
-
-        Console.WriteLine("Transportadora não encontrada.");
-    }
-    private  void Exibir(Transportadora t)
-    {
-        Console.WriteLine("=== Transportadora encontrada ===");
-        Console.WriteLine($"ID: {t.IdTransportadora}");
-        Console.WriteLine($"Nome: {t.Nome}");
-        Console.WriteLine($"Preço por KM: {t.PrecoPorKm}");
+        Exibir(t);
     }
 
-    public  void ConsultarPorNome()
+    public void ConsultarPorNome()
     {
         Console.Write("Digite parte do nome para buscar: ");
-        string termo = Console.ReadLine()!.ToLower();
+        string termo = (Console.ReadLine() ?? "").ToLower();
 
+        var lista = _repo.Listar();
         bool encontrou = false;
 
-        for (int i = 0; i < qtdTransportadoras; i++)
+        foreach (var t in lista)
         {
-            if (vetorTransportadoras == null)
+            if (t.Nome.ToLower().Contains(termo))
             {
-                continue;
-            }
-            string nomeLower = vetorTransportadoras[i].Nome.ToLower();
-            bool contemTodasLetras = true;
-
-
-            if (!nomeLower.Contains(termo))
-            {
-                contemTodasLetras = false;
-                continue;
-            }
-
-
-            if (contemTodasLetras)
-            {
-                Exibir(vetorTransportadoras[i]);
+                Exibir(t);
                 Console.WriteLine("---------------------");
                 encontrou = true;
             }
@@ -143,11 +137,11 @@ public  class TransportadoraService
 
         if (!encontrou)
         {
-            Console.WriteLine($"Nenhuma transportadora encontrado com: {termo}");
+            Console.WriteLine($"Nenhuma transportadora encontrada com: {termo}");
         }
     }
 
-    public  void Consultar()
+    public void Consultar()
     {
         Console.WriteLine("\n--- Tipo de Consulta ---");
         Console.WriteLine("1 - Por ID");
@@ -169,4 +163,13 @@ public  class TransportadoraService
                 break;
         }
     }
+
+    private void Exibir(Transportadora t)
+    {
+        Console.WriteLine("=== Transportadora encontrada ===");
+        Console.WriteLine($"ID: {t.IdTransportadora}");
+        Console.WriteLine($"Nome: {t.Nome}");
+        Console.WriteLine($"Preço por KM: {t.PrecoPorKm}");
+    }
+
 }
