@@ -72,7 +72,7 @@ namespace ProjetoPOO.Menu // ou o namespace que você definiu
             {
                 Console.WriteLine("Login efetuado com sucesso!");
                 var cliente = _clienteService.ObterCliente(nome, senha)!;
-                //new UsuarioNormalMenu(cliente, _fornecedorService, _transportadoraService).MenuUsuario(); ;;;
+                new UsuarioNormalMenu(cliente, _fornecedorService, _transportadoraService,_produtoService).MenuUsuario(); 
             }
             else
             {
