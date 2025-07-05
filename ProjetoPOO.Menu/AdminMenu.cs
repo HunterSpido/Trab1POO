@@ -8,10 +8,12 @@ using System.Security.Cryptography.X509Certificates;
 public class AdminMenu
 {
     private readonly FornecedorService _fornecedorService;
+    private readonly TransportadoraService _transportadoraService;
 
-    public AdminMenu(FornecedorService fornecedorService)
+    public AdminMenu(FornecedorService fornecedorService, TransportadoraService transportadoraService)
     {
         _fornecedorService = fornecedorService ?? throw new ArgumentNullException(nameof(fornecedorService));
+        _transportadoraService = transportadoraService ?? throw new ArgumentNullException(nameof(transportadoraService));
 
     }
 
@@ -42,7 +44,7 @@ public class AdminMenu
                     break;
                 case 3:
                     Console.WriteLine("MENU TRANSPORTADORA");
-                    TransportadoraMenu transportadoraMenu = new TransportadoraMenu();
+                    TransportadoraMenu transportadoraMenu = new TransportadoraMenu(_transportadoraService);
                     transportadoraMenu.MenuTransportadora();
                     break;
                 case 4:
