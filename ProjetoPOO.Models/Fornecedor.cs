@@ -13,11 +13,5 @@ public class Fornecedor:IIdentificavel
     public int Id => IdFornecedor;
 
     public Endereco? Endereco{ get; set; }
-
-
-
-
-
-
-
+    int IIdentificavel.Id { get => Id; set => throw new NotImplementedException(); }
 }

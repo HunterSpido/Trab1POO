@@ -71,5 +71,15 @@ namespace ProjetoPOO.Repository.FornecedorRepository
                 }
             }
         }
+
+        public Fornecedor? ObterPorId(int id)
+        {
+            for (int i = 0; i < fornecedores.Count; i++)
+            {
+                if (fornecedores[i].IdFornecedor == id)
+                    return fornecedores[i];
+            }
+            return null;
+        }
     }
 }

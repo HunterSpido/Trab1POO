@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ProjetoPOO.Models
+﻿namespace ProjetoPOO.Models
 {
     public interface IIdentificavel
     {
-        int Id { get; }
-        string? Nome { get; }
+        int Id { get; set; }    // antes era só get :contentReference[oaicite:0]{index=0}
+        string? Nome { get; set; }
     }
 }

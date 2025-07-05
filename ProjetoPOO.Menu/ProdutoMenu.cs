@@ -4,7 +4,14 @@ namespace ProjetoPOO.Menu;
 
 public class ProdutoMenu
 {
-    public  void MenuProdutos()
+    private readonly ProdutoService _produtoService;
+
+    public ProdutoMenu(ProdutoService produtoService)
+    {
+        _produtoService = produtoService ?? throw new ArgumentNullException(nameof(produtoService));
+    }
+
+    public void MenuProdutos()
     {
         while (true)
         {
@@ -20,16 +27,16 @@ public class ProdutoMenu
             switch (v)
             {
                 case 1:
-                    //produtoService.Adicionar();
+                    _produtoService.Cadastrar();
                     break;
                 case 2:
-                    //produtoService.Alterar();
+                    _produtoService.Alterar();
                     break;
                 case 3:
-                    //produtoService.Excluir();
+                   _produtoService.Remover();
                     break;
                 case 4:
-                    //produtoService.Consultar();
+                    _produtoService.Consultar();
                     break;
                 case 5:
                     return;
