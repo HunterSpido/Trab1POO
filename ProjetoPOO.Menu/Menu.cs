@@ -12,7 +12,7 @@ public  class Menu
             Console.WriteLine("3 - Sair");
             Console.Write("Escolha: ");
             int opcao = int.Parse(Console.ReadLine()!);
-            ClienteService clienteService = new ClienteService();
+            //ClienteService clienteService = new ClienteService();
 
 
             if (opcao == 1)
@@ -31,13 +31,13 @@ public  class Menu
                     // Chama menu admin
                 }
 
-                else if (clienteService.ValidarNome(nome, senha))
-                {
-                    Console.WriteLine("Login efetuado com sucesso!");
-                    UsuarioNormalMenu usuarioNormalMenu = new UsuarioNormalMenu();
-                    usuarioNormalMenu.MenuUsuario();
-                    // Chama menu usuário normal
-                }
+                //else if (clienteService.ValidarNome(nome, senha))
+                //{
+                //    Console.WriteLine("Login efetuado com sucesso!");
+                //    UsuarioNormalMenu usuarioNormalMenu = new UsuarioNormalMenu();
+                //    usuarioNormalMenu.MenuUsuario();
+                //    // Chama menu usuário normal
+                //}
                 else
                 {
                     Console.WriteLine("Login ou senha incorretos.");
@@ -45,7 +45,7 @@ public  class Menu
             }
             else if (opcao == 2)
             {
-                clienteService.CadastrarUsuario();
+                //clienteService.CadastrarUsuario();
             }
             else if (opcao == 3)
             {

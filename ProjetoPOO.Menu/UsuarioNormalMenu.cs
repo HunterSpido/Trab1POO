@@ -5,14 +5,10 @@ namespace ProjetoPOO.Menu;
 
 public  class UsuarioNormalMenu
 {
-    FornecedorService fornecedorService;
-    TransportadoraService transportadoraService;
-    ProdutoService produtoService;
+
     public UsuarioNormalMenu()
     {
-        fornecedorService = new FornecedorService();
-        transportadoraService=new TransportadoraService();
-        produtoService=new ProdutoService();
+
     }
     public  void MenuUsuario()
     {
@@ -30,14 +26,14 @@ public  class UsuarioNormalMenu
             switch (opcao)
             {
                 case 1:
-                    fornecedorService.Consultar();
+                    //fornecedorService.Consultar();
                     
                     break;
                 case 2:
-                    transportadoraService.Consultar();
+                    //transportadoraService.Consultar();
                     break;
                 case 3:
-                    produtoService.Consultar();
+                    //produtoService.Consultar();
                     break;
                 case 4:
                     Console.WriteLine("Voltar Tela de Login...");

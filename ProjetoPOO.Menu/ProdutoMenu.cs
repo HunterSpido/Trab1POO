@@ -15,21 +15,21 @@ public class ProdutoMenu
             Console.WriteLine("4- Consulte um produto");
             Console.WriteLine("5- Voltar");
             int v = int.Parse(Console.ReadLine()!);
-            ProdutoService produtoService = new ProdutoService();
+            //ProdutoService produtoService = new ProdutoService();
 
             switch (v)
             {
                 case 1:
-                    produtoService.Adicionar();
+                    //produtoService.Adicionar();
                     break;
                 case 2:
-                    produtoService.Alterar();
+                    //produtoService.Alterar();
                     break;
                 case 3:
-                    produtoService.Excluir();
+                    //produtoService.Excluir();
                     break;
                 case 4:
-                    produtoService.Consultar();
+                    //produtoService.Consultar();
                     break;
                 case 5:
                     return;

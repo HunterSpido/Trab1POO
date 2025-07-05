@@ -15,7 +15,7 @@ public  class MenuFornecedor
             Console.WriteLine("3 - Exclua um fornecedor");
             Console.WriteLine("4 - Consultar fornecedor");
             Console.WriteLine("5 - Voltar");
-            FornecedorService fornecedorService = new FornecedorService();
+            //FornecedorService fornecedorService = new FornecedorService();
 
             int opcao = int.Parse(Console.ReadLine()!);
 
@@ -23,19 +23,19 @@ public  class MenuFornecedor
             {
 
                 case 1:
-                    fornecedorService.Adicionar();
+                    //fornecedorService.Adicionar();
                     break;
 
                 case 2:
-                    fornecedorService.Alterar();
+                    //fornecedorService.Alterar();
                     break;
 
                 case 3:
-                    fornecedorService.Excluir();
+                    //fornecedorService.Excluir();
                     break;
 
                 case 4:
-                    fornecedorService.Consultar();
+                    //fornecedorService.Consultar();
                     break;
 
                 case 5:
