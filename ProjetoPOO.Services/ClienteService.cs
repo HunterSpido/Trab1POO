@@ -41,7 +41,7 @@ namespace ProjetoPOO.Services
             // Evita duplicado
             if (_repo.ObterPorNomeESenha(nome, senha) != null)
             {
-                Console.WriteLine("Já existe um cliente com esse nome/senha.");
+                Console.WriteLine("Não possível cadastrar.");
                 return;
             }
 

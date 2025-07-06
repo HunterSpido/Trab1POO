@@ -7,7 +7,7 @@ public class PedidoItem
    public int ProdutoId { get; set; }
     public int Quantidade { get; set; }
     public decimal PrecoUnitario { get; set; }
-    public decimal PrecoTotal => PrecoUnitario * Quantidade;
+    public decimal PrecoTotal {  get; set; }
 
     // Não serializar este campo!
     [System.Text.Json.Serialization.JsonIgnore]
