@@ -47,7 +47,7 @@ namespace ProjetoPOO
             var produtoService = new ProdutoService(produto, fornerrepo);
             var PedidoService = new PedidoService(pedido);
 
-            // Agora o compilador sabe que Menu é a classe em UI.Menus
+
             var menu = new MenuPrincipal(clienteService, fornecedoreService, transportadoraService, produtoService, PedidoService);
             menu.TelaLogin();
         }

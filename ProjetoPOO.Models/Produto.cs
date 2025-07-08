@@ -12,6 +12,18 @@ public class Produto : IIdentificavel
     public Fornecedor Fornecedor { get; set; } = new Fornecedor();
 
     public override string ToString()
-        => $"ID {Id}: {Nome} — R$ {Preco:N2} — Estoque: {Estoque} — Forn: {Fornecedor.Nome}";
+    {
+        string disponivel;
+        if (Estoque > 0)
+        {
+            disponivel = $"Em estoque: {Estoque}";
+        }
+        else
+        {
+            disponivel = "IndisponÃ­vel";
+        }
+
+        return $"ID {Id}: {Nome} â€“ R$ {Preco:N2} â€“ {disponivel} â€“ Forn: {Fornecedor.Nome}";
+    }
 }
 

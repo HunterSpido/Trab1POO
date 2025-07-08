@@ -86,6 +86,7 @@ namespace ProjetoPOO.Services
             foreach (var p in todos)
                 Console.WriteLine(p);
         }
+        
 
         public void Consultar()
         {

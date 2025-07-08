@@ -13,6 +13,7 @@ public class Pedido
     public string Status { get; set; } = "Novo";
     public DateTime? DataEnvio { get; set; }
     public DateTime? DataCancelamento { get; set; }
+    public DateTime? DataSaiuParaTransporte { get; set; }
     public Transportadora? Transportadora { get; set; }
 
 }
