@@ -87,7 +87,7 @@ namespace ProjetoPOO.Services
             }
             foreach (var c in todos)
                 Console.WriteLine($"ID {c.Id}: {c.Nome} — {c.Email} / {c.Telefone}");
-        } 
+        }
 
         public void Atualizar()
         {
@@ -141,26 +141,6 @@ namespace ProjetoPOO.Services
         {
             return _repo.ObterPorNomeESenha(nome, senha);
         }
-        public void Remover()
-        {
-            Console.Write("ID do cliente a remover: ");
-            if (!int.TryParse(Console.ReadLine(), out var id))
-            {
-                Console.WriteLine("ID inválido.");
-                return;
-            }
 
-            var c = _repo.ObterPorId(id);
-            if (c == null)
-            {
-                Console.WriteLine("Cliente não encontrado.");
-                return;
-            }
-
-            if (_repo.Remover(c))
-                Console.WriteLine("Cliente removido.");
-            else
-                Console.WriteLine("Falha ao remover cliente.");
-        }
     }
 }
