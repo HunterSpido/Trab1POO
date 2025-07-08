@@ -9,5 +9,9 @@ namespace ProjetoPOO.Services.Exceptions
             : base($"Estoque insuficiente. Disponível: {disponivel} unidades.")
         {
         }
+
+        public ExcecaoEstoqueInsuficiente(string? message) : base(message)
+        {
+        }
     }
 }

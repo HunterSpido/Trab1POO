@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ProjetoPOO.Models;
 using ProjetoPOO.Repository.Interfaces;
+using ProjetoPOO.Services.Exceptions;
 
 namespace ProjetoPOO.Services
 {
@@ -18,20 +19,25 @@ namespace ProjetoPOO.Services
 
         public bool RealizarPedido(Pedido pedido)
         {
+            if (pedido == null || pedido.Itens == null || pedido.Itens.Count == 0)
+                throw new ExcecaoEntradaInvalida("Pedido inválido. Verifique os itens.");
+
             pedido.Data = DateTime.Now;
             pedido.Status = "Novo";
             return _repo.Adicionar(pedido);
         }
-
 
         public List<Pedido> ListarPedidos()
         {
             return _repo.Listar();
         }
 
-        public Pedido? ObterPorId(int id)
+        public Pedido ObterPorId(int id)
         {
-            return _repo.ObterPorId(id);
+            var pedido = _repo.ObterPorId(id);
+            if (pedido == null)
+                throw new ExcecaoEntidadeNaoEncontrada($"Pedido com ID {id} não encontrado.");
+            return pedido;
         }
 
         public List<Pedido> ObterPorCliente(int clienteId)
@@ -43,37 +49,41 @@ namespace ProjetoPOO.Services
 
         public List<Pedido> ObterPorData(DateTime inicio, DateTime fim)
         {
+            if (fim < inicio)
+                throw new ExcecaoEntradaInvalida("A data final não pode ser anterior à inicial.");
+
             return _repo.Listar()
                         .Where(p => p.Data.Date >= inicio.Date && p.Data.Date <= fim.Date)
                         .ToList();
         }
 
-        public bool AlterarStatus(int pedidoId, string novoStatus, DateTime? dataEnvio = null, DateTime? dataCancelamento = null, DateTime? DataSaiuParaTransporte = null)
+        public bool AlterarStatus(int pedidoId, string novoStatus, DateTime? dataEnvio = null, DateTime? dataCancelamento = null, DateTime? dataSaiuParaTransporte = null)
         {
             var pedido = _repo.ObterPorId(pedidoId);
-            if (pedido == null) return false;
+            if (pedido == null)
+                throw new ExcecaoEntidadeNaoEncontrada("Pedido não encontrado para alteração de status.");
 
             pedido.Status = novoStatus;
             if (dataEnvio != null) pedido.DataEnvio = dataEnvio;
             if (dataCancelamento != null) pedido.DataCancelamento = dataCancelamento;
-            if (DataSaiuParaTransporte != null) pedido.DataSaiuParaTransporte = DataSaiuParaTransporte;
+            if (dataSaiuParaTransporte != null) pedido.DataSaiuParaTransporte = dataSaiuParaTransporte;
 
             return _repo.Alterar(pedido);
         }
 
         public void ExibirDetalhes(Pedido pedido, ProdutoService produtoService)
         {
-            Console.WriteLine($"\nPedido N° {pedido.Id} | Data: {pedido.Data:dd/MM/yyyy HH:mm} | Status: {pedido.Status} ");
+            Console.WriteLine($"\nPedido N° {pedido.Id} | Data: {pedido.Data:dd/MM/yyyy HH:mm} | Status: {pedido.Status}");
 
             foreach (var item in pedido.Itens)
             {
-                var produto = produtoService.ObterPorId(item.ProdutoId);
-                if (produto != null)
+                try
                 {
+                    var produto = produtoService.ObterPorId(item.ProdutoId);
                     Console.WriteLine($"Produto: {produto.Nome} | Qtd: {item.Quantidade} | Unit: {item.PrecoUnitario:C} | Total: {item.PrecoTotal:C}");
                     Console.WriteLine($"Descrição: {produto.Descricao}");
                 }
-                else
+                catch (ExcecaoEntidadeNaoEncontrada)
                 {
                     Console.WriteLine($"Produto removido ou não encontrado (ID: {item.ProdutoId})");
                 }
@@ -87,7 +97,7 @@ namespace ProjetoPOO.Services
             if (pedido.Status == "Cancelado" && pedido.DataCancelamento != null)
                 Console.WriteLine($"Data de cancelamento: {pedido.DataCancelamento:dd/MM/yyyy}");
             if (pedido.Status == "Em transporte" && pedido.DataSaiuParaTransporte != null)
-                Console.WriteLine($"Data que saiu para Trasnporte: {pedido.DataSaiuParaTransporte}");
+                Console.WriteLine($"Data que saiu para Transporte: {pedido.DataSaiuParaTransporte}");
         }
 
         public void ConsultarPedidosDoCliente(Cliente cliente, ProdutoService produtoService)
@@ -98,27 +108,25 @@ namespace ProjetoPOO.Services
             Console.WriteLine("1 - Número do pedido");
             Console.WriteLine("2 - Intervalo de datas");
             Console.Write("Opção: ");
-            string op = Console.ReadLine() ?? "";
+            string op = Console.ReadLine() ?? throw new ExcecaoEntradaInvalida("Opção inválida.");
 
             if (op == "1")
             {
                 Console.Write("Digite o número do pedido: ");
                 if (!int.TryParse(Console.ReadLine(), out int id))
-                {
-                    Console.WriteLine("Número inválido.");
-                    return;
-                }
+                    throw new ExcecaoEntradaInvalida("Número inválido.");
 
                 var pedido = pedidos.FirstOrDefault(p => p.Id == id);
                 if (pedido != null)
                     ExibirDetalhes(pedido, produtoService);
                 else
-                    Console.WriteLine("Pedido não encontrado.");
+                    throw new ExcecaoEntidadeNaoEncontrada("Pedido não encontrado.");
             }
             else if (op == "2")
             {
                 Console.Write("Data inicial (yyyy-mm-dd): ");
                 DateTime d1 = DateTime.Parse(Console.ReadLine()!);
+
                 Console.Write("Data final (yyyy-mm-dd): ");
                 DateTime d2 = DateTime.Parse(Console.ReadLine()!);
 
@@ -127,10 +135,7 @@ namespace ProjetoPOO.Services
                     .ToList();
 
                 if (!filtrados.Any())
-                {
-                    Console.WriteLine("Nenhum pedido nesse intervalo.");
-                    return;
-                }
+                    throw new ExcecaoEntidadeNaoEncontrada("Nenhum pedido encontrado nesse intervalo.");
 
                 foreach (var pedido in filtrados)
                 {
@@ -138,54 +143,51 @@ namespace ProjetoPOO.Services
                     Console.WriteLine("--------------------------");
                 }
             }
+            else
+            {
+                throw new ExcecaoEntradaInvalida("Opção inválida.");
+            }
         }
+
         public void ConsultarPedidosViaConsole(ProdutoService produtoService)
         {
             Console.WriteLine("\n== CONSULTA DE PEDIDOS ==");
-            Console.WriteLine("1 - Consultar por número");
+            Console.WriteLine("1 - Consultar por número e realizar alteração de STATUS");
             Console.WriteLine("2 - Consultar por intervalo de datas");
             Console.Write("Opção: ");
-            string op = Console.ReadLine() ?? "";
+            string op = Console.ReadLine() ?? throw new ExcecaoEntradaInvalida("Opção inválida.");
 
             if (op == "1")
             {
                 Console.Write("Número do pedido: ");
                 if (!int.TryParse(Console.ReadLine(), out int num))
-                {
-                    Console.WriteLine("Número inválido.");
-                    return;
-                }
+                    throw new ExcecaoEntradaInvalida("Número inválido.");
 
                 var pedido = ObterPorId(num);
-                if (pedido != null)
-                {
-                    ExibirDetalhes(pedido, produtoService);
-                    AlterarStatusViaConsole(pedido);
-                }
-                else
-                {
-                    Console.WriteLine("Pedido não encontrado.");
-                }
+                ExibirDetalhes(pedido, produtoService);
+                AlterarStatusViaConsole(pedido);
             }
             else if (op == "2")
             {
                 Console.Write("Data inicial (yyyy-mm-dd): ");
                 DateTime d1 = DateTime.Parse(Console.ReadLine()!);
+
                 Console.Write("Data final (yyyy-mm-dd): ");
                 DateTime d2 = DateTime.Parse(Console.ReadLine()!);
 
                 var pedidos = ObterPorData(d1, d2);
                 if (!pedidos.Any())
-                {
-                    Console.WriteLine("Nenhum pedido nesse intervalo.");
-                    return;
-                }
+                    throw new ExcecaoEntidadeNaoEncontrada("Nenhum pedido nesse intervalo.");
 
                 foreach (var pedido in pedidos)
                 {
                     ExibirDetalhes(pedido, produtoService);
                     Console.WriteLine("-------------------------");
                 }
+            }
+            else
+            {
+                throw new ExcecaoEntradaInvalida("Opção inválida.");
             }
         }
 
@@ -197,29 +199,31 @@ namespace ProjetoPOO.Services
             Console.WriteLine("3 - Marcar como EM TRANSPORTE");
             Console.WriteLine("4 - Não alterar");
             Console.Write("Opção: ");
-            string op = Console.ReadLine() ?? "";
+            string op = Console.ReadLine() ?? throw new ExcecaoEntradaInvalida("Opção inválida.");
 
             if (op == "1")
             {
-                bool ok = AlterarStatus(pedido.Id, "Enviado", dataEnvio: DateTime.Now);
-                Console.WriteLine(ok ? "Status alterado para ENVIADO!" : "Falha ao alterar status.");
+                AlterarStatus(pedido.Id, "Enviado", dataEnvio: DateTime.Now);
+                Console.WriteLine("Status alterado para ENVIADO!");
             }
             else if (op == "2")
             {
-                bool ok = AlterarStatus(pedido.Id, "Cancelado", dataCancelamento: DateTime.Now);
-                Console.WriteLine(ok ? "Status alterado para CANCELADO!" : "Falha ao alterar status.");
+                AlterarStatus(pedido.Id, "Cancelado", dataCancelamento: DateTime.Now);
+                Console.WriteLine("Status alterado para CANCELADO!");
             }
             else if (op == "3")
             {
-                bool ok = AlterarStatus(pedido.Id, "Em transporte", DataSaiuParaTransporte: DateTime.Now);
-                Console.WriteLine(ok ? "Status alterado para EM TRANSPORTE" : "Falha ao alterar status.");
+                AlterarStatus(pedido.Id, "Em transporte", dataSaiuParaTransporte: DateTime.Now);
+                Console.WriteLine("Status alterado para EM TRANSPORTE!");
             }
-            else
+            else if (op == "4")
             {
                 Console.WriteLine("Não alterado.");
             }
+            else
+            {
+                throw new ExcecaoEntradaInvalida("Opção inválida.");
+            }
         }
-
-
     }
 }

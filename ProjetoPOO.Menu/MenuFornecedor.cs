@@ -1,58 +1,72 @@
 namespace ProjetoPOO.Menu;
 using ProjetoPOO.Services;
+using ProjetoPOO.Services.Exceptions;
 using System;
 
-public  class MenuFornecedor
+public class MenuFornecedor
 {
     private readonly FornecedorService _fornecedorService;
 
     public MenuFornecedor(FornecedorService fornecedorService)
     {
         _fornecedorService = fornecedorService ?? throw new ArgumentNullException(nameof(fornecedorService));
-
     }
-    // adiciona construct e 
+
     public void TelaFornecedor()
     {
         while (true)
         {
-            Console.WriteLine(" == MENU DO FORNECEDOR == ");
-            Console.WriteLine("Selecione uma opcao: ");
-            Console.WriteLine("1 - Adicione um fornecedor");
-            Console.WriteLine("2 - Altere um fornecedor");
-            Console.WriteLine("3 - Exclua um fornecedor");
-            Console.WriteLine("4 - Consultar fornecedor");
-            Console.WriteLine("5 - Voltar");
-            //FornecedorService fornecedorService = new FornecedorService();
-
-            int opcao = int.Parse(Console.ReadLine()!);
-
-            switch (opcao)
+            try
             {
+                Console.WriteLine("\n== MENU DO FORNECEDOR ==");
+                Console.WriteLine("1 - Adicione um fornecedor");
+                Console.WriteLine("2 - Altere um fornecedor");
+                Console.WriteLine("3 - Exclua um fornecedor");
+                Console.WriteLine("4 - Consultar fornecedor");
+                Console.WriteLine("5 - Voltar");
+                Console.Write("Opção: ");
 
-                case 1:
-                    Console.WriteLine("escolheu 1");
-                    _fornecedorService.Cadastrar();
-                    break;
+                if (!int.TryParse(Console.ReadLine(), out int opcao))
+                    throw new ExcecaoEntradaInvalida("Digite um número válido para a opção.");
 
-                case 2:
-                    Console.WriteLine("escolheu 1");
-                    _fornecedorService.Alterar();
-                    break;
+                switch (opcao)
+                {
+                    case 1:
+                        _fornecedorService.Cadastrar();
+                        break;
 
-                case 3:
-                    _fornecedorService.Excluir();
-                    break;
+                    case 2:
+                        _fornecedorService.Alterar();
+                        break;
 
-                case 4:
-                    _fornecedorService.Consultar();
-                    break;
+                    case 3:
+                        _fornecedorService.Excluir();
+                        break;
 
-                case 5:
-                    return;
+                    case 4:
+                        _fornecedorService.Consultar();
+                        break;
+
+                    case 5:
+                        return;
+
+                    default:
+                        Console.WriteLine("Digite uma opção entre 1 e 5.");
+                        break;
+                }
+            }
+            catch (ExcecaoEntradaInvalida ex)
+            {
+                Console.WriteLine($"Erro de entrada: {ex.Message}");
+            }
+            catch (ExcecaoEntidadeNaoEncontrada ex)
+            {
+                Console.WriteLine($"Erro: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro inesperado: {ex.Message}");
             }
         }
-
-
     }
 }

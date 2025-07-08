@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ProjetoPOO.Models;
 using ProjetoPOO.Services;
+using ProjetoPOO.Services.Exceptions;
 
 namespace ProjetoPOO.Menu
 {
@@ -44,44 +44,63 @@ namespace ProjetoPOO.Menu
                 Console.WriteLine("6 - Sair");
                 Console.Write("Digite a opção: ");
 
-                if (!int.TryParse(Console.ReadLine(), out opcao))
+                string entrada = Console.ReadLine() ?? "";
+                if (!int.TryParse(entrada, out opcao))
                 {
                     Console.WriteLine("Opção inválida.");
                     continue;
                 }
 
-                switch (opcao)
+                try
                 {
-                    case 1:
-                        _produtoService.Consultar();
-                        break;
-                    case 2:
-                        _carrinhoService.AdicionarProdutoViaConsole(_produtoService);
-                        break;
-                    case 3:
-                        _carrinhoService.Visualizar();
-                        break;
-                    case 4:
-                        _carrinhoService.FinalizarPedidoViaConsole(
-                            _clienteLogado,
-                            _produtoService,
-                            _transportadoraService,
-                            _pedidoService
-                        );
-                        break;
-                    case 5:
-                        _pedidoService.ConsultarPedidosDoCliente(_clienteLogado, _produtoService);
-                        break;
-                    case 6:
-                        Console.WriteLine("Saindo...");
-                        break;
-                    default:
-                        Console.WriteLine("Opção inválida.");
-                        break;
+                    switch (opcao)
+                    {
+                        case 1:
+                            _produtoService.Consultar();
+                            break;
+                        case 2:
+                            _carrinhoService.AdicionarProdutoViaConsole(_produtoService);
+                            break;
+                        case 3:
+                            _carrinhoService.Visualizar();
+                            break;
+                        case 4:
+                            _carrinhoService.FinalizarPedidoViaConsole(
+                                _clienteLogado,
+                                _produtoService,
+                                _transportadoraService,
+                                _pedidoService
+                            );
+                            break;
+                        case 5:
+                            _pedidoService.ConsultarPedidosDoCliente(_clienteLogado, _produtoService);
+                            break;
+                        case 6:
+                            Console.WriteLine("Saindo...");
+                            break;
+                        default:
+                            Console.WriteLine("Digite uma opção entre 1 e 6.");
+                            break;
+                    }
+                }
+                catch (ExcecaoEntradaInvalida ex)
+                {
+                    Console.WriteLine($"[Erro de entrada] {ex.Message}");
+                }
+                catch (ExcecaoEntidadeNaoEncontrada ex)
+                {
+                    Console.WriteLine($"[Entidade não encontrada] {ex.Message}");
+                }
+                catch (ExcecaoEstoqueInsuficiente ex)
+                {
+                    Console.WriteLine($"[Estoque insuficiente] {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Erro inesperado] {ex.Message}");
                 }
 
             } while (opcao != 6);
         }
-
     }
 }

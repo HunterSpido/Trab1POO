@@ -2,6 +2,7 @@ namespace ProjetoPOO.Menu;
 
 using ProjetoPOO.Models;
 using ProjetoPOO.Services;
+using ProjetoPOO.Services.Exceptions;
 using System;
 
 public class MenuPedidos
@@ -25,16 +26,31 @@ public class MenuPedidos
             Console.Write("Opção: ");
             string op = Console.ReadLine() ?? "";
 
-            switch (op)
+            try
             {
-                case "1":
-                    _pedidoService.ConsultarPedidosViaConsole(_produtoService);
-                    break;
-                case "2":
-                    return;
-                default:
-                    Console.WriteLine("Opção inválida.");
-                    break;
+                switch (op)
+                {
+                    case "1":
+                        _pedidoService.ConsultarPedidosViaConsole(_produtoService);
+                        break;
+                    case "2":
+                        return;
+                    default:
+                        Console.WriteLine("Opção inválida.");
+                        break;
+                }
+            }
+            catch (ExcecaoEntradaInvalida ex)
+            {
+                Console.WriteLine($"[Erro de entrada] {ex.Message}");
+            }
+            catch (ExcecaoEntidadeNaoEncontrada ex)
+            {
+                Console.WriteLine($"[Entidade não encontrada] {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Erro inesperado] {ex.Message}");
             }
         }
     }

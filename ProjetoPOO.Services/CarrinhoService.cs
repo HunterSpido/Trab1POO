@@ -1,5 +1,6 @@
 using ProjetoPOO.Models;
-using ProjetoPOO.Services;
+using ProjetoPOO.Repository.Interfaces;
+using ProjetoPOO.Services.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,15 @@ namespace ProjetoPOO.Services
 
         public void AdicionarProduto(Produto produto, int quantidade)
         {
+            if (produto == null)
+                throw new ExcecaoEntidadeNaoEncontrada("Produto não encontrado.");
+
+            if (quantidade <= 0)
+                throw new ExcecaoEntradaInvalida("A quantidade deve ser maior que zero.");
+
+            if (quantidade > produto.Estoque)
+                throw new ExcecaoEstoqueInsuficiente(produto.Estoque);
+
             var existente = _itens.FirstOrDefault(i => i.ProdutoId == produto.Id);
             if (existente != null)
             {
@@ -60,30 +70,16 @@ namespace ProjetoPOO.Services
         {
             Console.Write("Digite o código do produto: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("ID inválido.");
-                return;
-            }
+                throw new ExcecaoEntradaInvalida("ID do produto inválido.");
 
             var produto = produtoService.ObterPorId(id);
-            if (produto == null || produto.Estoque <= 0)
-            {
-                Console.WriteLine("Produto não encontrado ou sem estoque!");
-                return;
-            }
+
+            if (produto.Estoque <= 0)
+                throw new ExcecaoEstoqueInsuficiente("Produto sem estoque disponível.");
 
             Console.Write("Quantidade: ");
             if (!int.TryParse(Console.ReadLine(), out int qtd))
-            {
-                Console.WriteLine("Quantidade inválida.");
-                return;
-            }
-
-            if (qtd > produto.Estoque)
-            {
-                Console.WriteLine($"Só há {produto.Estoque} em estoque.");
-                return;
-            }
+                throw new ExcecaoEntradaInvalida("Quantidade inválida.");
 
             AdicionarProduto(produto, qtd);
             Console.WriteLine("Produto adicionado ao carrinho!");
@@ -96,24 +92,15 @@ namespace ProjetoPOO.Services
             PedidoService pedidoService)
         {
             if (!_itens.Any())
-            {
-                Console.WriteLine("Carrinho vazio!");
-                return;
-            }
+                throw new ExcecaoEntradaInvalida("Carrinho vazio! Não é possível finalizar o pedido.");
 
             Console.Write("Determine a distância (km): ");
             if (!double.TryParse(Console.ReadLine(), out double distancia) || distancia <= 0)
-            {
-                Console.WriteLine("Distância inválida.");
-                return;
-            }
+                throw new ExcecaoEntradaInvalida("Distância inválida.");
 
             var transportadoras = transportadoraService.GetTodos();
             if (transportadoras.Count == 0)
-            {
-                Console.WriteLine("Nenhuma transportadora disponível.");
-                return;
-            }
+                throw new ExcecaoEntidadeNaoEncontrada("Nenhuma transportadora disponível.");
 
             Console.WriteLine("Escolha uma transportadora:");
             for (int i = 0; i < transportadoras.Count; i++)
@@ -121,10 +108,7 @@ namespace ProjetoPOO.Services
 
             Console.Write("Opção: ");
             if (!int.TryParse(Console.ReadLine(), out int idxT) || idxT < 1 || idxT > transportadoras.Count)
-            {
-                Console.WriteLine("Opção inválida.");
-                return;
-            }
+                throw new ExcecaoEntradaInvalida("Opção inválida de transportadora.");
 
             var transportadora = transportadoras[idxT - 1];
 
@@ -146,11 +130,14 @@ namespace ProjetoPOO.Services
             foreach (var item in _itens)
             {
                 var produto = produtoService.ObterPorId(item.ProdutoId);
-                if (produto != null)
-                {
-                    produto.Estoque -= item.Quantidade;
-                    produtoService.Atualizar(produto);
-                }
+                if (produto == null)
+                    throw new ExcecaoEntidadeNaoEncontrada($"Produto {item.ProdutoId} não encontrado durante finalização.");
+
+                if (item.Quantidade > produto.Estoque)
+                    throw new ExcecaoEstoqueInsuficiente($"Produto {produto.Nome} não tem estoque suficiente.");
+
+                produto.Estoque -= item.Quantidade;
+                produtoService.Atualizar(produto);
             }
 
             var pedido = new Pedido

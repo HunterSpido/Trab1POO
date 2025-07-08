@@ -1,8 +1,8 @@
-// ProjetoPOO/Services/ProdutoService.cs
 using System;
 using System.Collections.Generic;
 using ProjetoPOO.Models;
 using ProjetoPOO.Repository.Interfaces;
+using ProjetoPOO.Services.Exceptions;
 
 namespace ProjetoPOO.Services
 {
@@ -11,53 +11,45 @@ namespace ProjetoPOO.Services
         private readonly IRepositoryProduto _repo;
         private readonly IRepositoryFornecedor _fornecedorRepo;
 
-        public ProdutoService(
-            IRepositoryProduto repo,
-            IRepositoryFornecedor fornecedorRepo)
+        public ProdutoService(IRepositoryProduto repo, IRepositoryFornecedor fornecedorRepo)
         {
             _repo = repo ?? throw new ArgumentNullException(nameof(repo));
-            _fornecedorRepo = fornecedorRepo
-                ?? throw new ArgumentNullException(nameof(fornecedorRepo));
+            _fornecedorRepo = fornecedorRepo ?? throw new ArgumentNullException(nameof(fornecedorRepo));
             _repo.Carregar();
         }
 
         public void Cadastrar()
         {
             Console.WriteLine("=== Cadastro de Produto ===");
+
             Console.Write("Nome: ");
             var nome = Console.ReadLine()?.Trim() ?? "";
-            if (nome == "") { Console.WriteLine("Nome inválido."); return; }
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new ExcecaoEntradaInvalida("Nome do produto não pode ser vazio.");
 
             Console.Write("Descrição: ");
             var desc = Console.ReadLine()?.Trim() ?? "";
 
             Console.Write("Preço: ");
-            if (!double.TryParse(Console.ReadLine(), out var preco))
-            {
-                Console.WriteLine("Preço inválido."); return;
-            }
+            if (!double.TryParse(Console.ReadLine(), out var preco) || preco < 0)
+                throw new ExcecaoEntradaInvalida("Preço inválido.");
 
             Console.Write("Estoque inicial: ");
-            if (!int.TryParse(Console.ReadLine(), out var estoque))
-            {
-                Console.WriteLine("Estoque inválido."); return;
-            }
+            if (!int.TryParse(Console.ReadLine(), out var estoque) || estoque < 0)
+                throw new ExcecaoEntradaInvalida("Estoque inválido.");
 
-            // Escolher fornecedor
             Console.WriteLine("Fornecedores cadastrados:");
             var fornecedores = _fornecedorRepo.Listar();
             foreach (var f in fornecedores)
                 Console.WriteLine($"ID {f.Id}: {f.Nome}");
+
             Console.Write("ID do fornecedor: ");
             if (!int.TryParse(Console.ReadLine(), out var fid))
-            {
-                Console.WriteLine("ID inválido."); return;
-            }
+                throw new ExcecaoEntradaInvalida("ID do fornecedor inválido.");
+
             var fornecedor = _fornecedorRepo.ObterPorId(fid);
             if (fornecedor == null)
-            {
-                Console.WriteLine("Fornecedor não encontrado."); return;
-            }
+                throw new ExcecaoEntidadeNaoEncontrada("Fornecedor não encontrado.");
 
             var p = new Produto
             {
@@ -68,10 +60,10 @@ namespace ProjetoPOO.Services
                 Fornecedor = fornecedor
             };
 
-            if (_repo.Adicionar(p))
-                Console.WriteLine("Produto cadastrado com sucesso!");
-            else
-                Console.WriteLine("Falha ao cadastrar produto.");
+            if (!_repo.Adicionar(p))
+                throw new Exception("Falha ao cadastrar produto.");
+
+            Console.WriteLine("Produto cadastrado com sucesso!");
         }
 
         public void ListarTodos()
@@ -83,10 +75,10 @@ namespace ProjetoPOO.Services
                 Console.WriteLine("Nenhum produto cadastrado.");
                 return;
             }
+
             foreach (var p in todos)
                 Console.WriteLine(p);
         }
-        
 
         public void Consultar()
         {
@@ -94,12 +86,14 @@ namespace ProjetoPOO.Services
             Console.WriteLine("2 - Por nome/descrição");
             Console.WriteLine("3 - Por fornecedor");
             Console.Write("Opção: ");
-            switch (Console.ReadLine())
+            string op = Console.ReadLine() ?? throw new ExcecaoEntradaInvalida("Opção inválida.");
+
+            switch (op)
             {
                 case "1": ConsultarPorId(); break;
                 case "2": ConsultarPorNome(); break;
                 case "3": ConsultarPorFornecedor(); break;
-                default: Console.WriteLine("Opção inválida."); break;
+                default: throw new ExcecaoEntradaInvalida("Opção inválida.");
             }
         }
 
@@ -107,11 +101,13 @@ namespace ProjetoPOO.Services
         {
             Console.Write("ID do produto: ");
             if (!int.TryParse(Console.ReadLine(), out var id))
-            {
-                Console.WriteLine("ID inválido."); return;
-            }
+                throw new ExcecaoEntradaInvalida("ID inválido.");
+
             var p = _repo.Listar().Find(x => x.Id == id);
-            Console.WriteLine(p != null ? p.ToString() : "Não encontrado.");
+            if (p == null)
+                throw new ExcecaoEntidadeNaoEncontrada("Produto não encontrado.");
+
+            Console.WriteLine(p);
         }
 
         private void ConsultarPorNome()
@@ -119,10 +115,10 @@ namespace ProjetoPOO.Services
             Console.Write("Termo para busca: ");
             var termo = Console.ReadLine()?.Trim() ?? "";
             var resultados = _repo.ObterPorNomeOuDescricao(termo);
+
             if (resultados.Count == 0)
-            {
-                Console.WriteLine("Nenhum produto encontrado."); return;
-            }
+                throw new ExcecaoEntidadeNaoEncontrada("Nenhum produto encontrado.");
+
             resultados.ForEach(p => Console.WriteLine(p));
         }
 
@@ -130,14 +126,12 @@ namespace ProjetoPOO.Services
         {
             Console.Write("ID do fornecedor: ");
             if (!int.TryParse(Console.ReadLine(), out var fid))
-            {
-                Console.WriteLine("ID inválido."); return;
-            }
+                throw new ExcecaoEntradaInvalida("ID inválido.");
+
             var resultados = _repo.ObterPorFornecedor(fid);
             if (resultados.Count == 0)
-            {
-                Console.WriteLine("Nenhum produto para esse fornecedor."); return;
-            }
+                throw new ExcecaoEntidadeNaoEncontrada("Nenhum produto para esse fornecedor.");
+
             resultados.ForEach(p => Console.WriteLine(p));
         }
 
@@ -145,14 +139,11 @@ namespace ProjetoPOO.Services
         {
             Console.Write("ID do produto a alterar: ");
             if (!int.TryParse(Console.ReadLine(), out var id))
-            {
-                Console.WriteLine("ID inválido."); return;
-            }
+                throw new ExcecaoEntradaInvalida("ID inválido.");
+
             var p = _repo.Listar().Find(x => x.Id == id);
             if (p == null)
-            {
-                Console.WriteLine("Produto não encontrado."); return;
-            }
+                throw new ExcecaoEntidadeNaoEncontrada("Produto não encontrado.");
 
             Console.Write($"Novo nome ({p.Nome}): ");
             var nome = Console.ReadLine()?.Trim();
@@ -168,42 +159,39 @@ namespace ProjetoPOO.Services
             Console.Write($"Novo estoque ({p.Estoque}): ");
             if (int.TryParse(Console.ReadLine(), out var est)) p.Estoque = est;
 
-            if (_repo.Alterar(p))
-                Console.WriteLine("Produto atualizado!");
-            else
-                Console.WriteLine("Falha ao atualizar produto.");
+            if (!_repo.Alterar(p))
+                throw new Exception("Falha ao atualizar produto.");
+
+            Console.WriteLine("Produto atualizado!");
         }
 
         public void Remover()
         {
             Console.Write("ID do produto a remover: ");
             if (!int.TryParse(Console.ReadLine(), out var id))
-            {
-                Console.WriteLine("ID inválido."); return;
-            }
+                throw new ExcecaoEntradaInvalida("ID inválido.");
+
             var p = _repo.Listar().Find(x => x.Id == id);
             if (p == null)
-            {
-                Console.WriteLine("Produto não encontrado."); return;
-            }
+                throw new ExcecaoEntidadeNaoEncontrada("Produto não encontrado.");
 
-            if (_repo.Remover(p))
-                Console.WriteLine("Produto removido.");
-            else
-                Console.WriteLine("Falha ao remover produto.");
+            if (!_repo.Remover(p))
+                throw new Exception("Falha ao remover produto.");
+
+            Console.WriteLine("Produto removido.");
         }
 
-        public Produto? ObterPorId(int id)
+        public Produto ObterPorId(int id)
         {
-            return _repo.Listar().Find(x => x.Id == id);
+            var produto = _repo.Listar().Find(x => x.Id == id);
+            if (produto == null)
+                throw new ExcecaoEntidadeNaoEncontrada($"Produto com ID {id} não encontrado.");
+            return produto;
         }
 
         public bool Atualizar(Produto produto)
         {
             return _repo.Alterar(produto);
         }
-
     }
-    
-    
 }

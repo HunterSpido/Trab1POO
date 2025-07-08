@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ProjetoPOO.Models;
 using ProjetoPOO.Repository.Interfaces;
+using ProjetoPOO.Services.Exceptions;
 
 namespace ProjetoPOO.Services
 {
@@ -10,30 +12,26 @@ namespace ProjetoPOO.Services
         private readonly IRepositoryFornecedor _repo;
         private readonly EnderecoService _enderecoService;
 
-        // Injeção de dependências via construtor
         public FornecedorService(IRepositoryFornecedor repositorio, EnderecoService enderecoService)
         {
             _repo = repositorio;
             _enderecoService = enderecoService;
-
-            // Carrega do arquivo ao iniciar
             _repo.Carregar();
         }
 
-        // 1) CADASTRAR
         public void Cadastrar()
         {
             Console.WriteLine("=== Cadastro de Fornecedor ===");
             Console.Write("Nome: ");
-            string nome = Console.ReadLine() ?? "";
+            string nome = Console.ReadLine()?.Trim() ?? "";
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new ExcecaoEntradaInvalida("Nome não pode ser vazio.");
 
             Console.Write("Descrição: ");
             string desc = Console.ReadLine() ?? "";
 
-            // Pede endereço usando o seu serviço de endereço
             Endereco end = _enderecoService.PedirEndereco();
 
-            // Monta o objeto
             var f = new Fornecedor
             {
                 Nome = nome,
@@ -41,129 +39,84 @@ namespace ProjetoPOO.Services
                 Endereco = end
             };
 
-            // Adiciona e salva
-            bool ok = _repo.Adicionar(f);
-            if (ok)
-            {
-                _repo.Salvar();
-                Console.WriteLine("Fornecedor cadastrado com sucesso!");
-            }
-            else
-            {
-                Console.WriteLine("Falha ao cadastrar fornecedor.");
-            }
+            if (!_repo.Adicionar(f))
+                throw new Exception("Falha ao cadastrar fornecedor.");
+
+            _repo.Salvar();
+            Console.WriteLine("Fornecedor cadastrado com sucesso!");
         }
 
-        // 2) ALTERAR
         public void Alterar()
         {
             Console.WriteLine("=== Alteração de Fornecedor ===");
             Console.Write("ID do fornecedor: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("ID inválido.");
-                return;
-            }
+                throw new ExcecaoEntradaInvalida("ID inválido.");
 
-            // Busca manualmente na lista
-            Fornecedor? alvo = null;
-            foreach (var x in _repo.Listar())
-                if (x.IdFornecedor == id)
-                {
-                    alvo = x;
-                    break;
-                }
-
+            var alvo = _repo.Listar().FirstOrDefault(f => f.IdFornecedor == id);
             if (alvo == null)
-            {
-                Console.WriteLine("Fornecedor não encontrado.");
-                return;
-            }
+                throw new ExcecaoEntidadeNaoEncontrada("Fornecedor não encontrado.");
 
-            // Pergunta campos novos (ENTER para manter)
             Console.Write($"Novo nome ({alvo.Nome}): ");
             string nome = Console.ReadLine() ?? "";
-            if (nome != "") alvo.Nome = nome;
+            if (!string.IsNullOrWhiteSpace(nome)) alvo.Nome = nome;
 
             Console.Write($"Nova descrição ({alvo.Descricao}): ");
             string desc = Console.ReadLine() ?? "";
-            if (desc != "") alvo.Descricao = desc;
+            if (!string.IsNullOrWhiteSpace(desc)) alvo.Descricao = desc;
 
-            // Atualiza endereço inteiro
             Console.WriteLine("Atualizar endereço:");
             alvo.Endereco = _enderecoService.PedirEndereco();
 
-            // Chama repositório e salva
-            bool ok = _repo.Alterar(alvo);
-            if (ok)
-            {
-               _repo.Salvar();
-               Console.WriteLine("Fornecedor alterado com sucesso!");
-            }
-            else
-            {
-               Console.WriteLine("Falha ao alterar fornecedor.");
-            }
+            if (!_repo.Alterar(alvo))
+                throw new Exception("Falha ao alterar fornecedor.");
+
+            _repo.Salvar();
+            Console.WriteLine("Fornecedor alterado com sucesso!");
         }
 
-        // 3) EXCLUIR
         public void Excluir()
         {
             Console.WriteLine("=== Exclusão de Fornecedor ===");
             Console.Write("ID do fornecedor: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("ID inválido.");
-                return;
-            }
+                throw new ExcecaoEntradaInvalida("ID inválido.");
 
             var f = _repo.Listar().FirstOrDefault(f => f.IdFornecedor == id);
             if (f == null)
-            {
-                Console.WriteLine("Fornecedor não encontrado.");
-                return;
-            }
+                throw new ExcecaoEntidadeNaoEncontrada("Fornecedor não encontrado.");
 
-            bool ok = _repo.Remover(f);
-            if (ok)
-            {
-                _repo.Salvar();
-                Console.WriteLine("Fornecedor excluído com sucesso!");
-            }
-            else
-            {
-                Console.WriteLine("Falha ao excluir fornecedor.");
-            }
+            if (!_repo.Remover(f))
+                throw new Exception("Falha ao excluir fornecedor.");
+
+            _repo.Salvar();
+            Console.WriteLine("Fornecedor excluído com sucesso!");
         }
 
-        // 4) CONSULTAR (menu interno)
         public void Consultar()
         {
             Console.WriteLine("=== Consultar Fornecedores ===");
             Console.WriteLine("1) Por ID");
             Console.WriteLine("2) Por nome");
             Console.Write("Opção: ");
-            string op = Console.ReadLine() ?? "";
+            string op = Console.ReadLine() ?? throw new ExcecaoEntradaInvalida("Opção inválida.");
 
             if (op == "1") ConsultarPorId();
             else if (op == "2") ConsultarPorNome();
-            else Console.WriteLine("Opção inválida.");
+            else throw new ExcecaoEntradaInvalida("Opção inválida.");
         }
 
         private void ConsultarPorId()
         {
             Console.Write("Digite o ID: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("ID inválido.");
-                return;
-            }
+                throw new ExcecaoEntradaInvalida("ID inválido.");
 
             var f = _repo.Listar().FirstOrDefault(f => f.IdFornecedor == id);
             if (f == null)
-                Console.WriteLine("Não encontrado.");
-            else
-                Exibir(f);
+                throw new ExcecaoEntidadeNaoEncontrada("Fornecedor não encontrado.");
+
+            Exibir(f);
         }
 
         private void ConsultarPorNome()
@@ -171,16 +124,12 @@ namespace ProjetoPOO.Services
             Console.Write("Digite parte do nome: ");
             string termo = (Console.ReadLine() ?? "").ToLower();
 
-            var achados = new List<Fornecedor>();
-            foreach (var f in _repo.Listar())
-                if (f.Nome.ToLower().Contains(termo))
-                    achados.Add(f);
+            var achados = _repo.Listar()
+                .Where(f => f.Nome.ToLower().Contains(termo))
+                .ToList();
 
             if (achados.Count == 0)
-            {
-                Console.WriteLine("Nenhum fornecedor encontrado.");
-                return;
-            }
+                throw new ExcecaoEntidadeNaoEncontrada("Nenhum fornecedor encontrado com esse nome.");
 
             foreach (var f in achados)
             {
@@ -189,7 +138,6 @@ namespace ProjetoPOO.Services
             }
         }
 
-        // Mostra todos os campos de um Fornecedor
         private void Exibir(Fornecedor f)
         {
             Console.WriteLine($"ID:        {f.IdFornecedor}");
@@ -202,7 +150,6 @@ namespace ProjetoPOO.Services
             Console.WriteLine($"  CEP:    {f.Endereco.Cep}");
         }
 
-        // Lista todos os fornecedores (para menus externos)
         public List<Fornecedor> GetTodos() => _repo.Listar();
     }
 }
