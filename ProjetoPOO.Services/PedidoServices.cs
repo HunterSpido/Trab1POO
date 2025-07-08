@@ -80,7 +80,7 @@ namespace ProjetoPOO.Services
                 try
                 {
                     var produto = produtoService.ObterPorId(item.ProdutoId);
-                    Console.WriteLine($"Produto: {produto.Nome} | Qtd: {item.Quantidade} | Unit: {item.PrecoUnitario:C} | Total: {item.PrecoTotal:C}");
+                    Console.WriteLine($"Produto: {produto.Nome} | Qtd: {item.Quantidade} | Valor do Produto: {item.PrecoUnitario:C} | Total: {item.PrecoTotal:C}");
                     Console.WriteLine($"Descrição: {produto.Descricao}");
                 }
                 catch (ExcecaoEntidadeNaoEncontrada)
